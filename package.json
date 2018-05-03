@@ -48,7 +48,7 @@
     "moment-duration-format": "2.2.1",
     "moment-timezone": "^0.5.16",
     "money": "^0.2.0",
-    "nintendo-switch-eshop": "^1.0.7",
+    "nintendo-switch-eshop": "^1.1.0",
     "node-random": "^1.0.1",
     "node-vibrant": "^3.0.0",
     "open-exchange-rates": "^0.3.0",

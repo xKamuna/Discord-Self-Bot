@@ -1707,9 +1707,9 @@ ncp@0.4.x:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/ncp/-/ncp-0.4.2.tgz#abcc6cbd3ec2ed2a729ff6e7c1fa8f01784a8574"
 
-nintendo-switch-eshop@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/nintendo-switch-eshop/-/nintendo-switch-eshop-1.0.7.tgz#b3eef589dba3b288ebe13aa8d0a8f5250d185610"
+nintendo-switch-eshop@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/nintendo-switch-eshop/-/nintendo-switch-eshop-1.1.0.tgz#27dd64879c5fefe36418c4af6ce3c47327f28323"
   dependencies:
     array-unique-x "^1.0.5"
     country-data "0.0.31"

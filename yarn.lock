@@ -1669,9 +1669,9 @@ moment-duration-format@2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/moment-duration-format/-/moment-duration-format-2.2.1.tgz#b9ce5e5051a15282a0a6c361f0c05685c7ead47c"
 
-moment-timezone@^0.5.14:
-  version "0.5.14"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.14.tgz#4eb38ff9538b80108ba467a458f3ed4268ccfcb1"
+moment-timezone@^0.5.16:
+  version "0.5.16"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.16.tgz#661717d5f55b4d2c2e002262d726c83785192a5a"
   dependencies:
     moment ">= 2.9.0"
 

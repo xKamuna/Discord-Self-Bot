@@ -46,7 +46,7 @@
     "markdown-table": "^1.1.1",
     "moment": "2.20.1",
     "moment-duration-format": "2.2.1",
-    "moment-timezone": "^0.5.14",
+    "moment-timezone": "^0.5.16",
     "money": "^0.2.0",
     "nintendo-switch-eshop": "^1.0.7",
     "node-random": "^1.0.1",

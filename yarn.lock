@@ -555,9 +555,9 @@ ctype@0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/ctype/-/ctype-0.5.3.tgz#82c18c2461f74114ef16c135224ad0b9144ca12f"
 
-currency-symbol-map@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/currency-symbol-map/-/currency-symbol-map-4.0.3.tgz#2aa2359209383b30612a6fc1f1ccaf5fa4b679bc"
+currency-symbol-map@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/currency-symbol-map/-/currency-symbol-map-4.0.4.tgz#3cfba625974dd3f86822d327ecbd10248695e95e"
 
 currency-symbol-map@~2:
   version "2.2.0"

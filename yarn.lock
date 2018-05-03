@@ -2003,11 +2003,12 @@ pngjs@^3.0.0, pngjs@^3.3.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-3.3.1.tgz#8e14e6679ee7424b544334c3b2d21cea6d8c209a"
 
-pornsearch@^2.2.5:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/pornsearch/-/pornsearch-2.3.0.tgz#7e60739afc132427dd42049c9fde5c07aebbb4e4"
+pornsearch@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/pornsearch/-/pornsearch-2.4.2.tgz#3834ee199290ccfcb7c8a13485b3d5713eb164c2"
   dependencies:
     axios "^0.15.3"
+    babel-runtime "^6.26.0"
     cheerio "^0.22.0"
 
 prelude-ls@~1.1.2:

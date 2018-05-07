@@ -1,19 +1,37 @@
-# Discord-Self-Bot
+<div align="center">
 
-[![license](https://img.shields.io/github/license/Favna/Discord-Self-Bot.svg?style=flat-square)](https://github.com/Favna/Discord-Self-Bot/blob/master/LICENCE.md) [![Travis](https://img.shields.io/travis/Favna/Discord-Self-Bot.svg?style=flat-square)](https://travis-ci.org/Favna/Discord-Self-Bot) [![NodeV](https://img.shields.io/badge/Node-v8.5.0-FF0000.svg?style=flat-square)](https://nodejs.org/en/download/current/) [![Donate](https://img.shields.io/badge/Donate-PayPal-547ab8.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GY3CFCL25HQNJ) [![Twitter Follow](https://img.shields.io/twitter/follow/espadrine.svg?style=social&label=Follow)](https://twitter.com/Favna_)
+  <p>
+  <a href="https://favna.xyz/selfbot"><img src="https://i.imgur.com/WOBflp9.png" height="200" alt="ribbon"/></a>
+  </p>
 
-# WARNING!! THE DEVELOPMENT ON THIS PROJECT HAS SADLY STOPPED. THIS IS DUE TO DISCORD STAFF GOING DOWN ON SELFBOT USAGE MORE AND MORE OVER THE PAST MONTHS AND I CAN NO LONGER SUPPORT THE IDEA OF RUNNING A SELFBOT!
+  <p>
+  <a href="https://github.com/Favna/Discord-Self-Bot/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/favna/discord-self-bot.svg?style=for-the-badge" alt="License"></a><!--
+--><a href="https://twitter.com/Favna_"><img src="https://img.shields.io/twitter/follow/espadrine.svg?style=for-the-badge&label=Follow" alt="Twitter Follow"></a><!--
+--><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GY3CFCL25HQNJ"><img src="https://img.shields.io/badge/Donate-PayPal-547ab8.svg?style=for-the-badge" alt="donate" title="Donate with PayPal" /></a>
+  </p>
 
-_**This decision has been made in part for my own accounts safety as well as yours. Please do not take this decision the wrong way as I have no ill intentions with it. I really deeply do not like having to make this decision but it simply has to be done. For those who used Discord-Self-Bot primarily for Rich Presences I can strongly recommend you to check out JustDotJS' [SimplePresence](https://github.com/justdotJS/SimplePresence) application**_
+  <p>
+  <img src="https://forthebadge.com/images/badges/uses-badges.svg" alt="Uses Badges"><!--
+--><img src="https://forthebadge.com/images/badges/built-with-love.svg" alt="Built with Love"><!--
+--><img src="https://forthebadge.com/images/badges/made-with-javascript.svg" alt="Made with JavaScript"><!--
+--><img src="https://forthebadge.com/images/badges/powered-by-electricity.svg" alt="Powered by Electricity">
+  </p>
 
-**Support will still be given but know that I will not make any changes to fix bugs. The Issue tracker has been removed as none will be fixed.**
+  <p>
+    <a href="https://discord.gg/zdt5yQt"><img src="https://canary.discordapp.com/api/guilds/246821351585742851/widget.png?style=banner2" alt="Join Discord Server"/></a>
+  </p>
+</div>
 
-## Many features that were in the selfbot are also in my public server bot, Ribbon. Ribbon is still going to get fully supported as I hope it continue to grow. If you would like to invite Ribbon to your server you [can click here](https://discord.now.sh/376520643862331396?p8)
+***
 
+_**Silent Update**_  
+Previously this readme said the selfbot would no longer be updated. I hereby want to in part retract that statement as the dust of previous selfbot issues seems to have settled down and also because I see there is still a lot of traction towards it (spying those GitHub stars). While I cannot promise any ETA on major updates, the next one will likely be a massive refactor to make the selfbot work much in like how Ribbon works.
 
-This it the source for Favna's Discord-Self-Bot. Come join the dedicated server if you have any questions, concerns or other talk about to bot.
+**To those who need support with the current status of the selfbot you can always join my server!**
 
-[![Discord Server](https://canary.discordapp.com/api/guilds/246821351585742851/widget.png?style=banner3)](https://discord.gg/zdt5yQt)
+_Note that many features that are in this selfbot are also in my public server bot, Ribbon. Ribbon is way ahead on its codebase compared to the selfbot due to continued support while I dropped it for the selfbot, if you are interested please consider adding it to your server by [clicking here](https://discord.now.sh/376520643862331396?p8)!_
+
+***
 
 ### [**Install guide + list of all commands.**](https://github.com/Favna/Discord-Self-Bot/wiki)
 

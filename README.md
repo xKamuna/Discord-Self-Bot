@@ -27,6 +27,9 @@
 _**Silent Update**_  
 Previously this readme said the selfbot would no longer be updated. I hereby want to in part retract that statement as the dust of previous selfbot issues seems to have settled down and also because I see there is still a lot of traction towards it (spying those GitHub stars). While I cannot promise any ETA on major updates, the next one will likely be a massive refactor to make the selfbot work much in like how Ribbon works.
 
+**Update**  
+Refactoring has started slowly in the `development` branch. Master will retain stable state until `development` is done when it will be pushed to master.
+
 **To those who need support with the current status of the selfbot you can always join my server!**
 
 _Note that many features that are in this selfbot are also in my public server bot, Ribbon. Ribbon is way ahead on its codebase compared to the selfbot due to continued support while I dropped it for the selfbot, if you are interested please consider adding it to your server by [clicking here](https://discord.now.sh/376520643862331396?p8)!_

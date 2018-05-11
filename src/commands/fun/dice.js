@@ -50,7 +50,7 @@ module.exports = class diceCommand extends commando.Command {
       res = [],
       throwDice = xdicey(args.rolls, args.sides);
 
-    for (const index in throwDice.individual) { // eslint-disable-line guard-for-in
+    for (const index in throwDice.individual) {
       res.push(`🎲: ${throwDice.individual[index]}`);
     }
 

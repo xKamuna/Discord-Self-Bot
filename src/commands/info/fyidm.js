@@ -84,7 +84,6 @@ module.exports = class fyidmCommand extends commando.Command {
       const splitTotal = Discord.util.splitMessage(`${table(matchTable)}`);
 
       for (const part in splitTotal) {
-        // eslint-disable-next-line no-await-in-loop
         messages.push(await msg.say(stripIndents`\`\`\`Users with discriminator ${discrim} 
 				${splitTotal[part]}\`\`\``));
       }

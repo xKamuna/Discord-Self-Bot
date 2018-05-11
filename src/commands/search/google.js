@@ -107,7 +107,7 @@ module.exports = class googleCommand extends commando.Command {
       if (normalRes.body.queries.request[0].totalResults === '0') {
         msg.reply('⚠️ ***nothing found***');
 				
-        return Promise.reject(console.error('NO RESULTS')); // eslint-disable-line no-console
+        return Promise.reject(console.error('NO RESULTS'));
       }
 
       deleteCommandMessages(msg, this.client);
@@ -125,7 +125,7 @@ module.exports = class googleCommand extends commando.Command {
         .attr('href');
 
       if (!href) {
-        return Promise.reject(console.error('NO SEARCH RESULTS')); // eslint-disable-line no-console
+        return Promise.reject(console.error('NO SEARCH RESULTS'));
       }
       href = querystring.parse(href.replace('/url?', ''));
 

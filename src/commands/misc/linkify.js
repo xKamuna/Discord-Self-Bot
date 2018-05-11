@@ -13,36 +13,28 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando');
 
 module.exports = class linkifyCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'linkify',
-			'memberName': 'linkify',
-			'group': 'misc',
-			'aliases': ['link', 'imglink'],
-			'description': 'Create a discord cdn link from an attachment - for mobile',
-			'examples': ['linkify while sending a message with an attachment'],
-			'guildOnly': false
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'linkify',
+      memberName: 'linkify',
+      group: 'misc',
+      aliases: ['link', 'imglink'],
+      description: 'Create a discord cdn link from an attachment - for mobile',
+      examples: ['linkify while sending a message with an attachment'],
+      guildOnly: false
+    });
+  }
 
-	run (msg) {
-		if (msg.attachments.first() && msg.attachments.first().url) {
-			return msg.say(msg.attachments.first().url);
-		}
+  run (msg) {
+    if (msg.attachments.first() && msg.attachments.first().url) {
+      return msg.say(msg.attachments.first().url);
+    }
 		
-		return msg.delete();
-	}
+    return msg.delete();
+  }
 };

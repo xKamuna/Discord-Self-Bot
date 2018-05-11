@@ -13,54 +13,46 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{oneLine} = require('common-tags'),
-	{deleteCommandMessages} = require('../../util.js');
+  {oneLine} = require('common-tags'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class rplargetextCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'rplargetext',
-			'memberName': 'rplargetext',
-			'group': 'provider',
-			'aliases': ['largetext', 'ltext'],
-			'description': 'Set your Rich Presence largetext',
-			'format': 'LargeText',
-			'examples': ['rplargetext See the website'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'largetext',
-					'prompt': 'What is the largetext string for your richpresence?',
-					'type': 'string',
-					'label': 'largetext',
-					'validate': (largetext) => {
-						if (Buffer.byteLength(largetext, 'utf8') <= 128) {
-							return true;
-						}
+  constructor (client) {
+    super(client, {
+      name: 'rplargetext',
+      memberName: 'rplargetext',
+      group: 'provider',
+      aliases: ['largetext', 'ltext'],
+      description: 'Set your Rich Presence largetext',
+      format: 'LargeText',
+      examples: ['rplargetext See the website'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'largetext',
+          prompt: 'What is the largetext string for your richpresence?',
+          type: 'string',
+          label: 'largetext',
+          validate: (largetext) => {
+            if (Buffer.byteLength(largetext, 'utf8') <= 128) {
+              return true;
+            }
 
-						return 'The largetext string cannot be longer than 128 bytes';
-					}
-				}
-			]
-		});
-	}
+            return 'The largetext string cannot be longer than 128 bytes';
+          }
+        }
+      ]
+    });
+  }
 	
-	run (msg, args) {
-		this.client.provider.set('global', 'rplargetext', args.largetext);
+  run (msg, args) {
+    this.client.provider.set('global', 'rplargetext', args.largetext);
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		return msg.reply(oneLine `Your RichPresence LargeText has been set to \`${args.largetext}\``);
-	}
+    return msg.reply(oneLine`Your RichPresence LargeText has been set to \`${args.largetext}\``);
+  }
 };

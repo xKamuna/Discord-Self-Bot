@@ -13,48 +13,40 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{deleteCommandMessages} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class cydiaPackageCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'cypkg',
-			'memberName': 'cypkg',
-			'group': 'links',
-			'aliases': ['pkg'],
-			'description': 'Gets the link to a cydia package using the Cydia Share URL API',
-			'format': 'RepoURL PackageName',
-			'examples': ['cypkg http://apt.thebigboss.org/repofiles/cydia/ com.anemonetheming.anemone'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'repo',
-					'prompt': 'What is the repo URL?',
-					'type': 'string'
-				},
-				{
-					'key': 'package',
-					'prompt': 'And what is the package name?',
-					'type': 'string'
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'cypkg',
+      memberName: 'cypkg',
+      group: 'links',
+      aliases: ['pkg'],
+      description: 'Gets the link to a cydia package using the Cydia Share URL API',
+      format: 'RepoURL PackageName',
+      examples: ['cypkg http://apt.thebigboss.org/repofiles/cydia/ com.anemonetheming.anemone'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'repo',
+          prompt: 'What is the repo URL?',
+          type: 'string'
+        },
+        {
+          key: 'package',
+          prompt: 'And what is the package name?',
+          type: 'string'
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		deleteCommandMessages(msg, this.client);
+  run (msg, args) {
+    deleteCommandMessages(msg, this.client);
 
-		return msg.say(`To find this package on Cydia follow this URL: https://cydia.saurik.com/api/share#?source=${args.repo}/&package=${args.package}`);
-	}
+    return msg.say(`To find this package on Cydia follow this URL: https://cydia.saurik.com/api/share#?source=${args.repo}/&package=${args.package}`);
+  }
 };

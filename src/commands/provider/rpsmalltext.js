@@ -13,54 +13,46 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{oneLine} = require('common-tags'),
-	{deleteCommandMessages} = require('../../util.js');
+  {oneLine} = require('common-tags'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class rpsmalltextCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'rpsmalltext',
-			'memberName': 'rpsmalltext',
-			'group': 'provider',
-			'aliases': ['smalltext', 'smalltext'],
-			'description': 'Set your Rich Presence smalltext',
-			'format': 'SmallText',
-			'examples': ['rpsmalltext Or the GitHub'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'smalltext',
-					'prompt': 'What is the smalltext string for your richpresence?',
-					'type': 'string',
-					'label': 'smalltext',
-					'validate': (smalltext) => {
-						if (Buffer.byteLength(smalltext, 'utf8') <= 128) {
-							return true;
-						}
+  constructor (client) {
+    super(client, {
+      name: 'rpsmalltext',
+      memberName: 'rpsmalltext',
+      group: 'provider',
+      aliases: ['smalltext', 'smalltext'],
+      description: 'Set your Rich Presence smalltext',
+      format: 'SmallText',
+      examples: ['rpsmalltext Or the GitHub'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'smalltext',
+          prompt: 'What is the smalltext string for your richpresence?',
+          type: 'string',
+          label: 'smalltext',
+          validate: (smalltext) => {
+            if (Buffer.byteLength(smalltext, 'utf8') <= 128) {
+              return true;
+            }
 
-						return 'The smalltext string cannot be longer than 128 bytes';
-					}
-				}
-			]
-		});
-	}
+            return 'The smalltext string cannot be longer than 128 bytes';
+          }
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		this.client.provider.set('global', 'rpsmalltext', args.smalltext);
+  run (msg, args) {
+    this.client.provider.set('global', 'rpsmalltext', args.smalltext);
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		return msg.reply(oneLine `Your RichPresence SmallText has been set to \`${args.smalltext}\``);
-	}
+    return msg.reply(oneLine`Your RichPresence SmallText has been set to \`${args.smalltext}\``);
+  }
 };

@@ -13,44 +13,36 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{deleteCommandMessages} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class cydiaSourceCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'cysource',
-			'memberName': 'cysource',
-			'group': 'links',
-			'aliases': ['cysrc', 'source'],
-			'description': 'Gets the link to a cydia source using the Cydia Share URL API',
-			'format': 'RepoURL',
-			'examples': ['cypkg http://apt.thebigboss.org/repofiles/cydia/'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'repo',
-					'prompt': 'What is the repo URL?',
-					'type': 'string'
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'cysource',
+      memberName: 'cysource',
+      group: 'links',
+      aliases: ['cysrc', 'source'],
+      description: 'Gets the link to a cydia source using the Cydia Share URL API',
+      format: 'RepoURL',
+      examples: ['cypkg http://apt.thebigboss.org/repofiles/cydia/'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'repo',
+          prompt: 'What is the repo URL?',
+          type: 'string'
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		deleteCommandMessages(msg, this.client);
+  run (msg, args) {
+    deleteCommandMessages(msg, this.client);
 
-		return msg.say(`To add this repo directly to cydia click the following URL: https://cydia.saurik.com/api/share#?source=${args.repo}`);
-	}
+    return msg.say(`To add this repo directly to cydia click the following URL: https://cydia.saurik.com/api/share#?source=${args.repo}`);
+  }
 
 };

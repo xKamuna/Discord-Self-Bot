@@ -13,67 +13,59 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const Discord = require('discord.js'),
-	commando = require('discord.js-commando'),
-	maljs = require('maljs'),
-	{deleteCommandMessages} = require('../../util.js');
+  commando = require('discord.js-commando'),
+  maljs = require('maljs'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class mangaCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'manga',
-			'memberName': 'manga',
-			'group': 'search',
-			'aliases': ['cartoon', 'man'],
-			'description': 'Finds manga on MyAnimeList',
-			'format': 'MangaName',
-			'examples': ['manga Pokemon'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'query',
-					'prompt': 'What manga do you want to find?',
-					'type': 'string'
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'manga',
+      memberName: 'manga',
+      group: 'search',
+      aliases: ['cartoon', 'man'],
+      description: 'Finds manga on MyAnimeList',
+      format: 'MangaName',
+      examples: ['manga Pokemon'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'query',
+          prompt: 'What manga do you want to find?',
+          type: 'string'
+        }
+      ]
+    });
+  }
 
-	async run (msg, args) {
-		const manEmbed = new Discord.MessageEmbed(),
-			res = await maljs.quickSearch(args.query, 'manga');
+  async run (msg, args) {
+    const manEmbed = new Discord.MessageEmbed(),
+      res = await maljs.quickSearch(args.query, 'manga');
 
-		if (res) {
-			const manga = await res.manga[0].fetch();
+    if (res) {
+      const manga = await res.manga[0].fetch();
 
-			if (manga) {
+      if (manga) {
 
-				manEmbed
-					.setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
-					.setTitle(manga.title)
-					.setImage(manga.cover)
-					.setDescription(manga.description)
-					.setURL(`${manga.mal.url}${manga.path}`)
-					.addField('Score', manga.score, true)
-					.addField('Popularity', manga.popularity, true)
-					.addField('Rank', manga.ranked, true);
+        manEmbed
+          .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
+          .setTitle(manga.title)
+          .setImage(manga.cover)
+          .setDescription(manga.description)
+          .setURL(`${manga.mal.url}${manga.path}`)
+          .addField('Score', manga.score, true)
+          .addField('Popularity', manga.popularity, true)
+          .addField('Rank', manga.ranked, true);
 
-				deleteCommandMessages(msg, this.client);
+        deleteCommandMessages(msg, this.client);
 					
-				return msg.embed(manEmbed, `${manga.mal.url}${manga.path}`);
-			}
-		}
+        return msg.embed(manEmbed, `${manga.mal.url}${manga.path}`);
+      }
+    }
 		
-		return msg.reply('⚠️ ***nothing found***');
-	}
+    return msg.reply('⚠️ ***nothing found***');
+  }
 };

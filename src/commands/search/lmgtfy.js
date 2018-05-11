@@ -13,44 +13,36 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{deleteCommandMessages} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class lmgtfyCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'lmgtfy',
-			'memberName': 'lmgtfy',
-			'group': 'search',
-			'aliases': ['dumb'],
-			'description': 'Produce a lmgtfy (let me google that for you) URL',
-			'format': 'Query',
-			'examples': ['lmgtfy is it legal to kill an ant???', 'lmgtfy are there birds in canada?'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'question',
-					'prompt': 'What does the idiot want to find?',
-					'type': 'string',
-					'parse': p => p.replace(/ /gim, '+')
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'lmgtfy',
+      memberName: 'lmgtfy',
+      group: 'search',
+      aliases: ['dumb'],
+      description: 'Produce a lmgtfy (let me google that for you) URL',
+      format: 'Query',
+      examples: ['lmgtfy is it legal to kill an ant???', 'lmgtfy are there birds in canada?'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'question',
+          prompt: 'What does the idiot want to find?',
+          type: 'string',
+          parse: p => p.replace(/ /gim, '+')
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		deleteCommandMessages(msg, this.client);
+  run (msg, args) {
+    deleteCommandMessages(msg, this.client);
 
-		return msg.say(`https://lmgtfy.com/?q=${args.question}`);
-	}
+    return msg.say(`https://lmgtfy.com/?q=${args.question}`);
+  }
 };

@@ -13,56 +13,48 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{oneLine} = require('common-tags'),
-	{deleteCommandMessages} = require('../../util.js');
+  {oneLine} = require('common-tags'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class rptypeCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'rptype',
-			'memberName': 'rptype',
-			'group': 'provider',
-			'aliases': ['rtyp'],
-			'description': 'Set your Rich Presence Type',
-			'format': 'playing|watching|listening|streaming',
-			'examples': ['rptype PLAYING'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'type',
-					'prompt': 'What is the Type you want for your Rich Presence?',
-					'type': 'string',
-					'label': 'typeID',
-					'validate': (type) => {
-						const validTypes = ['playing', 'watching', 'listening', 'streaming'];
+  constructor (client) {
+    super(client, {
+      name: 'rptype',
+      memberName: 'rptype',
+      group: 'provider',
+      aliases: ['rtyp'],
+      description: 'Set your Rich Presence Type',
+      format: 'playing|watching|listening|streaming',
+      examples: ['rptype PLAYING'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'type',
+          prompt: 'What is the Type you want for your Rich Presence?',
+          type: 'string',
+          label: 'typeID',
+          validate: (type) => {
+            const validTypes = ['playing', 'watching', 'listening', 'streaming'];
 
-						if (validTypes.includes(type.toLowerCase())) {
-							return true;
-						}
+            if (validTypes.includes(type.toLowerCase())) {
+              return true;
+            }
 
-						return `Has to be one of ${validTypes.join(', ')}`;
-					}
-				}
-			]
-		});
-	}
+            return `Has to be one of ${validTypes.join(', ')}`;
+          }
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		this.client.provider.set('global', 'rptype', args.type.toUpperCase());
+  run (msg, args) {
+    this.client.provider.set('global', 'rptype', args.type.toUpperCase());
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		return msg.reply(oneLine `Your RichPresence Type has been set to \`${args.type}\``);
-	}
+    return msg.reply(oneLine`Your RichPresence Type has been set to \`${args.type}\``);
+  }
 };

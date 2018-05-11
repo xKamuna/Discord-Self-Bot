@@ -13,52 +13,44 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{deleteCommandMessages} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class timeformatCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'timeformat',
-			'memberName': 'timeformat',
-			'group': 'provider',
-			'aliases': ['tf', 'tformat'],
-			'description': 'Configure whether you want 12 hour or 24 hour formatted timestamps where applicable',
-			'format': '12|24',
-			'examples': ['timeformat 12'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'format',
-					'prompt': 'Would you like your timestamps to be formatted as 12 or 24 hours?',
-					'type': 'string',
-					'validate': (time) => {
-						if (time === '12' || time === '24') {
-							return true;
-						}
+  constructor (client) {
+    super(client, {
+      name: 'timeformat',
+      memberName: 'timeformat',
+      group: 'provider',
+      aliases: ['tf', 'tformat'],
+      description: 'Configure whether you want 12 hour or 24 hour formatted timestamps where applicable',
+      format: '12|24',
+      examples: ['timeformat 12'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'format',
+          prompt: 'Would you like your timestamps to be formatted as 12 or 24 hours?',
+          type: 'string',
+          validate: (time) => {
+            if (time === '12' || time === '24') {
+              return true;
+            }
 
-						return 'You have to give either `12` or `24` as argument';
-					}
-				}
-			]
-		});
-	}
+            return 'You have to give either `12` or `24` as argument';
+          }
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		this.client.provider.set('global', 'timeformat', args.format);
+  run (msg, args) {
+    this.client.provider.set('global', 'timeformat', args.format);
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		return msg.reply(`Your timestamps will now appear in \`${args.format} hour\` format`);
-	}
+    return msg.reply(`Your timestamps will now appear in \`${args.format} hour\` format`);
+  }
 };

@@ -13,44 +13,36 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const Discord = require('discord.js'),
-	commando = require('discord.js-commando'),
-	{deleteCommandMessages} = require('../../util.js');
+  commando = require('discord.js-commando'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class wiiGuideCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'wiiguide',
-			'memberName': 'wiiguide',
-			'group': 'links',
-			'aliases': ['cios', 'letterbomb'],
-			'description': 'A link to plailect\'s Nintendo Wii Guide',
-			'guildOnly': false
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'wiiguide',
+      memberName: 'wiiguide',
+      group: 'links',
+      aliases: ['cios', 'letterbomb'],
+      description: 'A link to plailect\'s Nintendo Wii Guide',
+      guildOnly: false
+    });
+  }
 
-	run (msg) {
-		const wiiGuideEmbed = new Discord.MessageEmbed();
+  run (msg) {
+    const wiiGuideEmbed = new Discord.MessageEmbed();
 
-		wiiGuideEmbed
-			.setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-			.setTitle('A one stop guide for Wii')
-			.setDescription('Want to run game backups on your Wii? Need instructions on how to set up Priiloader, Homebrew Launcher and cios? Follow this guide')
-			.addField('\u200b', 'https://wii.guide')
-			.setThumbnail('https://silento.s-ul.eu/g9QiwTgG');
+    wiiGuideEmbed
+      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+      .setTitle('A one stop guide for Wii')
+      .setDescription('Want to run game backups on your Wii? Need instructions on how to set up Priiloader, Homebrew Launcher and cios? Follow this guide')
+      .addField('\u200b', 'https://wii.guide')
+      .setThumbnail('https://silento.s-ul.eu/g9QiwTgG');
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		return msg.embed(wiiGuideEmbed, 'https://wii.guide');
-	}
+    return msg.embed(wiiGuideEmbed, 'https://wii.guide');
+  }
 };

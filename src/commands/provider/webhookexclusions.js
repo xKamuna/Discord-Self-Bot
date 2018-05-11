@@ -13,49 +13,41 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{oneLine} = require('common-tags'),
-	{deleteCommandMessages} = require('../../util.js');
+  {oneLine} = require('common-tags'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class webhookexclusionsCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'webhookexclusions',
-			'memberName': 'webhookexclusions',
-			'group': 'provider',
-			'aliases': ['whe', 'hookexclusions'],
-			'description': 'Configure the keywords to be avoided in your Webhook Notification System (WNS)',
-			'format': 'user,name,nick,name',
-			'examples': ['webhookexclusions Fantasy'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'exclusions',
-					'prompt': 'What keyword should be filtered for Webhook Notification System?',
-					'type': 'string',
-					'label': 'exclusions for WNS'
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'webhookexclusions',
+      memberName: 'webhookexclusions',
+      group: 'provider',
+      aliases: ['whe', 'hookexclusions'],
+      description: 'Configure the keywords to be avoided in your Webhook Notification System (WNS)',
+      format: 'user,name,nick,name',
+      examples: ['webhookexclusions Fantasy'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'exclusions',
+          prompt: 'What keyword should be filtered for Webhook Notification System?',
+          type: 'string',
+          label: 'exclusions for WNS'
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		this.client.provider.set('global', 'webhookexclusions', args.exclusions.split(','));
+  run (msg, args) {
+    this.client.provider.set('global', 'webhookexclusions', args.exclusions.split(','));
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		return msg.reply(oneLine `\`${args.exclusions.replace(/,/gim, ', ')}\` excluded from WNS. 
+    return msg.reply(oneLine`\`${args.exclusions.replace(/,/gim, ', ')}\` excluded from WNS. 
         Make sure to enable webhooks with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhooktoggle\`
         and set your keywords with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhookkeywords\` command`);
-	}
+  }
 };

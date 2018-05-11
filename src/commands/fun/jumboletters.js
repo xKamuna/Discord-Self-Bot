@@ -13,88 +13,80 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{deleteCommandMessages} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class jumbolettersCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'jumboletters',
-			'memberName': 'jumboletters',
-			'group': 'fun',
-			'aliases': ['jumbo', 'bigtext'],
-			'description': 'Create jumbo letters from your text',
-			'format': 'MessageToJumbo',
-			'examples': ['jumboletters Favna is a great coder!'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'text',
-					'prompt': 'What text to jumbo-fy',
-					'type': 'string'
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'jumboletters',
+      memberName: 'jumboletters',
+      group: 'fun',
+      aliases: ['jumbo', 'bigtext'],
+      description: 'Create jumbo letters from your text',
+      format: 'MessageToJumbo',
+      examples: ['jumboletters Favna is a great coder!'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'text',
+          prompt: 'What text to jumbo-fy',
+          type: 'string'
+        }
+      ]
+    });
+  }
 
-	fetchNumberWord (num) {
-		switch (num) {
-			case '0':
-				return 'zero';
-			case '1':
-				return 'one';
-			case '2':
-				return 'two';
-			case '3':
-				return 'three';
-			case '4':
-				return 'four';
-			case '5':
-				return 'five';
-			case '6':
-				return 'six';
-			case '7':
-				return 'seven';
-			case '8':
-				return 'eight';
-			case '9':
-				return 'nine';
-			default:
-				return '1234';
-		}
-	}
+  fetchNumberWord (num) {
+    switch (num) {
+    case '0':
+      return 'zero';
+    case '1':
+      return 'one';
+    case '2':
+      return 'two';
+    case '3':
+      return 'three';
+    case '4':
+      return 'four';
+    case '5':
+      return 'five';
+    case '6':
+      return 'six';
+    case '7':
+      return 'seven';
+    case '8':
+      return 'eight';
+    case '9':
+      return 'nine';
+    default:
+      return '1234';
+    }
+  }
 
-	run (msg, args) {
-		const jumboString = [];
+  run (msg, args) {
+    const jumboString = [];
 
-		for (const i in args.text) {
-			if (/[a-zA-Z]/gim.test(args.text[i])) {
-				jumboString.push(`:regional_indicator_${args.text[i].toLowerCase()}:`);
-			} else if (/[0-9]/gim.test(args.text[i])) {
-				jumboString.push(`:${this.fetchNumberWord(args.text[i])}:`);
-			} else if (/!/gim.test(args.text[i])) {
-				jumboString.push(':exclamation:');
-			} else if (/\?/gim.test(args.text[i])) {
-				jumboString.push(':question:');
-			} else if (/ /gim.test(args.text[i])) {
-				jumboString.push('  ');
-			} else {
-				jumboString.push(args.text[i]);
-			}
-		}
+    for (const i in args.text) {
+      if (/[a-zA-Z]/gim.test(args.text[i])) {
+        jumboString.push(`:regional_indicator_${args.text[i].toLowerCase()}:`);
+      } else if (/[0-9]/gim.test(args.text[i])) {
+        jumboString.push(`:${this.fetchNumberWord(args.text[i])}:`);
+      } else if (/!/gim.test(args.text[i])) {
+        jumboString.push(':exclamation:');
+      } else if (/\?/gim.test(args.text[i])) {
+        jumboString.push(':question:');
+      } else if (/ /gim.test(args.text[i])) {
+        jumboString.push('  ');
+      } else {
+        jumboString.push(args.text[i]);
+      }
+    }
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		return msg.say(jumboString.join(' '));
-	}
+    return msg.say(jumboString.join(' '));
+  }
 };

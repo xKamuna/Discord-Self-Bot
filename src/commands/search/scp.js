@@ -13,73 +13,65 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const Discord = require('discord.js'),
-	cheerio = require('cheerio'),
-	commando = require('discord.js-commando'),
-	request = require('snekfetch'),
-	{deleteCommandMessages} = require('../../util.js');
+  cheerio = require('cheerio'),
+  commando = require('discord.js-commando'),
+  request = require('snekfetch'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class scpCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'scp',
-			'memberName': 'scp',
-			'group': 'search',
-			'description': 'Get an SCP from the SCP foundation website',
-			'format': 'ArticleID',
-			'examples': ['scp 173'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'scparticle',
-					'prompt': 'Please enter the SCP you\'d like an URL for.',
-					'type': 'string'
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'scp',
+      memberName: 'scp',
+      group: 'search',
+      description: 'Get an SCP from the SCP foundation website',
+      format: 'ArticleID',
+      examples: ['scp 173'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'scparticle',
+          prompt: 'Please enter the SCP you\'d like an URL for.',
+          type: 'string'
+        }
+      ]
+    });
+  }
 
-	async run (msg, args) {
-		try {
-			const scpEmbed = new Discord.MessageEmbed(),
-				scpRes = await request.get(`http://www.scp-wiki.net/scp-${args.scparticle}`);
+  async run (msg, args) {
+    try {
+      const scpEmbed = new Discord.MessageEmbed(),
+        scpRes = await request.get(`http://www.scp-wiki.net/scp-${args.scparticle}`);
 
-			if (scpRes) {
-				const $ = cheerio.load(scpRes.text);
+      if (scpRes) {
+        const $ = cheerio.load(scpRes.text);
 
-				scpEmbed
-					.setTitle(`SCP-${args.scparticle}`)
-					.setFooter('SCP Foundation', 'https://ev1l0rd.s-ul.eu/uVu89Guq')
-					.setURL(`http://www.scp-wiki.net/scp-${args.scparticle}`)
-					.setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-					.addField('Object Class', $('strong:contains("Object Class:")').parent()
-						.text()
-						.slice(14), false)
-					.addField('Special Containment Procedures', `${$('strong:contains("Special Containment Procedures:")').parent()
-						.text()
-						.slice(32, 332)}... `, false)
-					.addField('Description', `${$('strong:contains("Description:")').parent()
-						.text()
-						.slice(13, 313)}... [Read more](http://www.scp-wiki.net/scp-${args.scparticle})`, false);
+        scpEmbed
+          .setTitle(`SCP-${args.scparticle}`)
+          .setFooter('SCP Foundation', 'https://ev1l0rd.s-ul.eu/uVu89Guq')
+          .setURL(`http://www.scp-wiki.net/scp-${args.scparticle}`)
+          .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+          .addField('Object Class', $('strong:contains("Object Class:")').parent()
+            .text()
+            .slice(14), false)
+          .addField('Special Containment Procedures', `${$('strong:contains("Special Containment Procedures:")').parent()
+            .text()
+            .slice(32, 332)}... `, false)
+          .addField('Description', `${$('strong:contains("Description:")').parent()
+            .text()
+            .slice(13, 313)}... [Read more](http://www.scp-wiki.net/scp-${args.scparticle})`, false);
 
-				deleteCommandMessages(msg, this.client);
+        deleteCommandMessages(msg, this.client);
 
-				return msg.embed(scpEmbed, `http://www.scp-wiki.net/scp-${args.scparticle}`);
-			}
-		} catch (err) {
-			return msg.reply('⚠️ ***nothing found***');
-		}
+        return msg.embed(scpEmbed, `http://www.scp-wiki.net/scp-${args.scparticle}`);
+      }
+    } catch (err) {
+      return msg.reply('⚠️ ***nothing found***');
+    }
 		
-		return msg.reply('⚠️ ***nothing found***');
-	}
+    return msg.reply('⚠️ ***nothing found***');
+  }
 };

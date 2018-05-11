@@ -13,35 +13,27 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{deleteCommandMessages} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class dndCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'dnd',
-			'memberName': 'dnd',
-			'group': 'status',
-			'aliases': ['busy', 'red'],
-			'description': 'Set your status to Do Not Disturb',
-			'examples': ['dnd'],
-			'guildOnly': false
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'dnd',
+      memberName: 'dnd',
+      group: 'status',
+      aliases: ['busy', 'red'],
+      description: 'Set your status to Do Not Disturb',
+      examples: ['dnd'],
+      guildOnly: false
+    });
+  }
 
-	run (msg) {
-		deleteCommandMessages(msg, this.client);
+  run (msg) {
+    deleteCommandMessages(msg, this.client);
 
-		this.client.user.setPresence({'status': 'dnd'}).then(msg.reply('Status set to do not disturb'));
-	}
+    this.client.user.setPresence({status: 'dnd'}).then(msg.reply('Status set to do not disturb'));
+  }
 };

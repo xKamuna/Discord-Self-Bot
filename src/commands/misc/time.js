@@ -13,46 +13,38 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	moment = require('moment'),
-	{oneLine} = require('common-tags'),
-	{deleteCommandMessages} = require('../../util.js');
+  moment = require('moment'),
+  {oneLine} = require('common-tags'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class timeCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'time',
-			'memberName': 'time',
-			'group': 'misc',
-			'aliases': ['curtime', 'currenttime', 'currentime'],
-			'description': 'Gets the current time in your timezone or UTC if you didn\'t set that up with with the timezone command',
-			'details': 'Be sure to use the timezone command if you want it to output the time in your own timezone!',
-			'examples': ['time'],
-			'guildOnly': false
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'time',
+      memberName: 'time',
+      group: 'misc',
+      aliases: ['curtime', 'currenttime', 'currentime'],
+      description: 'Gets the current time in your timezone or UTC if you didn\'t set that up with with the timezone command',
+      details: 'Be sure to use the timezone command if you want it to output the time in your own timezone!',
+      examples: ['time'],
+      guildOnly: false
+    });
+  }
 
-	run (msg) {
-		let utcHours = moment.utc().get('hours');
+  run (msg) {
+    let utcHours = moment.utc().get('hours');
 
-		utcHours += this.client.provider.get('global', 'timezone', 0);
+    utcHours += this.client.provider.get('global', 'timezone', 0);
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		/* eslint-disable newline-per-chained-call */
-		return msg.say(oneLine `
+    /* eslint-disable newline-per-chained-call */
+    return msg.say(oneLine`
             :clock${moment.utc().set('hours', utcHours).format('hh') < 10 ? `${moment.utc().set('hours', utcHours).format('hh').slice(1)}` : moment.utc().set('hours', utcHours).format('hh')}:
             Current time for **${msg.guild ? msg.member.displayName : this.client.user.username}** is 
             ${moment.utc().set('hours', utcHours).format('`HH:mm` (`hh:mm A`)')}`);
-	}
+  }
 };

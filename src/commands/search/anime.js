@@ -13,65 +13,57 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const Discord = require('discord.js'),
-	commando = require('discord.js-commando'),
-	maljs = require('maljs'),
-	{deleteCommandMessages} = require('../../util.js');
+  commando = require('discord.js-commando'),
+  maljs = require('maljs'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class animeCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'anime',
-			'memberName': 'anime',
-			'group': 'search',
-			'aliases': ['ani', 'mal'],
-			'description': 'Finds anime on MyAnimeList',
-			'format': 'AnimeName',
-			'examples': ['anime Pokemon'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'query',
-					'prompt': 'What anime do you want to find?',
-					'type': 'string'
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'anime',
+      memberName: 'anime',
+      group: 'search',
+      aliases: ['ani', 'mal'],
+      description: 'Finds anime on MyAnimeList',
+      format: 'AnimeName',
+      examples: ['anime Pokemon'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'query',
+          prompt: 'What anime do you want to find?',
+          type: 'string'
+        }
+      ]
+    });
+  }
 
-	async run (msg, args) {
-		const aniEmbed = new Discord.MessageEmbed(),
-			res = await maljs.quickSearch(args.query, 'anime');
+  async run (msg, args) {
+    const aniEmbed = new Discord.MessageEmbed(),
+      res = await maljs.quickSearch(args.query, 'anime');
 
-		if (res) {
-			const anime = await res.anime[0].fetch();
+    if (res) {
+      const anime = await res.anime[0].fetch();
 
-			if (anime) {
+      if (anime) {
 
-				aniEmbed
-					.setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
-					.setTitle(anime.title)
-					.setImage(anime.cover)
-					.setDescription(anime.description)
-					.setURL(`${anime.mal.url}${anime.path}`)
-					.addField('Score', anime.score, true)
-					.addField('Popularity', anime.popularity, true)
-					.addField('Rank', anime.ranked, true);
+        aniEmbed
+          .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
+          .setTitle(anime.title)
+          .setImage(anime.cover)
+          .setDescription(anime.description)
+          .setURL(`${anime.mal.url}${anime.path}`)
+          .addField('Score', anime.score, true)
+          .addField('Popularity', anime.popularity, true)
+          .addField('Rank', anime.ranked, true);
 
-				deleteCommandMessages(msg, this.client);
+        deleteCommandMessages(msg, this.client);
 
-				msg.embed(aniEmbed, `${anime.mal.url}${anime.path}`);
-			}
-		}
-	}
+        msg.embed(aniEmbed, `${anime.mal.url}${anime.path}`);
+      }
+    }
+  }
 };

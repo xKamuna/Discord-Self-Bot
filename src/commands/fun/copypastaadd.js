@@ -13,57 +13,49 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	fs = require('fs'),
-	path = require('path'),
-	{deleteCommandMessages} = require('../../util.js');
+  fs = require('fs'),
+  path = require('path'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class copypastaAddCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'copypastaadd',
-			'memberName': 'copypastaadd',
-			'group': 'fun',
-			'aliases': ['cpadd', 'pastaadd'],
-			'description': 'Saves a copypasta to local file',
-			'format': 'CopypastaName CopypastaContent',
-			'examples': ['copypasta navy what the fuck did you just say to me ... (etc.)'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'name',
-					'prompt': 'Send which copypasta?',
-					'type': 'string',
-					'parse': p => p.toLowerCase()
-				},
-				{
-					'key': 'content',
-					'prompt': 'What should be stored in the copypasta?',
-					'type': 'string'
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'copypastaadd',
+      memberName: 'copypastaadd',
+      group: 'fun',
+      aliases: ['cpadd', 'pastaadd'],
+      description: 'Saves a copypasta to local file',
+      format: 'CopypastaName CopypastaContent',
+      examples: ['copypasta navy what the fuck did you just say to me ... (etc.)'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'name',
+          prompt: 'Send which copypasta?',
+          type: 'string',
+          parse: p => p.toLowerCase()
+        },
+        {
+          key: 'content',
+          prompt: 'What should be stored in the copypasta?',
+          type: 'string'
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		fs.writeFileSync(path.join(__dirname, `pastas/${args.name}.txt`), args.content, 'utf8');
+  run (msg, args) {
+    fs.writeFileSync(path.join(__dirname, `pastas/${args.name}.txt`), args.content, 'utf8');
 
-		if (fs.existsSync(path.join(__dirname, `pastas/${args.name}.txt`))) {
-			deleteCommandMessages(msg, this.client);
+    if (fs.existsSync(path.join(__dirname, `pastas/${args.name}.txt`))) {
+      deleteCommandMessages(msg, this.client);
 			
-			return msg.reply(`Copypasta stored in ${args.name}.txt. You can summon it with ${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypasta ${args.name}`);
-		}
+      return msg.reply(`Copypasta stored in ${args.name}.txt. You can summon it with ${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypasta ${args.name}`);
+    }
 		
-		return msg.reply('⚠️ an error occured and your pasta was not saved. Consider creating the text file manually.');
-	}
+    return msg.reply('⚠️ an error occured and your pasta was not saved. Consider creating the text file manually.');
+  }
 };

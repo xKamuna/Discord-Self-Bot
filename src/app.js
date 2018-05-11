@@ -15,13 +15,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable no-mixed-requires, sort-vars */
+/* eslint-disable no-mixed-requires, sort-vars, one-var */
+const path = require('path');
 
-const path = require('path'),
-	DiscordSelfBot = require(path.join(__dirname, 'DiscordSelfBot.js')),
-	{token} = require('./auth.json'),
-	start = function () {
-		new DiscordSelfBot(token).init();
-	};
+require('dotenv').config({path: path.join(__dirname, '.env')});
+const DiscordSelfBot = require(path.join(__dirname, 'DiscordSelfBot.js')),
+  start = function () {
+    new DiscordSelfBot(process.env.token).init();
+  };
 
 start();

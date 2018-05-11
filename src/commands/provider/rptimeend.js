@@ -13,55 +13,47 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{oneLine} = require('common-tags'),
-	{deleteCommandMessages} = require('../../util.js');
+  {oneLine} = require('common-tags'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class rpTimeEndCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'rptimeend',
-			'memberName': 'rptimeend',
-			'group': 'provider',
-			'aliases': ['timeend', 'endtime', 'rptime', 'rpend'],
-			'description': 'Set your Rich Presence End Timestamp',
-			'details': 'Make sure to enable timestamp with the `rptoggletimeend` command',
-			'format': 'HoursAmount',
-			'examples': ['rptimeend 2'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'time',
-					'prompt': 'How many hours in the future do you want the timer to end?',
-					'type': 'integer',
-					'label': 'endtime',
-					'validate': (time) => {
-						if (time <= 24) {
-							return true;
-						}
+  constructor (client) {
+    super(client, {
+      name: 'rptimeend',
+      memberName: 'rptimeend',
+      group: 'provider',
+      aliases: ['timeend', 'endtime', 'rptime', 'rpend'],
+      description: 'Set your Rich Presence End Timestamp',
+      details: 'Make sure to enable timestamp with the `rptoggletimeend` command',
+      format: 'HoursAmount',
+      examples: ['rptimeend 2'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'time',
+          prompt: 'How many hours in the future do you want the timer to end?',
+          type: 'integer',
+          label: 'endtime',
+          validate: (time) => {
+            if (time <= 24) {
+              return true;
+            }
 
-						return 'Rich Presence time has to end within 24 hours';
-					}
-				}
-			]
-		});
-	}
+            return 'Rich Presence time has to end within 24 hours';
+          }
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		this.client.provider.set('global', 'rptimeend', args.time);
+  run (msg, args) {
+    this.client.provider.set('global', 'rptimeend', args.time);
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		return msg.reply(oneLine `Your RichPresence End Timestamp has been set to \`${args.time} hour(s)\``);
-	}
+    return msg.reply(oneLine`Your RichPresence End Timestamp has been set to \`${args.time} hour(s)\``);
+  }
 };

@@ -13,53 +13,45 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
  */
 
 const commando = require('discord.js-commando'),
-	{oneLine} = require('common-tags'),
-	{deleteCommandMessages} = require('../../util.js');
+  {oneLine} = require('common-tags'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class rppartysizeCommand extends commando.Command {
-	constructor (client) {
-		super(client, {
-			'name': 'rppartysize',
-			'memberName': 'rppartysize',
-			'group': 'provider',
-			'aliases': ['rparty', 'partysize', 'rpparty'],
-			'description': 'Set your Rich Presence Party Size',
-			'format': 'MinSizeAmount MaxSizeAmount',
-			'examples': ['rppartysize 0 0'],
-			'guildOnly': false,
-			'args': [
-				{
-					'key': 'partymin',
-					'prompt': 'What is the minimum party members?',
-					'type': 'integer',
-					'label': 'partyminx'
-				},
-				{
-					'key': 'partymax',
-					'prompt': 'What is the maximum party members?',
-					'type': 'integer',
-					'label': 'partymax'
-				}
-			]
-		});
-	}
+  constructor (client) {
+    super(client, {
+      name: 'rppartysize',
+      memberName: 'rppartysize',
+      group: 'provider',
+      aliases: ['rparty', 'partysize', 'rpparty'],
+      description: 'Set your Rich Presence Party Size',
+      format: 'MinSizeAmount MaxSizeAmount',
+      examples: ['rppartysize 0 0'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'partymin',
+          prompt: 'What is the minimum party members?',
+          type: 'integer',
+          label: 'partyminx'
+        },
+        {
+          key: 'partymax',
+          prompt: 'What is the maximum party members?',
+          type: 'integer',
+          label: 'partymax'
+        }
+      ]
+    });
+  }
 
-	run (msg, args) {
-		this.client.provider.set('global', 'rppartysize', [args.partymin, args.partymax]);
+  run (msg, args) {
+    this.client.provider.set('global', 'rppartysize', [args.partymin, args.partymax]);
 
-		deleteCommandMessages(msg, this.client);
+    deleteCommandMessages(msg, this.client);
 
-		return msg.reply(oneLine `Your Rich Presence party size has been set to a minimum of \`${args.partymin}\` and a maximum of \`${args.partymax}\``);
-	}
+    return msg.reply(oneLine`Your Rich Presence party size has been set to a minimum of \`${args.partymin}\` and a maximum of \`${args.partymax}\``);
+  }
 };

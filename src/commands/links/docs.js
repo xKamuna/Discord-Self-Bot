@@ -17,12 +17,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const commando = require('discord.js-commando'),
+const {Command} = require('discord.js-commando'),
   request = require('snekfetch'),
   {oneLineTrim} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class DocsCommand extends commando.Command {
+module.exports = class DocsCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'docs',

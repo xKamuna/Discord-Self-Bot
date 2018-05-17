@@ -16,13 +16,13 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   igdbapi = require('igdb-api-node').default,
   moment = require('moment'),
   {deleteCommandMessages} = require('../../util.js'),
-  {igdbAPIKey} = require('../../auth.json');
+  {igdbAPIKey} = process.env.igdbkey;
 
-module.exports = class IGDBCommand extends commando.Command {
+module.exports = class IGDBCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'igdb',

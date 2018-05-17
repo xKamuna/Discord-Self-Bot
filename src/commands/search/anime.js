@@ -16,11 +16,11 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   maljs = require('maljs'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class animeCommand extends commando.Command {
+module.exports = class animeCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'anime',

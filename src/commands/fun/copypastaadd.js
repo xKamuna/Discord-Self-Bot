@@ -15,12 +15,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const commando = require('discord.js-commando'),
+const {Command} = require('discord.js-commando'),
   fs = require('fs'),
   path = require('path'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class copypastaAddCommand extends commando.Command {
+module.exports = class copypastaAddCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'copypastaadd',

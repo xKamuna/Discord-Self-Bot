@@ -16,10 +16,10 @@
  */
 
 const booru = require('booru'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class pahealCommand extends commando.Command {
+module.exports = class pahealCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'paheal',

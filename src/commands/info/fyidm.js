@@ -16,12 +16,12 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   table = require('markdown-table'),
   {stripIndents} = require('common-tags'),
   {deleteCommandMessages, momentFormat} = require('../../util.js');
 
-module.exports = class fyidmCommand extends commando.Command {
+module.exports = class fyidmCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'fyidm',

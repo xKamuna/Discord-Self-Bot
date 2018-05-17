@@ -16,11 +16,11 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   request = require('snekfetch'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class defineCommand extends commando.Command {
+module.exports = class defineCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'define',

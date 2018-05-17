@@ -17,11 +17,11 @@
 
 const Discord = require('discord.js'),
   cheerio = require('cheerio'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   request = require('snekfetch'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class scpCommand extends commando.Command {
+module.exports = class scpCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'scp',

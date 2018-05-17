@@ -17,7 +17,7 @@
 
 const Discord = require('discord.js'),
   cheerio = require('cheerio'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   moment = require('moment'),
   path = require('path'),
   request = require('snekfetch'),
@@ -26,7 +26,7 @@ const Discord = require('discord.js'),
 
 const themeEmbed = new Discord.MessageEmbed(); // eslint-disable-line one-var
 
-module.exports = class themeNameCommand extends commando.Command {
+module.exports = class themeNameCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'tpname',

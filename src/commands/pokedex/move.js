@@ -16,14 +16,14 @@
  */
 
 const Discord = require('discord.js'),
-  Matcher = require('did-you-mean'),
+  Matcher = require('didyoumean2'),
   Path = require('path'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   moves = require(Path.join(__dirname, 'data/moves.js')).BattleMovedex,
   {oneLine} = require('common-tags'),
   {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
 
-module.exports = class moveCommand extends commando.Command {
+module.exports = class moveCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'move',

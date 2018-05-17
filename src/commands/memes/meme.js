@@ -15,8 +15,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Matcher = require('did-you-mean'),
-  commando = require('discord.js-commando'),
+const Matcher = require('didyoumean2'),
+  {Command} = require('discord.js-commando'),
   fs = require('fs'),
   path = require('path'),
   {oneLine} = require('common-tags'),
@@ -29,7 +29,7 @@ for (const meme in memes) {
   detailString += `${memes[meme].slice(0, memes[meme].length - 4)}, `;
 }
 
-module.exports = class memeCommand extends commando.Command {
+module.exports = class memeCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'meme',

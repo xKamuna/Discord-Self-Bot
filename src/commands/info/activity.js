@@ -16,13 +16,13 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   duration = require('moment-duration-format'), // eslint-disable-line no-unused-vars
   moment = require('moment'),
   request = require('snekfetch'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class activityCommand extends commando.Command {
+module.exports = class activityCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'activity',

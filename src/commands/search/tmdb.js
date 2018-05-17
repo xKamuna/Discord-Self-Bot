@@ -16,13 +16,13 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   moment = require('moment'),
   request = require('snekfetch'),
-  {TheMovieDBV3ApiKey} = require('../../auth.json'),
+  {TheMovieDBV3ApiKey} = process.env.moviedbkey,
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class movieCommand extends commando.Command {
+module.exports = class movieCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'tmdb',

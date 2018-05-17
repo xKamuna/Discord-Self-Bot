@@ -15,12 +15,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
-  urban = require('urban'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Searches UrbanCommand - Define a word using UrbanDictionary
+ * **Aliases**: `ub`, `ud`
+ * @module
+ * @category search
+ * @name urban
+ * @example urban Everclear
+ * @param {StringResolvable} PhraseQuery Phrase that you want to define
+ * @returns {MessageEmbed} Top definition for the requested phrase
+ */
 
-module.exports = class urbanCommand extends commando.Command {
+const request = require('snekfetch'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+
+module.exports = class UrbanCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'urban',
@@ -31,6 +42,10 @@ module.exports = class urbanCommand extends commando.Command {
       format: 'Term',
       examples: ['urban ugt'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'query',
@@ -41,23 +56,34 @@ module.exports = class urbanCommand extends commando.Command {
     });
   }
 
-  run (msg, args) {
-    urban(args.query).first((json) => {
-      if (!json) {
-        return msg.reply('⚠️ ***nothing found***');
-      }
-      const urbanEmbed = new Discord.MessageEmbed(); // eslint-disable-line one-var
+  async run (msg, args) {
+    startTyping(msg);
+    const urban = await request.get('https://api.urbandictionary.com/v0/define').query('term', args.query);
 
-      urbanEmbed
-        .setAuthor(`Urban Search - ${json.word}`, 'https://i.imgur.com/miYLsGw.jpg')
-        .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-        .addField('Definition', json.definition.length <= 1024 ? json.definition : `Truncated due to exceeding maximum length\n${json.definition.slice(0, 970)}`, false)
-        .addField('Example', json.example.length <= 1024 ? json.example : `Truncated due to exceeding maximum length\n${json.example.slice(0, 970)}`, false)
-        .addField('Permalink', json.permalink, false);
+    if (urban.ok && urban.body.result_type !== 'no_results') {
+      const embed = new MessageEmbed();
+
+      urban.body.list.sort((a, b) => b.thumbs_up - b.thumbs_down - (a.thumbs_up - a.thumbs_down));
+
+      embed
+        .setTitle(`Urban Search - ${urban.body.list[0].word}`)
+        .setURL(urban.body.list[0].permalink)
+        .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+        .setDescription(urban.body.list[0].definition)
+        .addField('Example',
+          urban.body.list[0].example.length <= 1024
+            ? urban.body.list[0].example
+            : `Truncated due to exceeding maximum length\n${urban.body.list[0].example.slice(0, 970)}`,
+          false);
 
       deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
 
-      return msg.embed(urbanEmbed);
-    });
+      return msg.embed(embed);
+    }
+    deleteCommandMessages(msg, this.client);
+    stopTyping(msg);
+
+    return msg.reply(`no definitions found for \`${args.query}\``);
   }
 };

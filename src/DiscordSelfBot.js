@@ -202,7 +202,10 @@ class DiscordSelfBot {
         ['provider', 'Control your data stored in the client provider'],
         ['search', 'Search the web'],
         ['status', 'Set your status'],
-        ['themeplaza', 'Browse ThemePlaza']
+        ['themeplaza', 'Browse ThemePlaza'],
+        // TODO: Check group names and defs
+        ['games', 'Fun and Games to play with the bot'],
+        ['extra', 'Extra commands']
       ])
       .registerDefaultGroups()
       .registerDefaultTypes()

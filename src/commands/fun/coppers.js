@@ -16,11 +16,11 @@
  */
 
 
-const commando = require('discord.js-commando'),
+const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class coppersCommand extends commando.Command {
+module.exports = class coppersCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'coppers',

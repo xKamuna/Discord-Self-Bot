@@ -17,11 +17,11 @@
 
 const Discord = require('discord.js'),
   card = require('creditcardutils'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   {oneLine, stripIndents} = require('common-tags'),
   {capitalizeFirstLetter, deleteCommandMessages, momentFormat} = require('../../util.js');
 
-module.exports = class creditgenCommand extends commando.Command {
+module.exports = class creditgenCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'creditgen',

@@ -15,13 +15,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const commando = require('discord.js-commando'),
+const {Command} = require('discord.js-commando'),
   eshop = require('nintendo-switch-eshop'),
   fs = require('fs'),
   path = require('path'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class EshopFetchCommand extends commando.Command {
+module.exports = class EshopFetchCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'eshopfetch',

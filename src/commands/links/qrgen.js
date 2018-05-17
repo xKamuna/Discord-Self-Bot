@@ -15,12 +15,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const commando = require('discord.js-commando'),
+const {Command} = require('discord.js-commando'),
   imgur = require('imgur'),
   qr = require('qrcode'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class qrgenCommand extends commando.Command {
+module.exports = class qrgenCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'qrgen',

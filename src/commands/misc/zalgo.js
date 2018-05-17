@@ -15,21 +15,38 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const commando = require('discord.js-commando'),
-  zalgo = require('zalgotxt'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Extra Zalgo - Create zalgo-fied text from your input
+ * First banishes any existing zalgo to ensure proper result
+ * **Aliases**: `trash`
+ * @module
+ * @category extra
+ * @name zalgo
+ * @example zalgo HE COMES
+ * @param {StringResolvable} SomeText Your input to transform with Zalgo
+ * @returns {Message} Your text zalgo-fied
+ */
 
+const banish = require('to-zalgo/banish'),
+  zalgo = require('to-zalgo'),
+  {Command} = require('discord.js-commando'),
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
 
-module.exports = class zalgoCommand extends commando.Command {
+module.exports = class zalgoCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'zalgo',
       memberName: 'zalgo',
-      group: 'misc',
+      group: 'extra',
+      aliases: ['trash'],
       description: 'F*ck up text using Zalgo',
       format: 'ContentToTransform',
       examples: ['zalgo HE COMES'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'txt',
@@ -41,8 +58,11 @@ module.exports = class zalgoCommand extends commando.Command {
   }
 
   run (msg, args) {
+    startTyping(msg);
     deleteCommandMessages(msg, this.client);
-		
-    return msg.say(zalgo(args.txt));
+
+    msg.say(zalgo(banish(args.txt)));
+
+    return stopTyping(msg);
   }
 };

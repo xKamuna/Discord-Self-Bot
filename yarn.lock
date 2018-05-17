@@ -1256,6 +1256,10 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
+flipacoin@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/flipacoin/-/flipacoin-1.0.0.tgz#16208adc007f768da180cd991d48c54a68442658"
+
 follow-redirects@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.0.0.tgz#8e34298cbd2e176f254effec75a1c78cc849fd37"
@@ -1508,6 +1512,12 @@ htmlparser2@^3.9.1:
     entities "^1.1.1"
     inherits "^2.0.1"
     readable-stream "^2.0.2"
+
+http-agent@*:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/http-agent/-/http-agent-0.1.2.tgz#aaacd633c87e5ab42ed4f90827a1a5f1e2bac4b8"
+  dependencies:
+    request "1.9.x"
 
 http-signature@~1.2.0:
   version "1.2.0"
@@ -2106,6 +2116,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+markdown-table@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/markdown-table/-/markdown-table-1.1.2.tgz#c78db948fa879903a41bce522e3b96f801c63786"
+
 marked@^0.3.16, marked@~0.3.6:
   version "0.3.19"
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.19.tgz#5d47f709c4c9fc3c216b6d46127280f40b39d790"
@@ -2492,6 +2506,12 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
+open-exchange-rates@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/open-exchange-rates/-/open-exchange-rates-0.3.0.tgz#00a0f22e8a06945f60615c25656cd765fd48316b"
+  dependencies:
+    http-agent "*"
+
 optimist@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/optimist/-/optimist-0.6.1.tgz#da3ea74686fa21a19a111c326e90eb15a0196686"
@@ -2812,6 +2832,10 @@ repeating@^2.0.0:
   resolved "https://registry.yarnpkg.com/repeating/-/repeating-2.0.1.tgz#5214c53a926d3552707527fbab415dbc08d06dda"
   dependencies:
     is-finite "^1.0.0"
+
+request@1.9.x:
+  version "1.9.9"
+  resolved "https://registry.yarnpkg.com/request/-/request-1.9.9.tgz#af231fe87e3725a5db46ff74833f3aa0ebfd9151"
 
 request@^2.34.0, request@^2.40.0, request@^2.60.0, request@^2.75.0, request@^2.81.0:
   version "2.86.0"
@@ -3148,6 +3172,10 @@ static-extend@^0.1.1:
 steamapi@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/steamapi/-/steamapi-2.0.0.tgz#71ac82cea53e7c743e0723d79d466f6b15000c4a"
+
+strawpoll.js@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/strawpoll.js/-/strawpoll.js-1.0.3.tgz#160ef73a87c1d680d8386dc1da36292bc9a1f7d0"
 
 stream-connect@^1.0.2:
   version "1.0.2"
@@ -3698,6 +3726,10 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+zalgotxt@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/zalgotxt/-/zalgotxt-0.1.0.tgz#f52ce5039a39c5f2bf36a404af315224885100a9"
 
 zlib-sync@^0.1.4:
   version "0.1.4"

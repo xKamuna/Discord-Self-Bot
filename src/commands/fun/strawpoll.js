@@ -15,22 +15,39 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
-  strawpoll = require('strawpoll.js'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Games StrawpollCommand - Create a strawpoll and find out what people really think (hopefully)
+ * Has a very specific syntax! Be sure to adapt the example!
+ * **Aliases**: `straw`, `poll`
+ * @module
+ * @category games
+ * @name strawpoll
+ * @example strawpoll "Best Anime Waifu?" "Pyrrha Nikos|Ruby Rose"
+ * @param {StringResolvable} Question The question that the strawpoll needs to answer. Recommended to wrap in `" "` (or `' '`) to allow spaces
+ * @param {StringResolvable} Options The options the strawpoll should have. Recommended to wrap in `" "` (or `' '`) to allow spaces. Splits on every \`|\`
+ * @returns {MessageEmbed} Poll url, title, options and preview image
+ */
 
-module.exports = class strawpollCommand extends commando.Command {
+const request = require('snekfetch'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js');
+
+module.exports = class StrawpollCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'strawpoll',
       memberName: 'strawpoll',
-      group: 'fun',
-      aliases: ['poll', 'straw'],
+      group: 'games',
+      aliases: ['straw', 'poll'],
       description: 'Strawpoll something. Recommended to use the replying with each argument method to allow spaces in the title',
+      details: 'Has a very specific syntax! Be sure to adapt the example!',
       format: 'TitleOfStrawpoll OptionA|OptionB|OptionC...',
       examples: ['strawpoll "Best Anime Waifu?" "Pyrrha Nikos|Ruby Rose"'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'title',
@@ -44,12 +61,13 @@ module.exports = class strawpollCommand extends commando.Command {
           type: 'string',
           wait: 60,
           validate: (opts) => {
-            if (/([a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\-\_\=\+\[\{\]\}\;\:\'\"\\\,\<\.\>\/\?\`\~ ]*\|[a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\-\_\=\+\[\{\]\}\;\:\'\"\\\,\<\.\>\/\?\`\~]*)*/.test(opts) &&
-							opts.split('|').length >= 2) {
+            if (/([\S ]*\|[\S ]*)*/i.test(opts) &&
+                            opts.split('|').length >= 2 && opts.split('|').length <= 30) {
               return true;
             }
 
-            return 'You need at least 2 options and the valid format for the options is `Question 1|Question 2|Question 3 etc..`';
+            return 'You need between 2 and 30 options and the valid format for the options is `Question 1|Question 2|Question 3 etc..`';
+
           }
         }
       ]
@@ -57,41 +75,36 @@ module.exports = class strawpollCommand extends commando.Command {
   }
 
   async run (msg, args) {
-    const APIConvertion = {
-        dupcheck: {
-          normal: 'IP Duplication Checking',
-          permissive: 'Browser Cookie Duplication Checking',
-          disabled: 'No Duplication Checking'
-        },
-        multi: {
-          true: 'Multiple poll answers allowed',
-          false: 'Multiple poll answers disabled'
-        }
-      },
-      poll = await strawpoll.make({
-        title: args.title,
-        options: args.options.split('|'),
-        multi: false,
-        dupcheck: 'normal',
-        captcha: false
-      }),
-      pollEmbed = new Discord.MessageEmbed();
+    startTyping(msg);
+    const pollEmbed = new MessageEmbed(),
+      strawpoll = await request
+        .post('https://www.strawpoll.me/api/v2/polls')
+        .set('Content-Type', 'application/json')
+        .send({
+          title: args.title,
+          options: args.options.split('|'),
+          multi: false,
+          dupcheck: 'normal',
+          captcha: true
+        });
 
-    if (poll) {
+    if (strawpoll.ok) {
       pollEmbed
-        .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-        .setTitle(poll.title)
-        .setURL(`http://www.strawpoll.me/${poll.id}`)
-        .setImage(`http://www.strawpoll.me/images/poll-results/${poll.id}.png`)
-        .addField('Duplication Check', APIConvertion.dupcheck[poll.dupcheck], true)
-        .addField('Multiple poll answers', APIConvertion.multi[poll.multi], true)
-        .addField('Poll options', poll.options, false);
+        .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+        .setTitle(strawpoll.body.title)
+        .setURL(`http://www.strawpoll.me/${strawpoll.body.id}`)
+        .setImage(`http://www.strawpoll.me/images/poll-results/${strawpoll.body.id}.png`)
+        .setDescription(`Options on this poll: \`${strawpoll.body.options.join(', ')}\` `);
 
       deleteCommandMessages(msg, this.client);
-			
-      return msg.embed(pollEmbed, `http://www.strawpoll.me/${poll.id}`);
+      stopTyping(msg);
+
+      return msg.embed(pollEmbed, `http://www.strawpoll.me/${strawpoll.body.id}`);
     }
 
-    return msg.reply('⚠️ an error occured creating the strawpoll');
+    deleteCommandMessages(msg, this.client);
+    stopTyping(msg);
+
+    return msg.reply('an error occurred creating the strawpoll');
   }
 };

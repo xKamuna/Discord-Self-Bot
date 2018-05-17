@@ -16,14 +16,14 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   duration = require('moment-duration-format'), // eslint-disable-line no-unused-vars
   moment = require('moment'),
   process = require('process'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages, momentFormat} = require('../../util.js');
 
-module.exports = class statsCommand extends commando.Command {
+module.exports = class statsCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'stats',

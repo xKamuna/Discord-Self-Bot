@@ -16,11 +16,11 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   random = require('node-random'),
   {deleteCommandMessages, momentFormat} = require('../../util.js');
 
-module.exports = class fightCommand extends commando.Command {
+module.exports = class fightCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'fight',

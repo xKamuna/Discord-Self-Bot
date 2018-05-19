@@ -15,12 +15,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const {Command} = require('discord.js-commando'),
-  fs = require('fs'),
-  path = require('path'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Extra CopyPastaAddCommand - Adds a new copypasta for your server  
+ * **Aliases**: `cpadd`, `pastaadd`
+ * @module
+ * @category extra
+ * @name copypastaadd
+ * @example copypastaadd lipsum Lorem ipsum dolor sit amet. 
+ * @param {StringResolvable} PasteName Name for the new pasta
+ * @param {StringResolvable} PastaContent Content for the new pasta
+ * @returns {Message} Confirmation the copypasta was added
+ */
 
-module.exports = class copypastaAddCommand extends Command {
+const fs = require('fs'),
+  path = require('path'),
+  {Command} = require('discord.js-commando'),
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+
+module.exports = class CopyPastaAddCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'copypastaadd',
@@ -47,15 +59,18 @@ module.exports = class copypastaAddCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    fs.writeFileSync(path.join(__dirname, `pastas/${args.name}.txt`), args.content, 'utf8');
+  run (msg, {name, content}) {
+    startTyping(msg);
+    fs.writeFileSync(path.join(__dirname, `pastas/${name}.txt`), content, 'utf8');
 
-    if (fs.existsSync(path.join(__dirname, `pastas/${args.name}.txt`))) {
+    if (fs.existsSync(path.join(__dirname, `pastas/${name}.txt`))) {
       deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
 			
-      return msg.reply(`Copypasta stored in ${args.name}.txt. You can summon it with ${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypasta ${args.name}`);
+      return msg.reply(`Copypasta stored in ${name}.txt. You can summon it with ${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypasta ${name}`);
     }
-		
-    return msg.reply('⚠️ an error occured and your pasta was not saved. Consider creating the text file manually.');
+    stopTyping(msg);
+
+    return msg.reply('an error occurred and your pasta was not saved.');
   }
 };

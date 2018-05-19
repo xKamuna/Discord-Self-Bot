@@ -15,15 +15,28 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  Matcher = require('didyoumean2'),
-  {Command} = require('discord.js-commando'),
+/**
+ * @file Extra CopyPastaCommand - Sends one of your saved copypastas  
+ * Save copypastas in the data/pastas folder in .txt format  
+ * If the copypasta has an image URL and the total length is less than 1024 characters it will be embedded along with the image  
+ * **Aliases**: `cp`, `pasta`
+ * @module
+ * @category extra
+ * @name copypasta
+ * @example copypasta navy
+ * @param {StringResolvable} PastaName Name of the copypasta to send
+ * @returns {MessageEmbed} Copypasta content. In a normal message if more than 1024 characters
+ */
+
+const dym = require('didyoumean2'),
   fs = require('fs'),
   path = require('path'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
   {oneLine} = require('common-tags'),
-  {deleteCommandMessages} = require('../../util.js');
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
 
-module.exports = class copypastaCommand extends Command {
+module.exports = class CopyPastaCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'copypasta',
@@ -45,52 +58,50 @@ module.exports = class copypastaCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    const match = new Matcher();
-
-    match.values = fs.readdirSync(path.join(__dirname, 'pastas'));
-
-    const dym = match.get(`${args.name}.txt`), // eslint-disable-line one-var
-      dymString = dym !== null
-        ? oneLine`Did you mean \`${dym}\`?`
-        : oneLine`You can save it with \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypastaadd <filename> <content>\` or verify the file name manually`;
-
+  run (msg, {name}) {
+    startTyping(msg);
     try {
-      let pastaContent = fs.readFileSync(path.join(__dirname, `pastas/${args.name}.txt`), 'utf8');
+      let pastaContent = fs.readFileSync(path.join(__dirname, `../../data/pastas/${name}.txt`), 'utf8');
 
-      if (pastaContent) {
-        if (pastaContent.length <= 1024) {
-          /* eslint-disable no-nested-ternary */
-          const cpEmbed = new Discord.MessageEmbed(),
-            ext = pastaContent.includes('.png') ? '.png'
-              : pastaContent.includes('.jpg') ? '.jpg'
-                : pastaContent.includes('.gif') ? '.gif'
-                  : pastaContent.includes('.webp') ? '.webp' : 'none',
-            header = ext !== 'none' ? pastaContent.includes('https') ? 'https' : 'http' : 'none';
-          /* eslint-enable no-nested-ternary */
+      if (pastaContent.length <= 1024) {
+        /* eslint-disable no-nested-ternary */
+        const cpEmbed = new MessageEmbed(),
+          ext = pastaContent.includes('.png') ? '.png'
+            : pastaContent.includes('.jpg') ? '.jpg'
+              : pastaContent.includes('.gif') ? '.gif'
+                : pastaContent.includes('.webp') ? '.webp' : 'none',
+          header = ext !== 'none' ? pastaContent.includes('https') ? 'https' : 'http' : 'none';
+        /* eslint-enable no-nested-ternary */
 
-          if (ext !== 'none' && header !== 'none') {
-            cpEmbed.setImage(`${pastaContent.substring(pastaContent.indexOf(header), pastaContent.indexOf(ext))}${ext}`);
-            pastaContent = pastaContent.substring(0, pastaContent.indexOf(header) - 1) + pastaContent.substring(pastaContent.indexOf(ext) + ext.length);
-          }
-
-          cpEmbed.setDescription(pastaContent);
-          msg.delete();
-
-          return msg.embed(cpEmbed);
+        if (ext !== 'none' && header !== 'none') {
+          cpEmbed.setImage(`${pastaContent.substring(pastaContent.indexOf(header), pastaContent.indexOf(ext))}${ext}`);
+          pastaContent = pastaContent.substring(0, pastaContent.indexOf(header) - 1) + pastaContent.substring(pastaContent.indexOf(ext) + ext.length);
         }
+
+        cpEmbed
+          .setDescription(pastaContent)
+          .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00');
+
         msg.delete();
+        stopTyping(msg);
 
-        return msg.say(pastaContent, {split: true});
+        return msg.embed(cpEmbed);
       }
+      msg.delete();
+      stopTyping(msg);
+
+      return msg.say(pastaContent, {split: true});
     } catch (err) {
+      console.error(err);
       deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
 
-      return msg.reply(`⚠️ that copypata does not exist! ${dymString}`);
+      const matchList = fs.readdirSync(path.join(__dirname, '../../data/pastas/')).map(v => v.slice(0, -4)),
+        maybe = dym(name, matchList, {deburr: true});
+
+      return msg.reply(oneLine`that copypasta does not exist! ${maybe 
+        ? oneLine`Did you mean \`${maybe}\`?` 
+        : `You can save it with \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypastaadd <filename> <content>\``}`);
     }
-
-    deleteCommandMessages(msg, this.client);
-
-    return msg.reply(`⚠️ that copypata does not exist! ${dymString}`);
   }
 };

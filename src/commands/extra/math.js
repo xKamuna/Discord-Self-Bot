@@ -1,0 +1,56 @@
+/*
+ *   This file is part of discord-self-bot
+ *   Copyright (C) 2017-2018 Favna
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, version 3 of the License
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+const Discord = require('discord.js'),
+  {Command} = require('discord.js-commando'),
+  scalc = require('scalc'),
+  {deleteCommandMessages} = require('../../util.js');
+
+module.exports = class mathCommand extends Command {
+  constructor (client) {
+    super(client, {
+      name: 'math',
+      memberName: 'math',
+      group: 'extra',
+      aliases: ['calc'],
+      description: 'Calculate anything',
+      format: 'EquationToSolve',
+      examples: ['math -10 - abs(-3) + 2^5'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'equation',
+          prompt: 'What is the equation to solve?',
+          type: 'string'
+        }
+      ]
+    });
+  }
+
+  run (msg, args) {
+    const mathEmbed = new Discord.MessageEmbed(); // eslint-disable-line one-var
+
+    mathEmbed
+      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+      .addField('Equation', args.equation.toString(), false)
+      .addField('Result', scalc(args.equation), false);
+
+    deleteCommandMessages(msg, this.client);
+
+    return msg.embed(mathEmbed);
+  }
+};

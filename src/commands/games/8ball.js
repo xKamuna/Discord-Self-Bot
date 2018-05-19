@@ -1,0 +1,56 @@
+/*
+ *   This file is part of discord-self-bot
+ *   Copyright (C) 2017-2018 Favna
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, version 3 of the License
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+const Discord = require('discord.js'),
+  {Command} = require('discord.js-commando'),
+  predict = require('eightball'),
+  {deleteCommandMessages} = require('../../util.js');
+    
+module.exports = class eightBallCommand extends Command {
+  constructor (client) {
+    super(client, {
+      name: '8ball',
+      memberName: '8ball',
+      group: 'games',
+      aliases: ['eightball'],
+      description: 'Roll a magic 8ball',
+      format: 'YourQuestion',
+      examples: ['8ball is Favna a genius coder?'],
+      guildOnly: false,
+      args: [
+        {
+          key: 'question',
+          prompt: '8ball what?',
+          type: 'string'
+        }
+      ]
+    });
+  }
+
+  run (msg, args) {
+    const eightBallEmbed = new Discord.MessageEmbed();
+
+    eightBallEmbed
+      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+      .addField(':question: Question', args.question, false)
+      .addField(':8ball: 8ball', predict(), false);
+			
+    deleteCommandMessages(msg, this.client);
+
+    return msg.embed(eightBallEmbed);
+  }
+};

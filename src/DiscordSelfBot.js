@@ -191,20 +191,18 @@ class DiscordSelfBot {
 
     this.client.registry
       .registerGroups([
-        ['emojis', '"Global" emojis as images'],
-        ['fun', 'Fun and Games to play with the bot'],
-        ['info', 'Get Information on various things'],
-        ['links', 'Quick Website Links'],
-        ['memes', 'React with memes'],
-        ['misc', 'Commands that cannot be categorized elsewhere'],
-        ['nsfw', 'Find NSFW content ( ͡° ͜ʖ ͡°)'],
-        ['pokedex', 'Get information from the PokéDex'],
-        ['provider', 'Control your data stored in the client provider'],
-        ['search', 'Search the web'],
-        ['status', 'Set your status'],
-        ['themeplaza', 'Browse ThemePlaza'],
-        ['games', 'Fun and Games to play with the bot'],
-        ['extra', 'Extra commands']
+        ['games', 'Games - Play some games'],
+        ['info', 'Info - Discord info at your fingertips'],
+        ['searches', 'Searches - Browse the web and find results'],
+        ['leaderboards', 'Leaderboards - View leaderboards from various games'],
+        ['pokemon', 'Pokemon - Let Dexter answer your questions'],
+        ['extra', 'Extra - Extra! Extra! Read All About It! Only Two Cents!'],
+        ['images', 'Images - Send emojis and memes directly to the chat'],
+        ['links', 'Links - Quickly link to various websites'],
+        ['quoting', 'Quoting - Quote other users to really reply to them'],
+        ['nsfw', 'NSFW - For all you dirty minds ( ͡° ͜ʖ ͡°)'],
+        ['provider', 'Provider - Control the data the bot has stored for you'],
+        ['status', 'Status - Control your status']
       ])
       .registerDefaultGroups()
       .registerDefaultTypes()

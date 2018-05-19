@@ -29,7 +29,7 @@ module.exports = class typeCommand extends Command {
     super(client, {
       name: 'type',
       memberName: 'type',
-      group: 'pokedex',
+      group: 'pokemon',
       aliases: ['matchup', 'weakness', 'advantage'],
       description: 'Get type matchup for a given type or type combination',
       format: 'FirstType [SecondType]',

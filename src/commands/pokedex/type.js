@@ -19,12 +19,12 @@
 
 const Discord = require('discord.js'),
   Path = require('path'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   typeMatchups = require(Path.join(__dirname, 'data/typechart.js')).BattleTypeChart,
   {oneLine} = require('common-tags'),
   {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
 
-module.exports = class typeCommand extends commando.Command {
+module.exports = class typeCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'type',

@@ -15,12 +15,29 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
-  cydia = require('cydia-api-node'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Searches CydiaCommand - Gets info from a package on Cydia, only supports default repositories
+ * Can also listens to the pattern of `[[SomePackageName]]` as is custom on the [/r/jailbreak subreddit](https://www.reddit.com/r/jailbreak) and [its discord server](https://discord.gg/jb)
+ * Server admins can enable the `[[]]` matching by using the `rmt off` command
+ * **Aliases**: `cy`
+ * @module
+ * @category search
+ * @name cydia
+ * @example cydia Anemone
+ * @param {StringResolvable} TweakName Name of the tweak to find
+ * @returns {MessageEmbed} Information about the tweak
+ */
 
-module.exports = class cydiaCommand extends commando.Command {
+const Fuse = require('fuse.js'),
+  cheerio = require('cheerio'),
+  moment = require('moment'),
+  request = require('snekfetch'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {oneLine, stripIndents} = require('common-tags'),
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+
+module.exports = class CydiaCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'cydia',
@@ -28,12 +45,20 @@ module.exports = class cydiaCommand extends commando.Command {
       group: 'search',
       aliases: ['cy'],
       description: 'Finds info on a Cydia package',
-      format: 'PackageName',
+      details: stripIndents`${oneLine`Can also listens to the pattern of \`[[SomePackageName]]\`
+        as is custom on the [/r/jailbreak subreddit](https://www.reddit.com/r/jailbreak) and [its discord server](https://discord.gg/jb)`}
+        Server admins can enable the \`[[]]\` matching by using the \`rmt on\` command`,
+      format: 'PackageName | [[PackageName]]',
       examples: ['cydia anemone'],
       guildOnly: false,
+      patterns: [/\[\[[a-zA-Z0-9 ]+\]\]/im],
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
-          key: 'query',
+          key: 'deb',
           prompt: 'Please supply package name',
           type: 'string'
         }
@@ -41,30 +66,89 @@ module.exports = class cydiaCommand extends commando.Command {
     });
   }
 
-  async run (msg, args) {
-    const cydiaEmbed = new Discord.MessageEmbed(),
-      res = await cydia.getAllInfo(args.query);
+  async run (msg, {deb}) {
+    startTyping(msg);
+    if (msg.patternMatches) {
+      if (!msg.guild.settings.get('regexmatches', false)) {
+        return null;
+      }
+      deb = msg.patternMatches[0].substring(2, msg.patternMatches[0].length - 2);
+    }
+    const baseURL = 'https://cydia.saurik.com/',
+      embed = new MessageEmbed(),
+      fsoptions = {
+        shouldSort: true,
+        threshold: 0.3,
+        location: 0,
+        distance: 100,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        keys: ['display', 'name']
+      },
+      packages = await request.get(`${baseURL}api/macciti`).query('query', deb);
 
-    if (res) {
-      cydiaEmbed
-        .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-        .setAuthor('Tweak Info', 'http://i.imgur.com/OPZfdht.png')
-        .addField('Display Name', res.display, true)
-        .addField('Package Name', res.name, true)
-        .addField('Description', `${res.summary.slice(0, 900)}... [Read more](http://cydia.saurik.com/package/${res.name})`, true)
-        .addField('Version', res.version, true)
-        .addField('Section', res.section, true)
-        .addField('Price', res.price === 0 ? 'Free' : res.price, true)
-        .addField('Link', `[Click Here](http://cydia.saurik.com/package/${res.name})`, true)
-        .addField('Repo', `[${res.repo.name}](https://cydia.saurik.com/api/share#?source=${res.repo.link})`, true);
-			
-      deleteCommandMessages(msg, this.client);
+    if (packages.ok) {
+      const fuse = new Fuse(packages.body.results, fsoptions),
+        results = fuse.search(deb);
 
-      return msg.embed(cydiaEmbed);
+      if (results.length) {
+        const result = results[0];
+
+        embed
+          .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+          .setTitle(result.display)
+          .setDescription(result.summary)
+          .addField('Version', result.version, true)
+          .addField('Link', `[Click Here](${baseURL}package/${result.name})`, true);
+
+        try {
+          const price = await request.get(`${baseURL}api/ibbignerd`).query('query', result.name),
+            site = await request.get(`${baseURL}package/${result.name}`);
+
+          if (site.ok) {
+            const $ = cheerio.load(site.text);
+
+            embed
+              .addField('Source', $('.source-name').html(), true)
+              .addField('Section', $('#section').html(), true)
+              .addField('Size', $('#extra').text(), true);
+          }
+
+          if (price.ok) {
+            embed.addField('Price', price.body ? `$${price.body.msrp}` : 'Free', true);
+          }
+
+          embed.addField('Package Name', result.name, false);
+
+          if (!msg.patternMatches) {
+            deleteCommandMessages(msg, this.client);
+          }
+          startTyping(msg);
+
+          return msg.embed(embed);
+        } catch (err) {
+          this.client.channels.resolve(process.env.ribbonlogchannel).send(stripIndents`
+          <@${this.client.owners[0].id}> Error occurred in \`cydia\` command!
+          **Server:** ${msg.guild.name} (${msg.guild.id})
+          **Author:** ${msg.author.tag} (${msg.author.id})
+          **Time:** ${moment(msg.createdTimestamp).format('MMMM Do YYYY [at] HH:mm:ss [UTC]Z')}
+          **Input:** ${deb}
+          **Regex Match:** \`${msg.patternMatches ? 'yes' : 'no'}\`
+          **Error Message:** ${err}
+          `);
+
+          embed.addField('Package Name', result.name, false);
+
+          if (!msg.patternMatches) {
+            deleteCommandMessages(msg, this.client);
+          }
+          stopTyping(msg);
+
+          return msg.embed(embed);
+        }
+      }
     }
 
-    deleteCommandMessages(msg, this.client);
-
-    return msg.say(`**Tweak/Theme \`${args.query}\` not found!**`);
+    return msg.say(`**Tweak/Theme \`${deb}\` not found!**`);
   }
 };

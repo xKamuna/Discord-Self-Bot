@@ -16,10 +16,10 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class wiiGuideCommand extends commando.Command {
+module.exports = class wiiGuideCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'wiiguide',

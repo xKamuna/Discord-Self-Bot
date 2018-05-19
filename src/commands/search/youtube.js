@@ -16,12 +16,12 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   request = require('snekfetch'),
   {deleteCommandMessages, momentFormat} = require('../../util.js'),
-  {googleapikey} = require('../../auth.json');
+  {googleapikey} = process.env.googleapikey;
 
-module.exports = class youtubeCommand extends commando.Command {
+module.exports = class youtubeCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'youtube',

@@ -16,14 +16,14 @@
  */
 
 const Discord = require('discord.js'),
-  Matcher = require('did-you-mean'),
-  commando = require('discord.js-commando'),
+  Matcher = require('didyoumean2'),
+  {Command} = require('discord.js-commando'),
   fs = require('fs'),
   path = require('path'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class copypastaCommand extends commando.Command {
+module.exports = class copypastaCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'copypasta',

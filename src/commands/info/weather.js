@@ -16,11 +16,11 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   weather = require('yahoo-weather'),
   {deleteCommandMessages, momentFormat} = require('../../util.js');
 
-module.exports = class weatherCommand extends commando.Command {
+module.exports = class weatherCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'weather',

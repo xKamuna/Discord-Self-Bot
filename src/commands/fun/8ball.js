@@ -16,11 +16,11 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   predict = require('eightball'),
   {deleteCommandMessages} = require('../../util.js');
     
-module.exports = class eightBallCommand extends commando.Command {
+module.exports = class eightBallCommand extends Command {
   constructor (client) {
     super(client, {
       name: '8ball',

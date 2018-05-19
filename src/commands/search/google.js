@@ -17,13 +17,14 @@
 
 const Discord = require('discord.js'),
   cheerio = require('cheerio'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   querystring = require('querystring'),
   request = require('snekfetch'),
   {deleteCommandMessages} = require('../../util.js'),
-  {googleapikey, searchEngineKey} = require('../../auth.json');
+  {googleapikey} = process.env.googleapikey,
+  {searchEngineKey} = process.env.searchkey;
 
-module.exports = class googleCommand extends commando.Command {
+module.exports = class googleCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'google',

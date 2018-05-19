@@ -16,13 +16,13 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   {
     deleteCommandMessages,
     momentFormat
   } = require('../../util.js');
 
-module.exports = class listEmojisCommand extends commando.Command {
+module.exports = class listEmojisCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'listemojis',

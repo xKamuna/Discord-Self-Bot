@@ -17,13 +17,14 @@
 
 const Discord = require('discord.js'),
   cheerio = require('cheerio'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   querystring = require('querystring'),
   request = require('snekfetch'),
   {deleteCommandMessages} = require('../../util.js'),
-  {googleapikey, imageEngineKey} = require('../../auth.json');
+  {googleapikey} = process.env.googleapikey,
+  {imageEngineKey} = process.env.imagekey;
 
-module.exports = class imageCommand extends commando.Command {
+module.exports = class imageCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'image',

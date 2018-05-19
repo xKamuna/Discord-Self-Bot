@@ -15,11 +15,11 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const commando = require('discord.js-commando'),
+const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class webhookexclusionsCommand extends commando.Command {
+module.exports = class webhookexclusionsCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'webhookexclusions',

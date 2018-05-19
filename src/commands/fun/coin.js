@@ -16,11 +16,10 @@
  */
 
 const Discord = require('discord.js'),
-  coin = require('flipacoin'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class coinCommand extends commando.Command {
+module.exports = class coinCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'coin',
@@ -35,7 +34,7 @@ module.exports = class coinCommand extends commando.Command {
 
   run (msg) {
     const coinEmbed = new Discord.MessageEmbed(),
-      res = coin();
+      res = Math.round(Math.randon()) ? 'head' : 'tail';
 
     coinEmbed
       .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')

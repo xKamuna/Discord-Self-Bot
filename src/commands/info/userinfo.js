@@ -16,10 +16,10 @@
  */
 
 const Discord = require('discord.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   {capitalizeFirstLetter, deleteCommandMessages, momentFormat} = require('../../util.js');
 
-module.exports = class userInfoCommand extends commando.Command {
+module.exports = class userInfoCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'userinfo',

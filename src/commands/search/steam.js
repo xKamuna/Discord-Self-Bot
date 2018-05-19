@@ -18,13 +18,13 @@
 const Discord = require('discord.js'),
   SteamAPI = require('steamapi'),
   cheerio = require('cheerio'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   currencySymbol = require('currency-symbol-map'),
   request = require('snekfetch'),
   {deleteCommandMessages} = require('../../util.js'),
-  {steamAPIKey} = require('../../auth.json');
+  {steamAPIKey} = process.env.steamkey;
 	
-module.exports = class steamCommand extends commando.Command {
+module.exports = class steamCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'steam',

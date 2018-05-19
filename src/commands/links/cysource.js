@@ -15,10 +15,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const commando = require('discord.js-commando'),
+const {Command} = require('discord.js-commando'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class cydiaSourceCommand extends commando.Command {
+module.exports = class cydiaSourceCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'cysource',

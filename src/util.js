@@ -16,8 +16,18 @@ const momentFormat = function (date, client) {
   return moment(date).format(`MMMM Do YYYY [at] ${client.provider.get('global', 'timeformat', '24') === '24' ? 'HH:mm:ss' : 'hh:mm:ss A'} [UTC]Z`);
 };
 
+const stopTyping = function (msg) {
+  msg.channel.stopTyping(true);
+};
+
+const startTyping = function (msg) {
+  msg.channel.startTyping(1);
+};
+
 module.exports = {
   capitalizeFirstLetter,
   deleteCommandMessages,
-  momentFormat
+  momentFormat,
+  stopTyping,
+  startTyping
 };

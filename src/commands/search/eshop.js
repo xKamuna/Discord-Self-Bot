@@ -16,14 +16,14 @@
  */
 
 const Fuse = require('fuse.js'),
-  commando = require('discord.js-commando'),
+  {Command} = require('discord.js-commando'),
   fs = require('fs'),
   path = require('path'),
   {MessageEmbed} = require('discord.js'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class EshopCommand extends commando.Command {
+module.exports = class EshopCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'eshop',

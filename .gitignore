@@ -20,8 +20,9 @@ src/data/pastas/
 !src/data/images/emojis/*.gitkeep
 !src/data/images/memes/*.gitkeep
 
-# VSCode settings
+# IDE Settings
 .vscode/
+.idea/
 
 # Code coverage results
 coverage/

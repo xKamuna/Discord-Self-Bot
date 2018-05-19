@@ -15,11 +15,20 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Extra EmbedCommand - Create custom MessageEmbeds on the fly  
+ * **Aliases**: `cplist`, `copylist`, `pastalist`
+ * @module
+ * @category extra
+ * @name copypastalist
+ * @returns {MessageEmbed} List of all available copypastas
+ */
 
-module.exports = class embedCommand extends Command {
+const {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages, startTyping, stopTyping} = require('../../util.js');
+
+module.exports = class EmbedCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'embed',
@@ -32,11 +41,11 @@ module.exports = class embedCommand extends Command {
       guildOnly: false,
       args: [
         {
-          key: 'embedContent',
+          key: 'content',
           prompt: 'What should the content of the embed be?',
           type: 'string',
           validate: (input) => {
-            if (input.match(/([a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\-\_\=\+\[\{\]\}\;\:\'\"\\\|\,\<\.\>\/\?\`\~]*)>([a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\-\_\=\+\[\{\]\}\;\:\'\"\\\|\,\<\.\>\/\?\`\~]*).*/)) { // eslint-disable-line max-len
+            if (input.match(/(?:[\S ]+)>(?:[\S ]+).*/gim)) { // eslint-disable-line max-len
               return true;
             }
 
@@ -48,7 +57,7 @@ module.exports = class embedCommand extends Command {
           key: 'image',
           prompt: 'Any image to send into the embed?',
           type: 'string',
-          default: 'none',
+          default: '',
           validate: (url) => {
             if (url.match(/(https?:\/\/.*\.(?:png|jpg|gif|webp|jpeg|svg))/im)) {
               return true;
@@ -61,9 +70,10 @@ module.exports = class embedCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    const customEmbed = new Discord.MessageEmbed(),
-      paramString = args.embedContent,
+  run (msg, {content, image}) {
+    startTyping(msg);
+    const customEmbed = new MessageEmbed(),
+      paramString = content,
       fields = paramString.split('<'); // eslint-disable-line sort-vars
 
     fields.forEach((field) => {
@@ -76,9 +86,10 @@ module.exports = class embedCommand extends Command {
 
     customEmbed
       .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-      .setImage(args.image !== 'none' ? args.image : null);
+      .setImage(image ? image : null);
 
     deleteCommandMessages(msg, this.client);
+    stopTyping(msg);
 
     return msg.embed(customEmbed);
   }

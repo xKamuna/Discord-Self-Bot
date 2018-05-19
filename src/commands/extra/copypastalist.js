@@ -15,6 +15,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file Extra EmbedCommand - Get a list of all copypastas  
+ * **Aliases**: `cplist`, `copylist`, `pastalist`
+ * @module
+ * @category extra
+ * @name copypastalist
+ * @returns {MessageEmbed} List of all available copypastas
+ */
+
 const fs = require('fs'),
   path = require('path'),
   {Command} = require('discord.js-commando'),
@@ -29,7 +38,7 @@ module.exports = class CopyPastaListCommand extends Command {
       memberName: 'copypastalist',
       group: 'extra',
       aliases: ['cplist', 'copylist', 'pastalist'],
-      description: 'Gets all copypastas available to the server',
+      description: 'Get a list of all copypastas',
       guildOnly: false,
       throttling: {
         usages: 2,

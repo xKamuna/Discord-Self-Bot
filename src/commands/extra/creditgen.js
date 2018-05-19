@@ -15,11 +15,11 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  card = require('creditcardutils'),
+const card = require('creditcardutils'),
   {Command} = require('discord.js-commando'),
-  {oneLine, stripIndents} = require('common-tags'),
-  {capitalizeFirstLetter, deleteCommandMessages, momentFormat} = require('../../util.js');
+  {MessageEmbed} = require('discord.js'),
+  {stripIndents} = require('common-tags'),
+  {capitalizeFirstLetter, deleteCommandMessages, startTyping, stopTyping} = require('../../util.js');
 
 module.exports = class creditgenCommand extends Command {
   constructor (client) {
@@ -28,7 +28,8 @@ module.exports = class creditgenCommand extends Command {
       memberName: 'creditgen',
       group: 'extra',
       aliases: ['cg'],
-      description: 'Generate a valid credit card number for those pesky sites that ask for one',
+      description: 'Generate a credit card number for those pesky sites that ask for one',
+      details: 'Validity is not guaranteed. Many sites properly check validity but this will work for some',
       format: 'CreditcardNetwork',
       examples: ['creditgen'],
       guildOnly: false,
@@ -228,17 +229,18 @@ module.exports = class creditgenCommand extends Command {
     return secondNameList[curSecondName];
   }
 
-  run (msg, args) {
+  run (msg, {network}) {
+    startTyping(msg);
     /*  eslint-disable no-nested-ternary*/
-    const cardNum = args.network === 'visa'
+    const cardNum = network === 'visa'
         ? this.generateVisaNumber()
-        : args.network === 'mastercard'
+        : network === 'mastercard'
           ? this.generateMastercardNumber()
           : this.generateAmexNumber(),
       /*  eslint-enable no-nested-ternary*/
-      embed = new Discord.MessageEmbed(),
+      embed = new MessageEmbed(),
       info = stripIndents`
-			**Issuing network**: ${capitalizeFirstLetter(args.network)}
+			**Issuing network**: ${capitalizeFirstLetter(network)}
 			**Card Number**: ${card.formatCardNumber(cardNum)}
 			**Name**: ${this.randomizeFirstName()} ${this.randomizeSecondName()}
 			**Address**: ${this.randomizeAddress()} ${Math.floor(Math.random() * 150) + 1}
@@ -250,16 +252,16 @@ module.exports = class creditgenCommand extends Command {
     embed
       .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
       .setDescription(info)
-    /*  eslint-disable no-nested-ternary*/
-      .setThumbnail(args.network === 'visa'
+      .setTimestamp()
+      .setThumbnail(network === 'visa' // eslint-disable-line no-nested-ternary
         ? 'https://i.imgur.com/a7RQu01.png'
-        : args.network === 'mastercard'
+        : network === 'mastercard'
           ? 'https://i.imgur.com/oCOOUn0.png'
-          : 'https://i.imgur.com/mETGJCm.png')
-    /*  eslint-enable no-nested-ternary*/
-      .setFooter(oneLine(momentFormat(new Date(), this.client)));
+          : 'https://i.imgur.com/mETGJCm.png');
+
 
     deleteCommandMessages(msg, this.client);
+    stopTyping(msg);
 
     return msg.embed(embed);
   }

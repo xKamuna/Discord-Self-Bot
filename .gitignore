@@ -23,6 +23,9 @@ src/data/pastas/
 # VSCode settings
 .vscode/
 
+#IntelliJ IDEA
+.idea/
+
 # Code coverage results
 coverage/
 .nyc_output/

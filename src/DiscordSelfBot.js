@@ -26,7 +26,7 @@ class DiscordSelfBot {
     this.token = token;
     this.client = new Client({
       owner: process.env.owner,
-      commandPrefix: process.env.prefix.toLowerCase().includes('favna') ? '$' : process.env.prefix,
+      commandPrefix: (/(?:favna)/gim).test(process.env.prefix) ? '$' : process.env.prefix,
       selfbot: true,
       unknownCommandResponse: false
     });
@@ -203,7 +203,6 @@ class DiscordSelfBot {
         ['search', 'Search the web'],
         ['status', 'Set your status'],
         ['themeplaza', 'Browse ThemePlaza'],
-        // TODO: Check group names and defs
         ['games', 'Fun and Games to play with the bot'],
         ['extra', 'Extra commands']
       ])

@@ -15,19 +15,12 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Matcher = require('didyoumean2'),
-  {Command} = require('discord.js-commando'),
+const dym = require('didyoumean2'),
   fs = require('fs'),
   path = require('path'),
+  {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
-  {deleteCommandMessages} = require('../../util.js');
-
-const memes = fs.readdirSync(path.join(__dirname, 'images')); // eslint-disable-line one-var
-let detailString = '';
-
-for (const meme in memes) {
-  detailString += `${memes[meme].slice(0, memes[meme].length - 4)}, `;
-}
+  {deleteCommandMessages} = require(path.join(__dirname, '../../util.js'));
 
 module.exports = class memeCommand extends Command {
   constructor (client) {
@@ -37,35 +30,37 @@ module.exports = class memeCommand extends Command {
       group: 'memes',
       aliases: ['mem', 'maymay'],
       description: 'Send a meme image',
-      details: `Available memes: ${detailString}`,
-      format: 'MemeName [MessageToSendWithEmoji]',
-      examples: ['meme {imageName}', 'meme cry'],
+      format: 'MemeName [MessageToSendWithMeme]',
+      examples: ['meme cry'],
       guildOnly: false,
       args: [
         {
-          key: 'image',
-          prompt: 'What image do you want send?',
+          key: 'meme',
+          prompt: 'What meme do you want send?',
           type: 'string',
-          label: 'image name to send'
+          parse: p => p.toLowerCase()
+        }, {
+          key: 'message',
+          prompt: 'Content to send along with the meme?',
+          type: 'string',
+          default: ''
         }
       ]
     });
   }
 
-  run (msg, args) {
-    const match = new Matcher();
+  run (msg, {meme, message}) {
+    try {
+      deleteCommandMessages(msg, this.client);
 
-    match.values = memes;
+      return msg.say(message, {files: [path.join(__dirname, `../../data/images/memes/${meme}.jpg`)]});
+    } catch (err) {
+      const matchList = fs.readdirSync(path.join).map(v => v.slice(0, 4)),
+        maybe = dym(meme, matchList, {deburr: true});
 
-    const dym = match.get(`${args.image}.jpg`), // eslint-disable-line one-var
-      dymString = dym !== null
-        ? oneLine`Did you mean \`${dym}\`?`
-        : oneLine`Add it to the images folder!`;
-
-    deleteCommandMessages(msg, this.client);
-
-    return msg.channel.send({files: [path.join(__dirname, `/images/${args.image.toLowerCase()}.jpg`)]}).catch((err) => { // eslint-disable-line handle-callback-err, no-unused-vars
-      msg.reply(`⚠️ that meme does not exist! ${dymString}`);
-    });
+      return msg.reply(oneLine`that meme does not exist! ${maybe 
+        ? oneLine`Did you mean \`${maybe}\`?` 
+        : 'You can add it to the folder then try again'}`);
+    }
   }
 };

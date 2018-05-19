@@ -15,12 +15,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  {
-    deleteCommandMessages,
-    momentFormat
-  } = require('../../util.js');
+const {Command} = require('discord.js-commando'), 
+  {MessageEmbed} = require('discord.js'), 
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
 
 module.exports = class listEmojisCommand extends Command {
   constructor (client) {
@@ -31,22 +28,24 @@ module.exports = class listEmojisCommand extends Command {
       aliases: ['listemo', 'emolist', 'listemoji', 'emotes'],
       description: 'Gets all available custom emojis from a server',
       format: 'ServerID|ServerName(partial or full)',
-      examples: ['emojis Favna\'s Selfbot'],
+      examples: ['emojis Bots By Favna'],
       guildOnly: false,
       args: [
         {
           key: 'server',
           prompt: 'What server would you like the emojis from?',
           type: 'guild',
-          default: 'current'
+          default: ''
         }
       ]
     });
   }
 
-  run (msg, args) {
-    const embed = new Discord.MessageEmbed(),
-      server = args.server === 'current' ? msg.guild : args.server;
+  run (msg, {server}) {
+    startTyping(msg);
+    const embed = new MessageEmbed();
+
+    server = server ? server : msg.guild;
 
     let animEmotes = [],
       staticEmotes = [];
@@ -56,9 +55,9 @@ module.exports = class listEmojisCommand extends Command {
     });
 
     embed
-      .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
+      .setColor(server.me.displayHexColor)
       .setAuthor(`${staticEmotes.length + animEmotes.length} ${server.name} Emotes`, server.iconURL({format: 'png'}))
-      .setFooter(`Emotes list from ${momentFormat(new Date(), this.client)}`);
+      .setTimestamp();
 
     staticEmotes = staticEmotes.length !== 0 ? `__**${staticEmotes.length} Static Emotes**__\n${staticEmotes.join('')}` : '';
     animEmotes = animEmotes.length !== 0 ? `\n\n__**${animEmotes.length} Animated Emotes**__\n${animEmotes.join('')}` : '';
@@ -66,7 +65,8 @@ module.exports = class listEmojisCommand extends Command {
     embed.setDescription(staticEmotes + animEmotes);
 
     deleteCommandMessages(msg, this.client);
+    stopTyping(msg);
 
-    return msg.channel.send(embed);
+    return msg.embed(embed);
   }
 };

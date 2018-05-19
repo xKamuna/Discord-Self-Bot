@@ -17,8 +17,7 @@
     "docs:deploy": "yarn run docs && yarn run docs:json && git commit -am documentation && git push && cd ../selfbot.wiki/ && git commit -am documentation && git push && cd ../favna.xyz/ && git commit -am documentation && git push",
     "lint": "./node_modules/.bin/eslint src/commands/**/*.js",
     "lint:fix": "./node_modules/.bin/eslint --fix src/commands/**/*.js",
-    "start": "node $NODE_DEBUG_OPTION src/app.js",
-    "version": "node -v",
+    "start": "node src/app.js",
     "test": "yarn run lint:fix && yarn lint && ./node_modules/.bin/mocha src/test/mocha.js",
     "test:minimal": "./node_modules/.bin/mocha src/test/mocha.js"
   },

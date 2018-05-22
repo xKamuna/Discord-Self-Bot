@@ -15,10 +15,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const {Command} = require('discord.js-commando'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Searches LmgtfyCommand - Transform some query into a LMGTFY (Let Me Google That For You) url
+ * **Aliases**: `dumb`
+ * @module
+ * @category searches
+ * @name lmgtfy
+ * @example lmgtfy is it legal to kill an ant???
+ * @param {StringResolvable} SearchQuery The dumb sh*t people need to use google for
+ * @returns {Message} LMGTFY url
+ */
 
-module.exports = class lmgtfyCommand extends Command {
+const {Command} = require('discord.js-commando'),
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+
+module.exports = class LmgtfyCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'lmgtfy',
@@ -29,6 +40,10 @@ module.exports = class lmgtfyCommand extends Command {
       format: 'Query',
       examples: ['lmgtfy is it legal to kill an ant???', 'lmgtfy are there birds in canada?'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'question',
@@ -41,8 +56,10 @@ module.exports = class lmgtfyCommand extends Command {
   }
 
   run (msg, args) {
+    startTyping(msg);
     deleteCommandMessages(msg, this.client);
+    stopTyping(msg);
 
-    return msg.say(`https://lmgtfy.com/?q=${args.question}`);
+    return msg.say(`<https://lmgtfy.com/?q=${args.question}>`);
   }
 };

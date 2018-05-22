@@ -19,7 +19,7 @@
  * @file Searches UrbanCommand - Define a word using UrbanDictionary
  * **Aliases**: `ub`, `ud`
  * @module
- * @category search
+ * @category searches
  * @name urban
  * @example urban Everclear
  * @param {StringResolvable} PhraseQuery Phrase that you want to define

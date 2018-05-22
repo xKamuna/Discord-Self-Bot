@@ -21,7 +21,7 @@
  * Server admins can enable the `[[]]` matching by using the `rmt off` command
  * **Aliases**: `cy`
  * @module
- * @category search
+ * @category searches
  * @name cydia
  * @example cydia Anemone
  * @param {StringResolvable} TweakName Name of the tweak to find

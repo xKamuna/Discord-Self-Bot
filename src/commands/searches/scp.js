@@ -19,7 +19,7 @@ const Discord = require('discord.js'),
   cheerio = require('cheerio'),
   {Command} = require('discord.js-commando'),
   request = require('snekfetch'),
-  {deleteCommandMessages} = require('../../util.js');
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
 
 module.exports = class scpCommand extends Command {
   constructor (client) {
@@ -42,6 +42,7 @@ module.exports = class scpCommand extends Command {
   }
 
   async run (msg, args) {
+    startTyping(msg);
     try {
       const scpEmbed = new Discord.MessageEmbed(),
         scpRes = await request.get(`http://www.scp-wiki.net/scp-${args.scparticle}`);
@@ -51,6 +52,7 @@ module.exports = class scpCommand extends Command {
 
         scpEmbed
           .setTitle(`SCP-${args.scparticle}`)
+          // TODO: Fix image
           .setFooter('SCP Foundation', 'https://ev1l0rd.s-ul.eu/uVu89Guq')
           .setURL(`http://www.scp-wiki.net/scp-${args.scparticle}`)
           .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
@@ -65,10 +67,14 @@ module.exports = class scpCommand extends Command {
             .slice(13, 313)}... [Read more](http://www.scp-wiki.net/scp-${args.scparticle})`, false);
 
         deleteCommandMessages(msg, this.client);
+        stopTyping(msg);
 
         return msg.embed(scpEmbed, `http://www.scp-wiki.net/scp-${args.scparticle}`);
       }
     } catch (err) {
+      deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
+
       return msg.reply('⚠️ ***nothing found***');
     }
 		

@@ -15,12 +15,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  maljs = require('maljs'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Searches MangaCommand - Gets information about any manga from MyAnimeList
+ * **Aliases**: `cartoon`, `man`
+ * @module
+ * @category searches
+ * @name manga
+ * @example manga Yu-Gi-Oh
+ * @param {StringResolvable} AnyManga manga to look up
+ * @returns {MessageEmbed} Information about the requested manga
+ */
 
-module.exports = class mangaCommand extends Command {
+const maljs = require('maljs'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+
+module.exports = class MangaCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'manga',
@@ -31,6 +42,10 @@ module.exports = class mangaCommand extends Command {
       format: 'MangaName',
       examples: ['manga Pokemon'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'query',
@@ -42,7 +57,8 @@ module.exports = class mangaCommand extends Command {
   }
 
   async run (msg, args) {
-    const manEmbed = new Discord.MessageEmbed(),
+    startTyping(msg);
+    const manEmbed = new MessageEmbed(),
       res = await maljs.quickSearch(args.query, 'manga');
 
     if (res) {
@@ -51,7 +67,7 @@ module.exports = class mangaCommand extends Command {
       if (manga) {
 
         manEmbed
-          .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
+          .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
           .setTitle(manga.title)
           .setImage(manga.cover)
           .setDescription(manga.description)
@@ -61,11 +77,18 @@ module.exports = class mangaCommand extends Command {
           .addField('Rank', manga.ranked, true);
 
         deleteCommandMessages(msg, this.client);
-					
+        stopTyping(msg);
+
         return msg.embed(manEmbed, `${manga.mal.url}${manga.path}`);
       }
+      deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
+
+      return msg.reply(`no manga found for the input \`${args.query}\` `);
     }
-		
-    return msg.reply('⚠️ ***nothing found***');
+    deleteCommandMessages(msg, this.client);
+    stopTyping(msg);
+
+    return msg.reply(`no manga found for the input \`${args.query}\` `);
   }
 };

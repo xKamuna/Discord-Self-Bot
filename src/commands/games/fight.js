@@ -95,7 +95,7 @@ module.exports = class fightCommand extends Command {
         return msg.embed(fighterEmbed);
       }
 
-      return msg.reply('⚠️ an error occured pitting these combatants against each other 😦');
+      return msg.reply('⚠️ an error occurred pitting these combatants against each other 😦');
     });
 
     return null;

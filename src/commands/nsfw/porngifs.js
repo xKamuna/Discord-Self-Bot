@@ -56,7 +56,7 @@ module.exports = class porngifsCommand extends Command {
         maximum: gifs.length - 1
       }, (error, gif) => {
         if (error) {
-          return msg.reply('⚠ An error occured while drawing a random number.');
+          return msg.reply('⚠ An error occurred while drawing a random number.');
         }
         pornEmbed
           .setURL(gifs[gif].url)

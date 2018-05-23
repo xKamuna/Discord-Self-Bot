@@ -34,7 +34,7 @@ const dym = require('didyoumean2'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {oneLine} = require('common-tags'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class CopyPastaCommand extends Command {
   constructor (client) {
@@ -59,7 +59,6 @@ module.exports = class CopyPastaCommand extends Command {
   }
 
   run (msg, {name}) {
-    startTyping(msg);
     try {
       let pastaContent = fs.readFileSync(path.join(__dirname, `../../data/pastas/${name}.txt`), 'utf8');
 
@@ -83,18 +82,15 @@ module.exports = class CopyPastaCommand extends Command {
           .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00');
 
         msg.delete();
-        stopTyping(msg);
 
         return msg.embed(cpEmbed);
       }
       msg.delete();
-      stopTyping(msg);
 
       return msg.say(pastaContent, {split: true});
     } catch (err) {
       console.error(err);
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
       const matchList = fs.readdirSync(path.join(__dirname, '../../data/pastas/')).map(v => v.slice(0, -4)),
         maybe = dym(name, matchList, {deburr: true});

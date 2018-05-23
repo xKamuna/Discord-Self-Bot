@@ -19,7 +19,7 @@ const card = require('creditcardutils'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {stripIndents} = require('common-tags'),
-  {capitalizeFirstLetter, deleteCommandMessages, startTyping, stopTyping} = require('../../util.js');
+  {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
 
 module.exports = class creditgenCommand extends Command {
   constructor (client) {
@@ -230,7 +230,6 @@ module.exports = class creditgenCommand extends Command {
   }
 
   run (msg, {network}) {
-    startTyping(msg);
     /*  eslint-disable no-nested-ternary*/
     const cardNum = network === 'visa'
         ? this.generateVisaNumber()
@@ -261,7 +260,6 @@ module.exports = class creditgenCommand extends Command {
 
 
     deleteCommandMessages(msg, this.client);
-    stopTyping(msg);
 
     return msg.embed(embed);
   }

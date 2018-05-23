@@ -24,9 +24,9 @@
  * @returns {MessageEmbed} List of all available copypastas
  */
 
-const {Command} = require('discord.js-commando'),
-  {MessageEmbed} = require('discord.js'),
-  {deleteCommandMessages, startTyping, stopTyping} = require('../../util.js');
+const {Command} = require('discord.js-commando'), 
+  {MessageEmbed} = require('discord.js'), 
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class EmbedCommand extends Command {
   constructor (client) {
@@ -71,7 +71,6 @@ module.exports = class EmbedCommand extends Command {
   }
 
   run (msg, {content, image}) {
-    startTyping(msg);
     const customEmbed = new MessageEmbed(),
       paramString = content,
       fields = paramString.split('<'); // eslint-disable-line sort-vars
@@ -89,7 +88,6 @@ module.exports = class EmbedCommand extends Command {
       .setImage(image ? image : null);
 
     deleteCommandMessages(msg, this.client);
-    stopTyping(msg);
 
     return msg.embed(customEmbed);
   }

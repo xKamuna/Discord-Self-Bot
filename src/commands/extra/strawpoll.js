@@ -31,7 +31,7 @@
 const request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class StrawpollCommand extends Command {
   constructor (client) {
@@ -63,7 +63,7 @@ module.exports = class StrawpollCommand extends Command {
           wait: 60,
           validate: (opts) => {
             if (/([\S ]*\|[\S ]*)*/i.test(opts) &&
-                            opts.split('|').length >= 2 && opts.split('|').length <= 30) {
+              opts.split('|').length >= 2 && opts.split('|').length <= 30) {
               return true;
             }
 
@@ -76,7 +76,6 @@ module.exports = class StrawpollCommand extends Command {
   }
 
   async run (msg, args) {
-    startTyping(msg);
     const pollEmbed = new MessageEmbed(),
       strawpoll = await request
         .post('https://www.strawpoll.me/api/v2/polls')
@@ -98,13 +97,11 @@ module.exports = class StrawpollCommand extends Command {
         .setDescription(`Options on this poll: \`${strawpoll.body.options.join(', ')}\` `);
 
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
       return msg.embed(pollEmbed, `http://www.strawpoll.me/${strawpoll.body.id}`);
     }
 
     deleteCommandMessages(msg, this.client);
-    stopTyping(msg);
 
     return msg.reply('an error occurred creating the strawpoll');
   }

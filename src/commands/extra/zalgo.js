@@ -30,7 +30,7 @@
 const banish = require('to-zalgo/banish'),
   zalgo = require('to-zalgo'),
   {Command} = require('discord.js-commando'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class zalgoCommand extends Command {
   constructor (client) {
@@ -58,11 +58,8 @@ module.exports = class zalgoCommand extends Command {
   }
 
   run (msg, args) {
-    startTyping(msg);
     deleteCommandMessages(msg, this.client);
 
-    msg.say(zalgo(banish(args.txt)));
-
-    return stopTyping(msg);
+    return msg.say(zalgo(banish(args.txt)));
   }
 };

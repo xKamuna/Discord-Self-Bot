@@ -17,7 +17,7 @@
 
 const {Command} = require('discord.js-commando'), 
   {MessageEmbed} = require('discord.js'), 
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class EmotesCommand extends Command {
   constructor (client) {
@@ -42,7 +42,6 @@ module.exports = class EmotesCommand extends Command {
   }
 
   run (msg, {server}) {
-    startTyping(msg);
     const embed = new MessageEmbed();
 
     server = server ? server : msg.guild;
@@ -65,7 +64,6 @@ module.exports = class EmotesCommand extends Command {
     embed.setDescription(staticEmotes + animEmotes);
 
     deleteCommandMessages(msg, this.client);
-    stopTyping(msg);
 
     return msg.embed(embed);
   }

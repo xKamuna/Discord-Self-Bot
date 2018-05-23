@@ -29,7 +29,7 @@ const fs = require('fs'),
   {Command} = require('discord.js-commando'),
   {splitMessage} = require('discord.js'),
   {stripIndents} = require('common-tags'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class CopyPastaListCommand extends Command {
   constructor (client) {
@@ -49,7 +49,6 @@ module.exports = class CopyPastaListCommand extends Command {
 
   async run (msg) {
     try {
-      startTyping(msg);
       const list = fs.readdirSync(path.join(__dirname, '../../data/pastas/')).filter(e => e !== '.gitkeep');
 
       if (list && list.length) {
@@ -57,7 +56,7 @@ module.exports = class CopyPastaListCommand extends Command {
           list[entry] = `- \`${list[entry].slice(0, -4)}\``;
         }
       }
-    
+
       deleteCommandMessages(msg, this.client);
 
       if (list.join('\n').length >= 2000) {
@@ -71,12 +70,9 @@ module.exports = class CopyPastaListCommand extends Command {
             color: msg.guild.me.displayColor
           }));
         }
-        stopTyping(msg);
 
         return messages;
       }
-
-      stopTyping(msg);
 
       return msg.embed({
         title: 'Copypastas available for you',
@@ -86,7 +82,6 @@ module.exports = class CopyPastaListCommand extends Command {
 
     } catch (err) {
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
       return msg.reply(`no copypastas found for you. Start saving your first with \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypastaadd\`!`);
     }

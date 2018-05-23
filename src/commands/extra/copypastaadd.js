@@ -30,7 +30,7 @@
 const fs = require('fs'),
   path = require('path'),
   {Command} = require('discord.js-commando'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class CopyPastaAddCommand extends Command {
   constructor (client) {
@@ -60,16 +60,13 @@ module.exports = class CopyPastaAddCommand extends Command {
   }
 
   run (msg, {name, content}) {
-    startTyping(msg);
     fs.writeFileSync(path.join(__dirname, `pastas/${name}.txt`), content, 'utf8');
 
     if (fs.existsSync(path.join(__dirname, `pastas/${name}.txt`))) {
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
-			
+
       return msg.reply(`Copypasta stored in ${name}.txt. You can summon it with ${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypasta ${name}`);
     }
-    stopTyping(msg);
 
     return msg.reply('an error occurred and your pasta was not saved.');
   }

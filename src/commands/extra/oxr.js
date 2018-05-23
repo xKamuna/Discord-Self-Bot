@@ -32,12 +32,10 @@
 
 const currencySymbol = require('currency-symbol-map'),
   fx = require('money'),
-  moment = require('moment'),
   request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
-  {stripIndents} = require('common-tags'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class MoneyCommand extends Command {
   constructor (client) {
@@ -125,7 +123,6 @@ module.exports = class MoneyCommand extends Command {
   }
 
   async run (msg, {value, curOne, curTwo}) {
-    startTyping(msg);
     const rates = await request.get('https://openexchangerates.org/api/latest.json')
       .query('app_id', process.env.oxrkey)
       .query('prettyprint', false)
@@ -146,18 +143,9 @@ module.exports = class MoneyCommand extends Command {
         .setTimestamp();
 
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
       return msg.embed(oxrEmbed);
     }
-    stopTyping(msg);
-    this.client.channels.resolve(process.env.ribbonlogchannel).send(stripIndents`
-    <@${this.client.owners[0].id}> Error occurred in \`oxr\` command!
-    **Server:** ${msg.guild.name} (${msg.guild.id})
-    **Author:** ${msg.author.tag} (${msg.author.id})
-    **Time:** ${moment(msg.createdTimestamp).format('MMMM Do YYYY [at] HH:mm:ss [UTC]Z')}
-    **Input:** \`${value}\` || \`${curOne}\` || \`${curTwo}\`
-    `);
 
     return msg.reply('an error occurred. Make sure you used supported currency names. See the list here: <https://docs.openexchangerates.org/docs/supported-currencies>');
   }

@@ -30,12 +30,11 @@
 
 const Fuse = require('fuse.js'),
   cheerio = require('cheerio'),
-  moment = require('moment'),
   request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {oneLine, stripIndents} = require('common-tags'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class CydiaCommand extends Command {
   constructor (client) {
@@ -67,7 +66,6 @@ module.exports = class CydiaCommand extends Command {
   }
 
   async run (msg, {deb}) {
-    startTyping(msg);
     if (msg.patternMatches) {
       if (!msg.guild.settings.get('regexmatches', false)) {
         return null;
@@ -123,26 +121,16 @@ module.exports = class CydiaCommand extends Command {
           if (!msg.patternMatches) {
             deleteCommandMessages(msg, this.client);
           }
-          startTyping(msg);
 
           return msg.embed(embed);
         } catch (err) {
-          this.client.channels.resolve(process.env.ribbonlogchannel).send(stripIndents`
-          <@${this.client.owners[0].id}> Error occurred in \`cydia\` command!
-          **Server:** ${msg.guild.name} (${msg.guild.id})
-          **Author:** ${msg.author.tag} (${msg.author.id})
-          **Time:** ${moment(msg.createdTimestamp).format('MMMM Do YYYY [at] HH:mm:ss [UTC]Z')}
-          **Input:** ${deb}
-          **Regex Match:** \`${msg.patternMatches ? 'yes' : 'no'}\`
-          **Error Message:** ${err}
-          `);
+          console.error(err);
 
           embed.addField('Package Name', result.name, false);
 
           if (!msg.patternMatches) {
             deleteCommandMessages(msg, this.client);
           }
-          stopTyping(msg);
 
           return msg.embed(embed);
         }

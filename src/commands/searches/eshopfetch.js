@@ -15,6 +15,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// TODO: Look into not printing error messages to public chat as sensitive data could be there(PM instead?)
 const {Command} = require('discord.js-commando'),
   eshop = require('nintendo-switch-eshop'),
   fs = require('fs'),
@@ -37,14 +38,14 @@ module.exports = class EshopFetchCommand extends Command {
 
   async run (msg) {
     msg.edit('\`fetching, please wait...\`');
-    fs.writeFileSync(path.join(__dirname, 'data/eshopdata.json'), JSON.stringify(await eshop.getGamesAmerica()), 'utf8');
+    fs.writeFileSync(path.join(__dirname, '../../data/databases/eshop.json'), JSON.stringify(await eshop.getGamesAmerica()), 'utf8');
 
-    if (fs.existsSync(path.join(__dirname, 'data/eshopdata.json'))) {
+    if (fs.existsSync(path.join(__dirname, '../../data/databases/eshop.json'))) {
       deleteCommandMessages(msg, this.client);
 
       return msg.reply('Latest eshop data stored in file');
     }
 
-    return msg.reply('An error occured fetching latest data!');
+    return msg.reply('An error occurred fetching latest data!');
   }
 };

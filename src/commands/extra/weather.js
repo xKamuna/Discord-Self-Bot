@@ -115,6 +115,6 @@ module.exports = class weatherCommand extends Command {
       return msg.embed(weatherEmbed);
     }
 		
-    return msg.reply('⚠️ an error occured getting weather info for that city');
+    return msg.reply('⚠️ an error occurred getting weather info for that city');
   }
 };

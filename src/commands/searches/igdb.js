@@ -15,12 +15,13 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// TODO: Throws error
 const Discord = require('discord.js'),
   {Command} = require('discord.js-commando'),
   igdbapi = require('igdb-api-node').default,
   moment = require('moment'),
   {deleteCommandMessages} = require('../../util.js'),
-  {igdbAPIKey} = process.env.igdbkey;
+  {igdbkey} = process.env;
 
 module.exports = class IGDBCommand extends Command {
   constructor (client) {
@@ -61,7 +62,7 @@ module.exports = class IGDBCommand extends Command {
   async run (msg, args) {
     /* eslint-disable sort-vars*/
     const gameEmbed = new Discord.MessageEmbed(),
-      igdb = igdbapi(igdbAPIKey),
+      igdb = igdbapi(igdbkey),
       gameInfo = await igdb.games({
         search: args.game,
         fields: ['name', 'url', 'summary', 'rating', 'developers', 'genres', 'release_dates', 'platforms', 'cover', 'esrb', 'pegi'],

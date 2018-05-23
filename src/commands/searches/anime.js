@@ -15,12 +15,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  maljs = require('maljs'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Searches AnimeCommand - Gets information about any anime from MyAnimeList
+ * **Aliases**: `ani`, `mal`
+ * @module
+ * @category searches
+ * @name anime
+ * @example anime Yu-Gi-Oh Dual Monsters
+ * @param {StringResolvable} AnyAnime anime to look up
+ * @returns {MessageEmbed} Information about the requested anime
+ */
 
-module.exports = class animeCommand extends Command {
+const maljs = require('maljs'),
+  {MessageEmbed} = require('discord.js'),
+  {Command} = require('discord.js-commando'),
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+
+module.exports = class AnimeCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'anime',
@@ -31,6 +42,10 @@ module.exports = class animeCommand extends Command {
       format: 'AnimeName',
       examples: ['anime Pokemon'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'query',
@@ -42,7 +57,8 @@ module.exports = class animeCommand extends Command {
   }
 
   async run (msg, args) {
-    const aniEmbed = new Discord.MessageEmbed(),
+    startTyping(msg);
+    const aniEmbed = new MessageEmbed(),
       res = await maljs.quickSearch(args.query, 'anime');
 
     if (res) {
@@ -51,7 +67,7 @@ module.exports = class animeCommand extends Command {
       if (anime) {
 
         aniEmbed
-          .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
+          .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
           .setTitle(anime.title)
           .setImage(anime.cover)
           .setDescription(anime.description)
@@ -61,9 +77,18 @@ module.exports = class animeCommand extends Command {
           .addField('Rank', anime.ranked, true);
 
         deleteCommandMessages(msg, this.client);
+        stopTyping(msg);
 
-        msg.embed(aniEmbed, `${anime.mal.url}${anime.path}`);
+        return msg.embed(aniEmbed, `${anime.mal.url}${anime.path}`);
       }
+      deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
+
+      return msg.reply(`no anime found for the input \`${args.query}\` `);
     }
+    deleteCommandMessages(msg, this.client);
+    stopTyping(msg);
+
+    return msg.reply(`no anime found for the input \`${args.query}\` `);
   }
 };

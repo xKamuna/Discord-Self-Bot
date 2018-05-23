@@ -56,7 +56,7 @@ module.exports = class pornvidsCommand extends Command {
         maximum: vids.length - 1
       }, (error, vid) => {
         if (error) {
-          return msg.reply('⚠ An error occured while drawing a random number.');
+          return msg.reply('⚠ An error occurred while drawing a random number.');
         }
         pornEmbed
           .setURL(vids[vid].url)

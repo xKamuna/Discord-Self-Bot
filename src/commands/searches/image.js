@@ -15,16 +15,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  cheerio = require('cheerio'),
-  {Command} = require('discord.js-commando'),
-  querystring = require('querystring'),
-  request = require('snekfetch'),
-  {deleteCommandMessages} = require('../../util.js'),
-  {googleapikey} = process.env.googleapikey,
-  {imageEngineKey} = process.env.imagekey;
+/**
+ * @file Searches ImageCommand - Gets an image through Google Images
+ * **Aliases**: `img`, `i`
+ * @module
+ * @category searches
+ * @name image
+ * @example image Pyrrha Nikos
+ * @param {StringResolvable} ImageQuery Image to find on google images
+ * @returns {MessageEmbed} Embedded image and search query
+ */
 
-module.exports = class imageCommand extends Command {
+const cheerio = require('cheerio'),
+  request = require('snekfetch'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+
+module.exports = class ImageCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'image',
@@ -35,46 +43,53 @@ module.exports = class imageCommand extends Command {
       format: 'ImageQuery',
       examples: ['image Pyrrha Nikos'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'query',
           prompt: 'What do you want to find images of?',
-          type: 'string'
+          type: 'string',
+          parse: p => p.replace(/(who|what|when|where) ?(was|is|were|are) ?/gi, '')
+            .split(' ')
+            .map(x => encodeURIComponent(x))
+            .join('+')
         }
       ]
     });
   }
 
   async run (msg, args) {
-    const embed = new Discord.MessageEmbed(),
-      query = args.query
-        .replace(/(who|what|when|where) ?(was|is|were|are) ?/gi, '')
-        .split(' ')
-        .map(x => encodeURIComponent(x))
-        .join('+'),
-      safe = msg.channel.nsfw ? 'medium' : 'off',
-      QUERY_PARAMS = { // eslint-disable-line sort-vars
-        cx: imageEngineKey,
-        key: googleapikey,
-        safe,
-        searchType: 'image'
-      };
+    startTyping(msg);
+    const embed = new MessageEmbed();
 
-    let res = await request.get(`https://www.googleapis.com/customsearch/v1?${querystring.stringify(QUERY_PARAMS)}&q=${encodeURI(query)}`);
+    let res = await request.get('https://www.googleapis.com/customsearch/v1')
+      .query('cx', process.env.imagekey)
+      .query('key', process.env.googleapikey)
+      .query('safe', msg.guild ? msg.channel.nsfw ? 'off' : 'medium' : 'high') // eslint-disable-line no-nested-ternary
+      .query('searchType', 'image')
+      .query('q', args.query);
 
     if (res && res.body.items) {
       embed
-        .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
+        .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
         .setImage(res.body.items[0].link)
-        .setFooter(`Search query: "${args.query}"`);
+        .setFooter(`Search query: "${args.query.replace(/\+/g, ' ')}"`);
 
       deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
 
       return msg.embed(embed);
     }
 
     if (!res) {
-      res = await request.get(`https://www.google.com/search?tbm=isch&gs_l=img&safe=${safe}&q=${encodeURI(query)}`);
+      res = await request.get('https://www.google.com/search')
+        .query('tbm', 'isch')
+        .query('gs_l', 'img')
+        .query('safe', msg.guild ? msg.channel.nsfw ? 'off' : 'medium' : 'high') // eslint-disable-line no-nested-ternary
+        .query('q', args.query);
 
       const $ = cheerio.load(res.text),
         result = $('.images_table').find('img')
@@ -82,17 +97,18 @@ module.exports = class imageCommand extends Command {
           .attr('src');
 
       embed
-        .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
+        .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
         .setImage(result)
         .setFooter(`Search query: "${args.query}"`);
 
       deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
 
       return msg.embed(embed);
     }
-
     deleteCommandMessages(msg, this.client);
+    stopTyping(msg);
 
-    return msg.reply('⚠️ ***nothing found***');
+    return msg.reply(`nothing found for \`${args.query}\``);
   }
 };

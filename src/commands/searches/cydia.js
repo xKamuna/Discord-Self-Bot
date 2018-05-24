@@ -19,7 +19,7 @@
  * @file Searches CydiaCommand - Gets info from a package on Cydia, only supports default repositories  
  * **Aliases**: `cy`
  * @module
- * @category search
+ * @category searches
  * @name cydia
  * @example cydia Anemone
  * @param {StringResolvable} TweakName Name of the tweak to find

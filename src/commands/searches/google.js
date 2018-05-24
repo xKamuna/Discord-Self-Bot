@@ -33,7 +33,7 @@ const cheerio = require('cheerio'),
   {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class googleCommand extends Command {
+module.exports = class GoogleCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'google',
@@ -44,6 +44,10 @@ module.exports = class googleCommand extends Command {
       format: 'GoogleQuery',
       examples: ['google Pyrrha Nikos'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'query',

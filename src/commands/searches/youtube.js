@@ -27,14 +27,13 @@
  * @returns {MessageEmbed} Title, Channel, Publication Date and Description of the video
  */
 
-
 const moment = require('moment'),
   request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class youtubeCommand extends Command {
+module.exports = class YouTubeCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'youtube',
@@ -45,6 +44,10 @@ module.exports = class youtubeCommand extends Command {
       format: 'VideoName',
       examples: ['youtube RWBY Volume 4'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'video',

@@ -29,7 +29,7 @@
 const {Command} = require('discord.js-commando'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class lmgtfyCommand extends Command {
+module.exports = class LmgtfyCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'lmgtfy',
@@ -40,6 +40,10 @@ module.exports = class lmgtfyCommand extends Command {
       format: 'Query',
       examples: ['lmgtfy is it legal to kill an ant???', 'lmgtfy are there birds in canada?'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'question',

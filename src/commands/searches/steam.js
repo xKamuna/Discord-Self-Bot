@@ -14,6 +14,16 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * @file Searches SteamCommand - Gets information about a game using Steam
+ * **Aliases**: `valve`
+ * @module
+ * @category searches
+ * @name steam
+ * @example steam Tales of Berseria
+ * @param {StringResolvable} GameName The name of any game that you want to find
+ * @returns {MessageEmbed} Information about the requested game
+ */
 
 /**
  * @file Searches SteamCommand - Gets information about a game using Steam  
@@ -45,10 +55,14 @@ module.exports = class steamCommand extends Command {
       format: 'GameName',
       examples: ['steam Tales of Berseria'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'game',
-          prompt: 'What game do you want to find on the steam store?',
+          prompt: 'Which game do you want to find on the steam store?',
           type: 'string',
           parse: p => p.replace(/ /gim, '+')
         }

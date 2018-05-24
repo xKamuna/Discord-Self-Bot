@@ -31,7 +31,7 @@ const maljs = require('maljs'),
   {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class mangaCommand extends Command {
+module.exports = class MangaCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'manga',
@@ -42,6 +42,10 @@ module.exports = class mangaCommand extends Command {
       format: 'MangaName',
       examples: ['manga Pokemon'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'manga',

@@ -35,7 +35,7 @@ const Fuse = require('fuse.js'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class EshopCommand extends Command {
+module.exports = class EShopCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'eshop',
@@ -96,6 +96,7 @@ module.exports = class EshopCommand extends Command {
 
       return msg.reply(`No titles found for \`${args.game}\``);
     }
+    deleteCommandMessages(msg, this.client);
 
     return msg.reply(oneLine`eshop data was not found!!
 		Make sure you have generated your json at least once using the \`${msg.guilld ? msg.guild.commandPrefix : this.client.commandPrefix}eshopfetch\` command`);

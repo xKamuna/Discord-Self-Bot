@@ -42,6 +42,10 @@ module.exports = class AnimeCommand extends Command {
       format: 'AnimeName',
       examples: ['anime Yu-Gi-Oh Dual Monsters'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'anime',

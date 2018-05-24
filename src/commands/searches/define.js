@@ -42,11 +42,16 @@ module.exports = class DefineCommand extends Command {
       format: 'Word',
       examples: ['define pixel'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'query',
           prompt: 'What word do you want to define?',
-          type: 'string'
+          type: 'string',
+          parse: p => p.replace(/[^a-zA-Z]/g, '')
         }
       ]
     });

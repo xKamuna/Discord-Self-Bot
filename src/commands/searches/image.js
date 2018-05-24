@@ -43,11 +43,19 @@ module.exports = class ImageCommand extends Command {
       format: 'ImageQuery',
       examples: ['image Pyrrha Nikos'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'query',
           prompt: 'What do you want to find images of?',
-          type: 'string'
+          type: 'string',
+          parse: p => p.replace(/(who|what|when|where) ?(was|is|were|are) ?/gi, '')
+            .split(' ')
+            .map(x => encodeURIComponent(x))
+            .join('+')
         }
       ]
     });

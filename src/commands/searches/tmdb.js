@@ -32,17 +32,21 @@ const moment = require('moment'),
   {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class movieCommand extends Command {
+module.exports = class MovieCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'tmdb',
       memberName: 'tmdb',
       group: 'searches',
       aliases: ['movie'],
-      description: 'Finds movies and TV shows on TheMovieDB',
+      description: 'Finds movies on TheMovieDB',
       format: 'MovieName [release_year_movie]',
       examples: ['tmdb Ocean\'s Eleven 2001'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
           key: 'name',

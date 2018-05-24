@@ -10,7 +10,7 @@ machine:
 general:
   branches:
     ignore:
-      - stripe
+      - master
 jobs:
   build:
     docker:

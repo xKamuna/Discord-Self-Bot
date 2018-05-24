@@ -154,6 +154,6 @@ module.exports = class CrossQuoteCommand extends Command {
       return msg.embed(quoteEmbed, args.content);
     }
 
-    return msg.reply('⚠️ something went wrong quoting that message.');
+    return msg.reply('something went wrong quoting that message.');
   }
 };

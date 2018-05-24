@@ -253,24 +253,6 @@ For item names existing of multiple words (for example <code>life orb</code>) yo
 </dd>
 </dl>
 
-## Constants
-
-<dl>
-<dt><a href="#Database">Database</a></dt>
-<dd><p>This file is part of discord-self-bot
-  Copyright (C) 2017-2018 Favna</p>
-<p>  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, version 3 of the License</p>
-<p>  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.</p>
-<p>  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
-</dd>
-</dl>
-
 <a name="module_copypasta"></a>
 
 ## copypasta ⇒ <code>MessageEmbed</code>
@@ -1268,25 +1250,6 @@ By default returns MessageEmbed. use `yts` to return just the URL and have in-cl
 ```js
 youtube Voldemort Origins of the heir
 ```
-<a name="Database"></a>
-
-## Database
-This file is part of discord-self-bot
-  Copyright (C) 2017-2018 Favna
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, version 3 of the License
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-**Kind**: global constant  
 
 <a name="module_groups"></a>
 

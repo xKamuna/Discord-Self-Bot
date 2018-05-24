@@ -17,8 +17,8 @@
     "lint": "./node_modules/.bin/eslint src/commands/**/*.js",
     "lint:fix": "./node_modules/.bin/eslint --fix src/commands/**/*.js",
     "start": "node src/app.js",
-    "test": "yarn run lint:fix && yarn lint && ./node_modules/.bin/mocha src/test/mocha.js",
-    "test:minimal": "./node_modules/.bin/mocha src/test/mocha.js"
+    "test": "yarn run lint:fix && yarn lint && ./node_modules/.bin/mocha",
+    "test:minimal": "./node_modules/.bin/mocha"
   },
   "keywords": [
     "discord",

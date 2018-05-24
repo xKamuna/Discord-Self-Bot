@@ -16,10 +16,10 @@
  */
 
 /**
- * @file Searches UrbanCommand - Define a word using UrbanDictionary
+ * @file Searches UrbanCommand - Define a word using UrbanDictionary  
  * **Aliases**: `ub`, `ud`
  * @module
- * @category search
+ * @category searches
  * @name urban
  * @example urban Everclear
  * @param {StringResolvable} PhraseQuery Phrase that you want to define
@@ -48,7 +48,7 @@ module.exports = class UrbanCommand extends Command {
       },
       args: [
         {
-          key: 'query',
+          key: 'term',
           prompt: 'What word do you want to define?',
           type: 'string'
         }
@@ -56,8 +56,8 @@ module.exports = class UrbanCommand extends Command {
     });
   }
 
-  async run (msg, args) {
-    const urban = await request.get('https://api.urbandictionary.com/v0/define').query('term', args.query);
+  async run (msg, {term}) {
+    const urban = await request.get('https://api.urbandictionary.com/v0/define').query('term', term);
 
     if (urban.ok && urban.body.result_type !== 'no_results') {
       const embed = new MessageEmbed();
@@ -81,6 +81,6 @@ module.exports = class UrbanCommand extends Command {
     }
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(`no definitions found for \`${args.query}\``);
+    return msg.reply(`no definitions found for \`${term}\``);
   }
 };

@@ -15,14 +15,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  cheerio = require('cheerio'),
-  {Command} = require('discord.js-commando'),
-  querystring = require('querystring'),
+/**
+ * @file Searches GoogleCommand - Gets information through google  
+ * Note: prioritizes Knowledge Graphs for better searching  
+ * **Aliases**: `search`, `g`
+ * @module
+ * @category searches
+ * @name google
+ * @example google Pyrrha Nikos
+ * @param {StringResolvable} GoogleQuery Thing to find on google
+ * @returns {Message} Result of your search
+ */
+
+const cheerio = require('cheerio'),
   request = require('snekfetch'),
-  {deleteCommandMessages} = require('../../util.js'),
-  {googleapikey} = process.env.googleapikey,
-  {searchEngineKey} = process.env.searchkey;
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class googleCommand extends Command {
   constructor (client) {
@@ -39,28 +48,22 @@ module.exports = class googleCommand extends Command {
         {
           key: 'query',
           prompt: 'What do you want to google?',
-          type: 'string'
+          type: 'string',
+          parse: p => p.replace(/(who|what|when|where) ?(was|is|were|are) ?/gi, '')
+            .split(' ')
+            .map(uriComponent => encodeURIComponent(uriComponent))
+            .join('+')
         }
       ]
     });
   }
 
-  async run (msg, args) {
-    /* eslint-disable sort-vars */
-    const query = args.query
-        .replace(/(who|what|when|where) ?(was|is|were|are) ?/gi, '')
-        .split(' ')
-        .map(uriComponent => encodeURIComponent(uriComponent))
-        .join('+'),
-      KNOWLEDGE_PARAMS = {
-        key: googleapikey,
-        limit: 1,
-        indent: true,
-        query
-      },
-      knowledgeRes = await request.get(`https://kgsearch.googleapis.com/v1/entities:search?${querystring.stringify(KNOWLEDGE_PARAMS)}`);
-
-    /* eslint-enable sort-vars */
+  async run (msg, {query}) {
+    const knowledgeRes = await request.get('https://kgsearch.googleapis.com/v1/entities:search')
+      .query('key', process.env.googleapikey)
+      .query('limit', 1)
+      .query('indent', true)
+      .query('query', query);
 
     knowledgeCheck: if (knowledgeRes) {
       let result = knowledgeRes.body.itemListElement[0];
@@ -75,66 +78,51 @@ module.exports = class googleCommand extends Command {
         types = types.filter(t => t !== 'Thing');
       }
 
-      const LEARN_MORE_URL = result.detailedDescription.url.replace(/\(/, '%28').replace(/\)/, '%29'),
-        description = `${result.detailedDescription.articleBody} [Learn More...](${LEARN_MORE_URL})`,
-        knowledgeGraphEmbed = new Discord.MessageEmbed(),
-        title = `${result.name} ${types.length === 0 ? '' : `(${types.join(', ')})`}`,
-        url = result.detailedDescription.url;
+      const knowledgeGraphEmbed = new MessageEmbed();
 
       knowledgeGraphEmbed
-        .setURL(url)
-        .setTitle(title)
-        .setDescription(description);
+        .setURL(result.detailedDescription.url)
+        .setTitle(`${result.name} ${types.length === 0 ? '' : `(${types.join(', ')})`}`)
+        .setDescription(`${result.detailedDescription.articleBody} [Learn More...](${result.detailedDescription.url.replace(/\(/, '%28').replace(/\)/, '%29')})`);
 
       deleteCommandMessages(msg, this.client);
 
       return msg.embed(knowledgeGraphEmbed);
-
     }
 
+    const normalRes = await request.get('https://www.googleapis.com/customsearch/v1') // eslint-disable-line one-var
+      .query('key', process.env.googleapikey)
+      .query('cx', process.env.searchkey)
+      .query('safe', msg.guild ? msg.channel.nsfw ? 'off' : 'medium' : 'high') // eslint-disable-line no-nested-ternary
+      .query('q', query);
 
-    /* eslint-disable one-var, sort-vars*/
-    const safe = 'high',
-      REULAR_PARAMS = {
-        key: googleapikey,
-        cx: searchEngineKey,
-        safe,
-        q: encodeURI(query)
-      },
-      normalRes = await request.get(`https://www.googleapis.com/customsearch/v1?${querystring.stringify(REULAR_PARAMS)}`);
-    /* eslint-enable one-var, sort-vars*/
-
-    if (normalRes) {
-      if (normalRes.body.queries.request[0].totalResults === '0') {
-        msg.reply('⚠️ ***nothing found***');
-				
-        return Promise.reject(console.error('NO RESULTS'));
-      }
-
+    if (normalRes && normalRes.body.queries.request[0].totalResults !== '0') {
       deleteCommandMessages(msg, this.client);
 
       return msg.say(normalRes.body.items[0].link);
     }
 
-    const noAPIRes = await request.get(`https://www.google.com/search?safe=${safe}&q=${encodeURI(query)}`); // eslint-disable-line one-var
+    const noAPIRes = await request.get('https://www.google.com/search') // eslint-disable-line one-var
+      .query('safe', msg.guild ? msg.channel.nsfw ? 'off' : 'medium' : 'high') // eslint-disable-line no-nested-ternary
+      .query('q', query);
 
     if (noAPIRes) {
-      const $ = cheerio.load(noAPIRes.text);
-      let href = $('.r').first()
-        .find('a')
-        .first()
-        .attr('href');
+      const $ = cheerio.load(noAPIRes.text),
+        href = $('.r').first()
+          .find('a')
+          .first()
+          .attr('href');
 
       if (!href) {
-        return Promise.reject(console.error('NO SEARCH RESULTS'));
+        return msg.reply('***nothing found***');
       }
-      href = querystring.parse(href.replace('/url?', ''));
 
       deleteCommandMessages(msg, this.client);
 
-      return msg.say(href.q);
+      return msg.say(href.replace('/url?q=', '').split('&')[0]);
     }
+    deleteCommandMessages(msg, this.client);
 
-    return msg.reply('⚠️ ***nothing found***');
+    return msg.reply(`nothing found for \`${query}\``);
   }
 };

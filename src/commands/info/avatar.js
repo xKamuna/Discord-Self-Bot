@@ -15,11 +15,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
+/**
+ * @file Games AvatarCommand - Get the avatar from any member  
+ * **Aliases**: `ava`
+ * @module
+ * @category info
+ * @name avatar
+ * @example avatar Favna
+ * @param {GuildMemberResolvable} MemberName Member to get the avatar from
+ * @param {GuildMemberResolvable} [ImageSize] Optional: Size of the avatar to get. Defaults to 1024
+ * @returns {MessageEmbed} The avatar image and a direct link to it
+ */
+
+const {Command} = require('discord.js-commando'), 
+  {MessageEmbed} = require('discord.js'), 
+  {stripIndents} = require('common-tags'), 
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class avatarCommand extends Command {
+module.exports = class AvatarCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'avatar',
@@ -30,7 +43,6 @@ module.exports = class avatarCommand extends Command {
       format: 'MemberID|MemberName(partial or full) [ImageSize]',
       examples: ['avatar Favna 2048'],
       guildOnly: true,
-
       args: [
         {
           key: 'member',
@@ -41,7 +53,7 @@ module.exports = class avatarCommand extends Command {
           key: 'size',
           prompt: 'What size do you want the avatar to be? (Valid sizes: 128, 256, 512, 1024, 2048)',
           type: 'integer',
-          default: 128,
+          default: 1024,
           validate: (size) => {
             const validSizes = ['128', '256', '512', '1024', '2048'];
 
@@ -49,7 +61,8 @@ module.exports = class avatarCommand extends Command {
               return true;
             }
 
-            return `Has to be one of ${validSizes.join(', ')}`;
+            return stripIndents`Has to be one of ${validSizes.map(val => `\`${val}\``).join(', ')}
+            Respond with your new selection or`;
           }
         }
       ]
@@ -60,15 +73,15 @@ module.exports = class avatarCommand extends Command {
     return str.substring(str.length - 14, str.length - 8);
   }
 
-  run (msg, args) {
-    const ava = args.member.user.displayAvatarURL({size: args.size}),
-      embed = new Discord.MessageEmbed(),
+  run (msg, {member, size}) {
+    const ava = member.user.displayAvatarURL({size}),
+      embed = new MessageEmbed(),
       ext = this.fetchExt(ava);
 
     embed
-      .setColor(args.member.displayHexColor ? args.member.displayHexColor : msg.member.displayHexColor)
+      .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
       .setImage(ext.includes('gif') ? `${ava}&f=.gif` : ava)
-      .setTitle(args.member.displayName)
+      .setTitle(member.displayName)
       .setURL(ava)
       .setDescription(`[Direct Link](${ava})`);
 

@@ -15,11 +15,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file nsfw E621Command - Gets a NSFW image from e621  
+ * Can only be used in NSFW marked channels!  
+ * **Aliases**: `eee`
+ * @module
+ * @category nsfw
+ * @name e621
+ * @example e621 pyrrha_nikos
+ * @param {StringResolvable} Query Something you want to find
+ * @returns {MessageEmbed} Score, Link and preview of the image
+ */
+
 const booru = require('booru'),
   {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class e621Command extends Command {
+module.exports = class E621Command extends Command {
   constructor (client) {
     super(client, {
       name: 'e621',
@@ -33,30 +47,47 @@ module.exports = class e621Command extends Command {
       nsfw: true,
       args: [
         {
-          key: 'nsfwtags',
+          key: 'tags',
           prompt: 'What do you want to find NSFW for?',
-          type: 'string'
+          type: 'string',
+          parse: p => p.split(' ')
         }
       ]
     });
   }
 
-  async run (msg, args) {
+  async run (msg, {tags}) {
     try {
-      const booruData = await booru.search('e621', args.nsfwtags.split(' '), {
-        limit: 1,
-        random: true
-      }).then(booru.commonfy);
+      /* eslint-disable sort-vars*/
+      const search = await booru.search('e621', tags, {
+          limit: 1,
+          random: true
+        }),
+        common = await booru.commonfy(search),
+        embed = new MessageEmbed(),
+        imageTags = [];
+      /* eslint-enable sort-vars*/
 
-      if (booruData) {
-        deleteCommandMessages(msg, this.client);
-
-        return msg.say(`Score: ${booruData[0].common.score}\nImage: ${booruData[0].common.file_url}`);
+      for (const tag in common[0].common.tags) {
+        imageTags.push(`[#${common[0].common.tags[tag]}](${common[0].common.file_url})`);
       }
 
-      return msg.reply('⚠️ No juicy images found.');
-    } catch (BooruError) {
-      return msg.reply('⚠️ No juicy images found.');
+      embed
+        .setTitle(`e621 image for ${tags.join(', ')}`)
+        .setURL(common[0].common.file_url)
+        .setColor('#FFB6C1')
+        .setDescription(stripIndents`${imageTags.slice(0, 5).join(' ')}
+          
+          **Score**: ${common[0].common.score}`)
+        .setImage(common[0].common.file_url);
+
+      deleteCommandMessages(msg, this.client);
+
+      return msg.embed(embed);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
+
+      return msg.reply(`no juicy images found for \`${tags}\``);
     }
   }
 };

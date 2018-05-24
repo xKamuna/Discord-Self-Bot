@@ -24,7 +24,7 @@
  * @returns {MessageEmbed} List of all available copypastas
  */
 
-const fs = require('fs'),
+const Database = require('better-sqlite3'),
   path = require('path'),
   {Command} = require('discord.js-commando'),
   {splitMessage} = require('discord.js'),
@@ -48,24 +48,27 @@ module.exports = class CopyPastaListCommand extends Command {
   }
 
   async run (msg) {
+    const conn = new Database(path.join(__dirname, '../../data/databases/pastas.sqlite3'));
+
     try {
-      const list = fs.readdirSync(path.join(__dirname, '../../data/pastas/')).filter(e => e !== '.gitkeep');
+      // eslint-disable-next-line newline-per-chained-call
+      const list = conn.prepare('SELECT name FROM pastas;').all().map(p => p.name);
 
       if (list && list.length) {
         for (const entry in list) {
-          list[entry] = `- \`${list[entry].slice(0, -4)}\``;
+          list[entry] = `- \`${list[entry]}\``;
         }
       }
 
       deleteCommandMessages(msg, this.client);
 
-      if (list.join('\n').length >= 2000) {
+      if (list.join('\n').length >= 2048) {
         const messages = [],
           splitTotal = splitMessage(stripIndents`${list.join('\n')}`);
 
         for (const part in splitTotal) {
           messages.push(await msg.embed({
-            title: 'Copypastas available for you',
+            title: 'Available Copypastas',
             description: splitTotal[part],
             color: msg.guild.me.displayColor
           }));
@@ -75,15 +78,18 @@ module.exports = class CopyPastaListCommand extends Command {
       }
 
       return msg.embed({
-        title: 'Copypastas available for you',
+        title: 'Available Copypastas',
         description: list.join('\n'),
         color: msg.guild.me.displayColor
       });
 
     } catch (err) {
       deleteCommandMessages(msg, this.client);
+      if (/(?:no such table)/i.test(err.toString())) {
+        return msg.reply(`no pastas saved yet. Start saving your first with \`${msg.guild.commandPrefix}copypastaadd <name> <content>\``);
+      }
 
-      return msg.reply(`no copypastas found for you. Start saving your first with \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypastaadd\`!`);
+      return msg.reply('an unknown error occurred there :(');
     }
   }
 };

@@ -15,10 +15,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file Searches EShopCommand - Gets information about a game in the Nintendo Switch eShop  
+ * **Aliases**: `shop`
+ * @module
+ * @category searches
+ * @name eshop
+ * @example eshop Breath of The Wild
+ * @param {StringResolvable} GameName Game that you want to find in the eShop
+ * @returns {MessageEmbed} Information about the requested game
+ */
+
 const Fuse = require('fuse.js'),
-  {Command} = require('discord.js-commando'),
   fs = require('fs'),
+  moment = require('moment'),
   path = require('path'),
+  {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
@@ -45,7 +57,7 @@ module.exports = class EshopCommand extends Command {
   }
 
   run (msg, args) {
-    if (fs.existsSync(path.join(__dirname, 'data/eshopdata.json'))) {
+    if (fs.existsSync(path.join(__dirname, '../../data/databases/eshopdata.json'))) {
 
       /* eslint-disable sort-vars, no-var, vars-on-top, one-var*/
       const embed = new MessageEmbed(),
@@ -58,31 +70,34 @@ module.exports = class EshopCommand extends Command {
           minMatchCharLength: 1,
           keys: ['title']
         },
-        games = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/eshopdata.json'), 'utf8')),
+        games = JSON.parse(fs.readFileSync(path.join(__dirname, '../../data/databases/eshopdata.json'), 'utf8')),
         fuse = new Fuse(games, fsoptions),
         results = fuse.search(args.game);
       /* eslint-enable sort-vars*/
 
-      embed
-        .setTitle(results[0].title)
-        .setURL(`https://www.nintendo.com/games/detail/${results[0].slug}`)
-        .setThumbnail(results[0].front_box_art)
-        .setColor('#FFA600')
-        .addField('eShop Price', `$${results[0].eshop_price} USD`, true)
-        .addField('Release Date', results[0].release_date, true)
-        .addField('Number of Players', results[0].number_of_players, true)
-        .addField('Available', results[0].buyitnow ? 'Yes' : 'No', true)
-        .addField('Game Code', results[0].game_code, true)
-        .addField('NSUID', results[0].nsuid, true)
-        .addField('Digital Download', results[0].digitaldownload ? 'Yes' : 'No', true)
-        .addField('Categories', typeof results[0].categories.category === 'object' ? results[0].categories.category.join(', ') : results[0].categories.category, true);
+      if (results.length) {
+        embed
+          .setTitle(results[0].title)
+          .setURL(`https://www.nintendo.com/games/detail/${results[0].slug}`)
+          .setThumbnail(results[0].front_box_art)
+          .setColor('#FFA600')
+          .addField('eShop Price', results[0].eshop_price ? `$${results[0].eshop_price} USD` : 'TBA', true)
+          .addField('Release Date', moment(results[0].release_date, 'MMM DD YYYY').format('MMMM Do YYYY'), true)
+          .addField('Number of Players', results[0].number_of_players, true)
+          .addField('Game Code', results[0].game_code, true)
+          .addField('NSUID', results[0].nsuid ? results[0].nsuid : 'TBD', true)
+          .addField('Categories', typeof results[0].categories.category === 'object' ? results[0].categories.category.join(', ') : results[0].categories.category, true);
 
+        deleteCommandMessages(msg, this.client);
+
+        return msg.embed(embed);
+      }
       deleteCommandMessages(msg, this.client);
 
-      return msg.embed(embed);
+      return msg.reply(`No titles found for \`${args.game}\``);
     }
 
-    return msg.reply(oneLine`ehsop data was not found!!
+    return msg.reply(oneLine`eshop data was not found!!
 		Make sure you have generated your json at least once using the \`${msg.guilld ? msg.guild.commandPrefix : this.client.commandPrefix}eshopfetch\` command`);
   }
 };

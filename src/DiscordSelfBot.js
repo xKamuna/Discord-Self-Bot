@@ -198,11 +198,9 @@ class DiscordSelfBot {
         ['pokemon', 'Pokemon - Let Dexter answer your questions'],
         ['extra', 'Extra - Extra! Extra! Read All About It! Only Two Cents!'],
         ['images', 'Images - Send emojis and memes directly to the chat'],
-        ['links', 'Links - Quickly link to various websites'],
         ['quoting', 'Quoting - Quote other users to really reply to them'],
         ['nsfw', 'NSFW - For all you dirty minds ( ͡° ͜ʖ ͡°)'],
-        ['provider', 'Provider - Control the data the bot has stored for you'],
-        ['status', 'Status - Control your status']
+        ['provider', 'Provider - Control the data the bot has stored for you']
       ])
       .registerDefaultGroups()
       .registerDefaultTypes()

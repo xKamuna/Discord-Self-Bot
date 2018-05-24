@@ -15,26 +15,33 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file Games CoppersCommand - YOU ARE SURROUNDED!  
+ * **Aliases**: `police`, `cops`
+ * @module
+ * @category games
+ * @name coppers
+ * @returns {Message} WIIEEEOOWIIEEOOO YOU ARE SURROUNDED!!!
+ */
 
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class coppersCommand extends Command {
+module.exports = class CoppersCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'coppers',
       memberName: 'coppers',
       group: 'games',
       aliases: ['police', 'cops'],
-      description: 'Sends a "Police you are surrounded" message',
+      description: 'YOU ARE SURROUNDED!',
       examples: ['coppers'],
       guildOnly: false
     });
   }
 
   run (msg) {
-
     deleteCommandMessages(msg, this.client);
 
     if (this.client.user.premium) {

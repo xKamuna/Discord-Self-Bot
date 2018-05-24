@@ -15,15 +15,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  duration = require('moment-duration-format'), // eslint-disable-line no-unused-vars
+/**
+ * @file Info StatsCommand - Statistics about your selfbot instance  
+ * **Aliases**: `botinfo`, `info`
+ * @module
+ * @category info
+ * @name stats
+ * @returns {MessageEmbed} Your statistics
+ */
+
+const duration = require('moment-duration-format'), // eslint-disable-line no-unused-vars
   moment = require('moment'),
   process = require('process'),
+  speedTest = require('speedtest-net'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
   {oneLine} = require('common-tags'),
-  {deleteCommandMessages, momentFormat} = require('../../util.js');
+  {deleteCommandMessages, roundNumber} = require('../../util.js');
 
-module.exports = class statsCommand extends Command {
+module.exports = class StatsCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'stats',
@@ -48,31 +58,49 @@ module.exports = class statsCommand extends Command {
   }
 
 
-  run (msg) {
-    const statsEmbed = new Discord.MessageEmbed();
+  async run (msg) {
+    const speed = speedTest({
+        maxTime: 5000,
+        serverId: 3242
+      }),
+      statsEmbed = new MessageEmbed();
 
     statsEmbed
-      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-      .setAuthor('Selfbot Stats', 'https://favna.xyz/images/appIcons/selfbot.png')
+      .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+      .setAuthor('Discord-Self-Bot Stats', 'https://favna.xyz/images/appIcons/selfbot.png')
       .addField('Guilds', this.client.guilds.size, true)
       .addField('Channels', this.client.channels.size, true)
       .addField('Users', this.client.users.size, true)
-      .addField('Owner', this.client.user.tag, true)
-      .addField('License', 'GPL-3.0 + 7b & 7c', true)
-      .addField('Discord.JS', '12.0', true)
+      .addField('Owner', this.client.owners[0].tag, true)
+      .addField('License', 'GPL-3.0', true)
+      .addField('DiscordJS', 'master', true)
       .addField('NodeJS', process.version, true)
       .addField('Platform', this.fetchPlatform(process.platform.toLowerCase()), true)
-      .addField('Memory Usage', `${Math.round(process.memoryUsage().heapUsed / 10485.76) / 100} MB`, true)
+      .addField('Memory Usage', `${roundNumber(process.memoryUsage().heapUsed / 10485.76) / 100} MB`, true)
+      .addField('Install me', '[Click Here](https://favna.xyz/selfbot)', true)
       .addField('Source', '[Available on GitHub](https://github.com/favna/discord-self-bot)', true)
-      .addField('Support', '[Server Invite](https://discord.gg/zdt5yQt)', true)
+      .addField('Support', '[Server Invite](https://favna.xyz/redirect/server)', true)
       .addField('Uptime', moment.duration(this.client.uptime).format('DD [days], HH [hours and] mm [minutes]'), true)
       .addField('\u200b', oneLine`Use the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}help\` command to get the list of commands available to you in a DM. 
             The default prefix is \`$\`. You can change this with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}prefix\` command. 
-            If you ever forget the command prefix, just use \`@${this.client.user.tag} prefix\``)
-      .setFooter(`Discord-Self-Bot | ${momentFormat(new Date(), this.client)}`, 'https://favna.xyz/images/appIcons/selfbot.png');
+            If you ever forget the command prefix, just use \`${this.client.user.tag} prefix\``)
+      .setFooter('Ribbon', 'https://favna.xyz/images/appIcons/selfbot.png')
+      .setTimestamp();
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.embed(statsEmbed);
+    const statMessage = await msg.embed(statsEmbed); // eslint-disable-line one-var
+
+    speed.on('data', (data) => {
+      statsEmbed.fields.pop();
+      statsEmbed
+        .addField('Download Speed', `${roundNumber(data.speeds.download, 2)} Mbps`, true)
+        .addField('Upload Speed', `${roundNumber(data.speeds.upload, 2)} Mbps`, true)
+        .addField('\u200b', oneLine`Use the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}help\` command to get the list of commands available to you in a DM. 
+      The default prefix is \`$\`. You can change this with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}prefix\` command. 
+      If you ever forget the command prefix, just use \`${this.client.user.tag} prefix\``);
+
+      statMessage.edit('', {embed: statsEmbed});
+    });
   }
 };

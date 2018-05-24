@@ -15,11 +15,27 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  {deleteCommandMessages, momentFormat} = require('../../util.js');
+/**
+ * @file quoting CrossQuoteCommand - Quote someone else's message into a MessageEmbed  
+ * This command has support for cross-server quoting!  
+ * **Aliases**: `xq`
+ * @module
+ * @category quoting
+ * @name xquote
+ * @example xquote 246821351585742851 355269305941622786 355275528002994176 Oh so that was the first message on the channel!
+ * @param {StringResolvable} Server Server the channel is in
+ * @param {StringResolvable} ChannelID ID of the channel the message is in
+ * @param {StringResolvable} MessageID ID of the message to quote
+ * @param {StringResolvable} [Content] Optional content to send along with the quote
+ * @returns {MessageEmbed} Quote and optional content
+ */
 
-module.exports = class quoteCommand extends Command {
+const moment = require('moment'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages} = require('../../util.js');
+
+module.exports = class CrossQuoteCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'xquote',
@@ -88,7 +104,7 @@ module.exports = class quoteCommand extends Command {
     const quote = await this.client.guilds.get(args.guild.id).channels.get(args.channel).messages.fetch(args.message);
 
     if (quote) {
-      const quoteEmbed = new Discord.MessageEmbed();
+      const quoteEmbed = new MessageEmbed();
 
       let content = quote.cleanContent;
 
@@ -129,7 +145,8 @@ module.exports = class quoteCommand extends Command {
       }
 
       quoteEmbed
-        .setFooter(`Message sent in #${quote.channel.name} on ${momentFormat(quote.createdAt, this.client)}`)
+        .setFooter(`Message sent on the ${quote.guild.name} server in #${quote.channel.name} on`)
+        .setTimestamp(moment(quote.createdAt)._d)
         .setDescription(content);
 
       deleteCommandMessages(msg, this.client);

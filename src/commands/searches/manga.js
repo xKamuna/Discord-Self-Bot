@@ -15,9 +15,20 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
+/**
+ * @file Searches MangaCommand - Gets information about any manga from MyAnimeList  
+ * **Aliases**: `cartoon`, `man`
+ * @module
+ * @category searches
+ * @name manga
+ * @example manga Yu-Gi-Oh
+ * @param {StringResolvable} AnyManga manga to look up
+ * @returns {MessageEmbed} Information about the requested manga
+ */
+
+const maljs = require('maljs'),
   {Command} = require('discord.js-commando'),
-  maljs = require('maljs'),
+  {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class mangaCommand extends Command {
@@ -33,7 +44,7 @@ module.exports = class mangaCommand extends Command {
       guildOnly: false,
       args: [
         {
-          key: 'query',
+          key: 'manga',
           prompt: 'What manga do you want to find?',
           type: 'string'
         }
@@ -41,31 +52,29 @@ module.exports = class mangaCommand extends Command {
     });
   }
 
-  async run (msg, args) {
-    const manEmbed = new Discord.MessageEmbed(),
-      res = await maljs.quickSearch(args.query, 'manga');
+  async run (msg, {manga}) {
+    try {
+      const manEmbed = new MessageEmbed(),
+        search = await maljs.quickSearch(manga, 'manga'),
+        searchDetails = await search.manga[0].fetch();
 
-    if (res) {
-      const manga = await res.manga[0].fetch();
+      manEmbed
+        .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+        .setTitle(searchDetails.title)
+        .setImage(searchDetails.cover)
+        .setDescription(searchDetails.description)
+        .setURL(`${searchDetails.mal.url}${searchDetails.path}`)
+        .addField('Score', searchDetails.score, true)
+        .addField('Popularity', searchDetails.popularity, true)
+        .addField('Rank', searchDetails.ranked, true);
 
-      if (manga) {
+      deleteCommandMessages(msg, this.client);
 
-        manEmbed
-          .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
-          .setTitle(manga.title)
-          .setImage(manga.cover)
-          .setDescription(manga.description)
-          .setURL(`${manga.mal.url}${manga.path}`)
-          .addField('Score', manga.score, true)
-          .addField('Popularity', manga.popularity, true)
-          .addField('Rank', manga.ranked, true);
+      return msg.embed(manEmbed, `${searchDetails.mal.url}${searchDetails.path}`);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
 
-        deleteCommandMessages(msg, this.client);
-					
-        return msg.embed(manEmbed, `${manga.mal.url}${manga.path}`);
-      }
+      return msg.reply(`no manga found for \`${manga}\` `);
     }
-		
-    return msg.reply('⚠️ ***nothing found***');
   }
 };

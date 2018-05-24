@@ -15,8 +15,17 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const {Command} = require('discord.js-commando'), 
-  {MessageEmbed} = require('discord.js'), 
+/**
+ * @file Info EmotesCommand - Lists all emotes from the server  
+ * **Aliases**: `listemo`, `emolist`, `listemoji`, `emote`
+ * @module
+ * @category info
+ * @name emotes
+ * @returns {MessageEmbed} List of emotes
+ */
+
+const {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class EmotesCommand extends Command {

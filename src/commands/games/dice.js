@@ -15,9 +15,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
+/**
+ * @file Games DiceCommand - Rolls some dice with some sides. Great for the DnD players!  
+ * **Aliases**: `xdicey`, `roll`, `dicey`, `die`
+ * @module
+ * @category games
+ * @name dice
+ * @example dice 5 6
+ * @param {StringResolvable} DiceSides The amount of sides the dice should have
+ * @param {StringResolvable} AmountOfRolls The amount of dice to roll
+ * @returns {MessageEmbed} The eyes rolled for each dice as well as the total of all rolls
+ */
+
+const xdicey = require('xdicey'),
   {Command} = require('discord.js-commando'),
-  xdicey = require('xdicey'),
+  {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class diceCommand extends Command {
@@ -27,7 +39,7 @@ module.exports = class diceCommand extends Command {
       memberName: 'dice',
       group: 'games',
       aliases: ['xdicey', 'roll', 'dicey', 'die'],
-      description: 'Sends contents of a copypasta file to the chat',
+      description: 'Rolls some dice with some sides. Great for the DnD players!',
       format: 'SidesOfTheDice AmountOfRolls',
       examples: ['dice 6 5'],
       guildOnly: false,
@@ -45,18 +57,21 @@ module.exports = class diceCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    const diceEmbed = new Discord.MessageEmbed(),
+  run (msg, {sides, rolls}) {
+    const diceEmbed = new MessageEmbed(),
       res = [],
-      throwDice = xdicey(args.rolls, args.sides);
+      throwDice = xdicey(rolls, sides);
 
-    for (const index in throwDice.individual) {
-      res.push(`🎲: ${throwDice.individual[index]}`);
+
+    for (const i in throwDice.individual) {
+      res.push(`${throwDice.individual[i]}`);
     }
 
+
     diceEmbed
-      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-      .addField('Dice result', res, false)
+      .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+      .setTitle('🎲 Dice Rolls 🎲')
+      .setDescription(`| ${res.join(' | ')} |`)
       .addField('Total', throwDice.total, false);
 
     deleteCommandMessages(msg, this.client);

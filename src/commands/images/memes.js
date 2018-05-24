@@ -15,6 +15,18 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file images MemesCommand - Sends a jpg image along with a message to easily share your favorite memes  
+ * **Aliases**: `mem`, `maymay`
+ * @module
+ * @category images
+ * @name memes
+ * @example meme cry
+ * @param {StringResolvable} MemeName Name of the meme to send
+ * @param {StringResolvable} [Content] Optional content to send along with the meme
+ * @returns {Message} Meme image and optional content
+ */
+
 const dym = require('didyoumean2'),
   fs = require('fs'),
   path = require('path'),
@@ -22,7 +34,7 @@ const dym = require('didyoumean2'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require(path.join(__dirname, '../../util.js'));
 
-module.exports = class memeCommand extends Command {
+module.exports = class MemesCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'memes',
@@ -50,17 +62,16 @@ module.exports = class memeCommand extends Command {
   }
 
   run (msg, {meme, message}) {
-    try {
+    if (fs.existsSync(path.join(__dirname, `../../data/images/memes/${meme}.jpg`))) {
       deleteCommandMessages(msg, this.client);
 
       return msg.say(message, {files: [path.join(__dirname, `../../data/images/memes/${meme}.jpg`)]});
-    } catch (err) {
-      const matchList = fs.readdirSync(path.join).map(v => v.slice(0, 4)),
-        maybe = dym(meme, matchList, {deburr: true});
-
-      return msg.reply(oneLine`that meme does not exist! ${maybe 
-        ? oneLine`Did you mean \`${maybe}\`?` 
-        : 'You can add it to the folder then try again'}`);
     }
+    const matchList = fs.readdirSync(path.join(__dirname, '../../data/images/memes/')).map(v => v.slice(0, 4)),
+      maybe = dym(meme, matchList, {deburr: true});
+
+    return msg.reply(oneLine`that meme does not exist! ${maybe 
+      ? oneLine`Did you mean \`${maybe}\`?` 
+      : 'You can add it to the folder then try again'}`);
   }
 };

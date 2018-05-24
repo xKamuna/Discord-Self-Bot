@@ -15,11 +15,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  {deleteCommandMessages, momentFormat} = require('../../util.js');
+/**
+ * @file quoting QuoteCommand - Quote someone else's message into a MessageEmbed  
+ * **Aliases**: `quoter`, `q`
+ * @module
+ * @category quoting
+ * @name quote
+ * @example quote discussion 355275528002994176 Oh so that was the first message on the channel!
+ * @param {StringResolvable} Channel Channel the message is in
+ * @param {StringResolvable} MessageID ID of the message to quote
+ * @param {StringResolvable} [Content] Optional content to send along with the quote
+ * @returns {MessageEmbed} Quote and optional content
+ */
 
-module.exports = class quoteCommand extends Command {
+const moment = require('moment'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages} = require('../../util.js');
+
+module.exports = class QuoteCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'quote',
@@ -29,7 +43,7 @@ module.exports = class quoteCommand extends Command {
       description: 'Quote someone else\'s message into a MessageEmbed.',
       details: ' Limited to same server, see xquote for cross server.',
       format: 'ChannelID|ChannelName(partial or full) MessageID [ContentToSendAlongWithTheEmbed]',
-      examples: ['quote general 355275528002994176 Oh so that was the first message on the channel!'],
+      examples: ['quote discussion 355275528002994176 Oh so that was the first message on the channel!'],
       guildOnly: false,
       args: [
         {
@@ -83,7 +97,7 @@ module.exports = class quoteCommand extends Command {
     const quote = await msg.guild.channels.get(args.channel.id).messages.fetch(args.message);
 
     if (quote) {
-      const quoteEmbed = new Discord.MessageEmbed();
+      const quoteEmbed = new MessageEmbed();
 
       let content = quote.cleanContent;
 
@@ -124,7 +138,8 @@ module.exports = class quoteCommand extends Command {
       }
 
       quoteEmbed
-        .setFooter(`Message sent in #${quote.channel.name} on ${momentFormat(quote.createdAt, this.client)}`)
+        .setFooter(`Message sent in #${quote.channel.name} on`)
+        .setTimestamp(moment(quote.createdAt)._d)
         .setDescription(content);
 
       deleteCommandMessages(msg, this.client);

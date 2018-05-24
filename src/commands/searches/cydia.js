@@ -16,9 +16,7 @@
  */
 
 /**
- * @file Searches CydiaCommand - Gets info from a package on Cydia, only supports default repositories
- * Can also listens to the pattern of `[[SomePackageName]]` as is custom on the [/r/jailbreak subreddit](https://www.reddit.com/r/jailbreak) and [its discord server](https://discord.gg/jb)
- * Server admins can enable the `[[]]` matching by using the `rmt off` command
+ * @file Searches CydiaCommand - Gets info from a package on Cydia, only supports default repositories  
  * **Aliases**: `cy`
  * @module
  * @category search
@@ -33,7 +31,6 @@ const Fuse = require('fuse.js'),
   request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
-  {oneLine, stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class CydiaCommand extends Command {
@@ -44,13 +41,9 @@ module.exports = class CydiaCommand extends Command {
       group: 'searches',
       aliases: ['cy'],
       description: 'Finds info on a Cydia package',
-      details: stripIndents`${oneLine`Can also listens to the pattern of \`[[SomePackageName]]\`
-        as is custom on the [/r/jailbreak subreddit](https://www.reddit.com/r/jailbreak) and [its discord server](https://discord.gg/jb)`}
-        Server admins can enable the \`[[]]\` matching by using the \`rmt on\` command`,
-      format: 'PackageName | [[PackageName]]',
+      format: 'PackageName',
       examples: ['cydia anemone'],
       guildOnly: false,
-      patterns: [/\[\[[a-zA-Z0-9 ]+\]\]/im],
       throttling: {
         usages: 2,
         duration: 3
@@ -58,7 +51,7 @@ module.exports = class CydiaCommand extends Command {
       args: [
         {
           key: 'deb',
-          prompt: 'Please supply package name',
+          prompt: 'What package to find?',
           type: 'string'
         }
       ]
@@ -66,12 +59,6 @@ module.exports = class CydiaCommand extends Command {
   }
 
   async run (msg, {deb}) {
-    if (msg.patternMatches) {
-      if (!msg.guild.settings.get('regexmatches', false)) {
-        return null;
-      }
-      deb = msg.patternMatches[0].substring(2, msg.patternMatches[0].length - 2);
-    }
     const baseURL = 'https://cydia.saurik.com/',
       embed = new MessageEmbed(),
       fsoptions = {
@@ -117,20 +104,14 @@ module.exports = class CydiaCommand extends Command {
           }
 
           embed.addField('Package Name', result.name, false);
-
-          if (!msg.patternMatches) {
-            deleteCommandMessages(msg, this.client);
-          }
+          deleteCommandMessages(msg, this.client);
 
           return msg.embed(embed);
         } catch (err) {
           console.error(err);
 
           embed.addField('Package Name', result.name, false);
-
-          if (!msg.patternMatches) {
-            deleteCommandMessages(msg, this.client);
-          }
+          deleteCommandMessages(msg, this.client);
 
           return msg.embed(embed);
         }

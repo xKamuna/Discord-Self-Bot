@@ -17,8 +17,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const {Command} = require('discord.js-commando'),
-  request = require('snekfetch'),
+/**
+ * @file Searches DocsCommand - Get an entry from the Discord.JS documentation  
+ * **Aliases**: `djsguide`, `guide`, `djs`
+ * @module
+ * @category searches
+ * @name docs
+ * @example docs ClientUser
+ * @param {StringResolvable} DocEntry The entry from the docs you want to get info about
+ * @returns {MessageEmbed} Info about the entry from the library
+ */
+
+const request = require('snekfetch'),
+  {Command} = require('discord.js-commando'),
   {oneLineTrim} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
@@ -27,7 +38,7 @@ module.exports = class DocsCommand extends Command {
     super(client, {
       name: 'docs',
       memberName: 'docs',
-      group: 'links',
+      group: 'searches',
       aliases: ['djsguide', 'guide', 'djs'],
       description: 'Gets info from something in the DJS docs',
       format: 'TopicToFind [master|stable|commando]',
@@ -332,10 +343,7 @@ module.exports = class DocsCommand extends Command {
     return embed;
   }
 
-  async run (msg, {
-    query,
-    version
-  }) {
+  async run (msg, {query, version}) {
     const docs = await this.fetchDocs(version);
     const [main, member] = this.search(docs, query); // eslint-disable-line one-var
 
@@ -352,8 +360,8 @@ module.exports = class DocsCommand extends Command {
 
     embed.url = this.getLink(version);
     embed.author = {
-      name: version === 'commando' ? 'Commando Docs' : `Discord.js Docs (${version})`,
-      icon_url: 'https://cdn.discordapp.com/icons/222078108977594368/bc226f09db83b9176c64d923ff37010b.webp'
+      name: version === 'commando' ? 'Commando Docs' : `MessageEmbedjs Docs (${version})`,
+      iconURL: 'https://github.com/discordjs.png'
     };
 
     deleteCommandMessages(msg, this.client);

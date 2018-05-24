@@ -15,10 +15,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file Extra JumboLettersCommand - Create jumbo letters from your text  
+ * **Aliases**: `jumbo`, `bigtext`
+ * @module
+ * @category extra
+ * @name jumboletters
+ * @example jumboletters Favna is a great  coder!
+ * @param {StringResolvable} Content Content you want to jumbo-fy
+ * @returns {Message} Jumbofied content
+ */
+
 const {Command} = require('discord.js-commando'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class jumbolettersCommand extends Command {
+module.exports = class JumboLettersCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'jumboletters',
@@ -66,22 +77,22 @@ module.exports = class jumbolettersCommand extends Command {
     }
   }
 
-  run (msg, args) {
+  run (msg, {text}) {
     const jumboString = [];
 
-    for (const i in args.text) {
-      if (/[a-zA-Z]/gim.test(args.text[i])) {
-        jumboString.push(`:regional_indicator_${args.text[i].toLowerCase()}:`);
-      } else if (/[0-9]/gim.test(args.text[i])) {
-        jumboString.push(`:${this.fetchNumberWord(args.text[i])}:`);
-      } else if (/!/gim.test(args.text[i])) {
+    for (const i in text) {
+      if (/[a-zA-Z]/gim.test(text[i])) {
+        jumboString.push(`:regional_indicator_${text[i].toLowerCase()}:`);
+      } else if (/[0-9]/gim.test(text[i])) {
+        jumboString.push(`:${this.fetchNumberWord(text[i])}:`);
+      } else if (/!/gim.test(text[i])) {
         jumboString.push(':exclamation:');
-      } else if (/\?/gim.test(args.text[i])) {
+      } else if (/\?/gim.test(text[i])) {
         jumboString.push(':question:');
-      } else if (/ /gim.test(args.text[i])) {
+      } else if (/ /gim.test(text[i])) {
         jumboString.push('  ');
       } else {
-        jumboString.push(args.text[i]);
+        jumboString.push(text[i]);
       }
     }
 

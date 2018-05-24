@@ -17,8 +17,7 @@
 
 /**
  * @file Extra CopyPastaCommand - Sends one of your saved copypastas  
- * Save copypastas in the data/pastas folder in .txt format  
- * If the copypasta has an image URL and the total length is less than 1024 characters it will be embedded along with the image  
+ * Sends a copypasta stored in the data/databases/pastas.sqlite3 database  
  * **Aliases**: `cp`, `pasta`
  * @module
  * @category extra
@@ -28,11 +27,11 @@
  * @returns {MessageEmbed} Copypasta content. In a normal message if more than 1024 characters
  */
 
-const dym = require('didyoumean2'),
-  fs = require('fs'),
+const Database = require('better-sqlite3'),
+  dym = require('didyoumean2'),
   path = require('path'),
   {Command} = require('discord.js-commando'),
-  {MessageEmbed} = require('discord.js'),
+  {splitMessage, MessageEmbed} = require('discord.js'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
@@ -58,46 +57,60 @@ module.exports = class CopyPastaCommand extends Command {
     });
   }
 
-  run (msg, {name}) {
+  async run (msg, {name}) {
+    const conn = new Database(path.join(__dirname, '../../data/databases/pastas.sqlite3')),
+      pastaEmbed = new MessageEmbed();
+
     try {
-      let pastaContent = fs.readFileSync(path.join(__dirname, `../../data/pastas/${name}.txt`), 'utf8');
+      const query = conn.prepare('SELECT * FROM pastas WHERE name = ?;').get(name);
 
-      if (pastaContent.length <= 1024) {
-        /* eslint-disable no-nested-ternary */
-        const cpEmbed = new MessageEmbed(),
-          ext = pastaContent.includes('.png') ? '.png'
-            : pastaContent.includes('.jpg') ? '.jpg'
-              : pastaContent.includes('.gif') ? '.gif'
-                : pastaContent.includes('.webp') ? '.webp' : 'none',
-          header = ext !== 'none' ? pastaContent.includes('https') ? 'https' : 'http' : 'none';
-        /* eslint-enable no-nested-ternary */
+      if (query) {
+        const image = query.content.match(/(https?:\/\/.*\.(?:png|jpg|gif|webp|jpeg|svg))/im);
 
-        if (ext !== 'none' && header !== 'none') {
-          cpEmbed.setImage(`${pastaContent.substring(pastaContent.indexOf(header), pastaContent.indexOf(ext))}${ext}`);
-          pastaContent = pastaContent.substring(0, pastaContent.indexOf(header) - 1) + pastaContent.substring(pastaContent.indexOf(ext) + ext.length);
+        if (image) {
+          pastaEmbed.setImage(image[0]);
+          query.content = query.content.replace(/(<|>)/gm, '');
+          query.content = query.content.substring(0, image.index - 1) + query.content.substring(image.index + image[0].length);
         }
 
-        cpEmbed
-          .setDescription(pastaContent)
-          .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00');
+        if (query.content.length >= 1950) {
+          const messages = [],
+            splitTotal = splitMessage(query.content);
 
-        msg.delete();
+          for (const part in splitTotal) {
+            messages.push(await msg.say(splitTotal[part]));
+          }
 
-        return msg.embed(cpEmbed);
+          deleteCommandMessages(msg, this.client);
+
+          return messages;
+        }
+        pastaEmbed
+          .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+          .setTitle(query.name)
+          .setDescription(query.content);
+
+        deleteCommandMessages(msg, this.client);
+
+        return msg.embed(pastaEmbed);
       }
-      msg.delete();
+      // eslint-disable-next-line one-var
+      const maybe = dym(name, conn.prepare('SELECT name FROM pastas;')
+        .all()
+        .map(a => a.name), {deburr: true});
 
-      return msg.say(pastaContent, {split: true});
-    } catch (err) {
-      console.error(err);
       deleteCommandMessages(msg, this.client);
-
-      const matchList = fs.readdirSync(path.join(__dirname, '../../data/pastas/')).map(v => v.slice(0, -4)),
-        maybe = dym(name, matchList, {deburr: true});
 
       return msg.reply(oneLine`that copypasta does not exist! ${maybe 
         ? oneLine`Did you mean \`${maybe}\`?` 
-        : `You can save it with \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypastaadd <filename> <content>\``}`);
+        : `You can save it with \`${msg.guild.commandPrefix}copypastaadd <name> <content>\``}`);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
+      if (/(?:no such table)/i.test(err.toString())) {
+        return msg.reply(`no pastas saved for this server. Start saving your first with \`${msg.guild.commandPrefix}copypastaadd <name> <content>\``);
+      }
+
+      return msg.reply('an unknown error occurred there :(');
     }
   }
 };

@@ -16,7 +16,7 @@
  */
 
 /**
- * @file Extra CopyPastaAddCommand - Adds a new copypasta for your server  
+ * @file Extra CopyPastaAddCommand - Save a new copypasta to the database  
  * **Aliases**: `cpadd`, `pastaadd`
  * @module
  * @category extra
@@ -27,9 +27,10 @@
  * @returns {Message} Confirmation the copypasta was added
  */
 
-const fs = require('fs'),
+const Database = require('better-sqlite3'),
   path = require('path'),
   {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class CopyPastaAddCommand extends Command {
@@ -60,14 +61,50 @@ module.exports = class CopyPastaAddCommand extends Command {
   }
 
   run (msg, {name, content}) {
-    fs.writeFileSync(path.join(__dirname, `pastas/${name}.txt`), content, 'utf8');
+    const conn = new Database(path.join(__dirname, '../../data/databases/pastas.sqlite3')),
+      pastaAddEmbed = new MessageEmbed();
 
-    if (fs.existsSync(path.join(__dirname, `pastas/${name}.txt`))) {
-      deleteCommandMessages(msg, this.client);
+    pastaAddEmbed
+      .setAuthor(msg.member.displayName, msg.author.displayAvatarURL({format: 'png'}))
+      .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+      .setDescription(content);
 
-      return msg.reply(`Copypasta stored in ${name}.txt. You can summon it with ${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}copypasta ${name}`);
+    try {
+      const query = conn.prepare('SELECT name FROM pastas WHERE name = ?;').get(name);
+
+      if (query) {
+        conn.prepare('UPDATE pastas SET content=$content WHERE name=$name').run({
+          name,
+          content
+        });
+
+        pastaAddEmbed.setTitle(`Copypasta \`${name}\` Updated`);
+
+        deleteCommandMessages(msg, this.client);
+
+        return msg.embed(pastaAddEmbed);
+      }
+      conn.prepare('INSERT INTO pastas VALUES ($name, $content);').run({
+        name,
+        content
+      });
+      pastaAddEmbed.setTitle(`Copypasta \`${name}\` Added`);
+
+      return msg.embed(pastaAddEmbed);
+    } catch (err) {
+      if (/(?:no such table)/i.test(err.toString())) {
+        conn.prepare('CREATE TABLE IF NOT EXISTS pastas (name TEXT PRIMARY KEY, content TEXT);').run();
+
+        conn.prepare('INSERT INTO pastas VALUES ($name, $content);').run({
+          name,
+          content
+        });
+        pastaAddEmbed.setTitle(`Copypasta \`${name}\` Added`);
+
+        return msg.embed(pastaAddEmbed);
+      }
+
+      return msg.reply('an unknown error occurred there :(');
     }
-
-    return msg.reply('an error occurred and your pasta was not saved.');
   }
 };

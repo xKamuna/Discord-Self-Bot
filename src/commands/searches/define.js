@@ -15,19 +15,30 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
+/**
+ * @file Searches DefineCommand - Define a word using glosbe  
+ * **Aliases**: `def`, `dict`
+ * @module
+ * @category searches
+ * @name define
+ * @example define Google
+ * @param {StringResolvable} Word the word you want to define
+ * @returns {MessageEmbed} Possible definitions for that word
+ */
+
+const request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
-  request = require('snekfetch'),
+  {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class defineCommand extends Command {
+module.exports = class DefineCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'define',
       memberName: 'define',
       group: 'searches',
       aliases: ['def', 'dict'],
-      description: 'Gets the definition on a word on glosbe',
+      description: 'Define a word using glosbe',
       format: 'Word',
       examples: ['define pixel'],
       guildOnly: false,
@@ -41,12 +52,12 @@ module.exports = class defineCommand extends Command {
     });
   }
 
-  async run (msg, args) {
-    const defineEmbed = new Discord.MessageEmbed(),
-      word = await request.get(`https://glosbe.com/gapi/translate?from=en&dest=en&format=json&phrase=${args.query}`);
+  async run (msg, {query}) {
+    const defineEmbed = new MessageEmbed(),
+      word = await request.get(`https://glosbe.com/gapi/translate?from=en&dest=en&format=json&phrase=${query}`);
 
     if (word.body.tuc) {
-      const final = [`**Definitions for __${args.query}__:**`];
+      const final = [`**Definitions for __${query}__:**`];
 
       for (let [index, item] of Object.entries(word.body.tuc.filter(tuc => tuc.meanings)[0].meanings.slice(0, 5))) { // eslint-disable-line prefer-const
 
@@ -60,7 +71,7 @@ module.exports = class defineCommand extends Command {
         final.push(`**${(parseInt(index, 10) + 1)}:** ${item}`);
       }
       defineEmbed
-        .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+        .setColor(msg.member ? msg.member.displayHexColor : '#FF0000')
         .setDescription(final);
 
       deleteCommandMessages(msg, this.client);
@@ -70,6 +81,6 @@ module.exports = class defineCommand extends Command {
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply('⚠️ ***nothing found***');
+    return msg.reply(`nothing found for \`${query}\`, maybe check your spelling?`);
   }
 };

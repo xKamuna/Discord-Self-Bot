@@ -15,18 +15,28 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  {deleteCommandMessages, momentFormat} = require('../../util.js');
+/**
+ * @file Info ServerInfoCommand - Gets information about any server you're in  
+ * **Aliases**: `serverinfo`, `sinfo`
+ * @module
+ * @category info
+ * @name server
+ * @returns {MessageEmbed} Info about the server
+ */
 
-module.exports = class serverInfoCommand extends Command {
+const moment = require('moment'),
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages} = require('../../util.js');
+
+module.exports = class ServerInfoCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'server',
       memberName: 'server',
       group: 'info',
       aliases: ['serverinfo', 'sinfo'],
-      description: 'Gets information about the server.',
+      description: 'Gets information about any server you\'re in',
       format: 'ServerID|ServerName(partial or full)',
       examples: ['server Bots by Favna'],
       guildOnly: false,
@@ -71,20 +81,18 @@ module.exports = class serverInfoCommand extends Command {
     }
   }
 
-  run (msg, args) {
-    if (msg.channel.type !== 'text' && args.server === 'current') {
+  run (msg, {server}) {
+    if (msg.channel.type !== 'text' && server === 'current') {
       return msg.reply('An argument of server name (partial or full) or server ID is required when talking outside of a server');
     }
 
-    const guild = args.server === 'current' ? msg.guild : args.server,
+    const guild = server === 'current' ? msg.guild : server,
       channels = guild.channels.map(ty => ty.type), // eslint-disable-line sort-vars
       presences = guild.presences.map(st => st.status),
-      serverEmbed = new Discord.MessageEmbed();
-
+      serverEmbed = new MessageEmbed();
 
     let guildChannels = 0,
       onlineMembers = 0;
-
 
     for (const i in presences) {
       if (presences[i] !== 'offline') {
@@ -111,7 +119,7 @@ module.exports = class serverInfoCommand extends Command {
       .addField('Number of emojis', guild.emojis.size, true)
       .addField('Number of roles', guild.roles.size, true)
       .addField('Number of channels', guildChannels, true)
-      .addField('Created At', momentFormat(guild.createdTimestamp, this.client), false)
+      .addField('Created At', moment(guild.createdTimestamp).format('MMMM Do YYYY [at] HH:mm'), false)
       .addField('Verification Level', this.verificationFilter(guild.verificationLevel), false)
       .addField('Explicit Content Filter', this.contentFilter(guild.explicitContentFilter), false);
 

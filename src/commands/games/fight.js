@@ -15,10 +15,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
+/**
+ * @file Games FightCommand - Pit two things against each other in a fight to the death.  
+ * Winner is determined with random.org randomization.  
+ * **Aliases**: `combat`
+ * @module
+ * @category games
+ * @name fight
+ * @example fight Pyrrha Ruby
+ * @param {StringResolvable} FighterOne The first combatant
+ * @param {StringResolvable} FighterTwo The second combatant
+ * @returns {MessageEmbed} Result of the combat
+ */
+
+const random = require('node-random'),
   {Command} = require('discord.js-commando'),
-  random = require('node-random'),
-  {deleteCommandMessages, momentFormat} = require('../../util.js');
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class fightCommand extends Command {
   constructor (client) {
@@ -46,56 +59,59 @@ module.exports = class fightCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    const fighterEmbed = new Discord.MessageEmbed();
+  run (msg, {fighterOne, fighterTwo}) {
+    const fighterEmbed = new MessageEmbed();
 
     fighterEmbed
-      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+      .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
       .setTitle('🥊 Fight Results 🥊')
-      .setThumbnail('http://i.imgur.com/LxPAE2f.png');
+      .setThumbnail('https://favna.xyz/images/ribbonhost/dbxlogo.png');
 
-    if (args.fighterOne.toLowerCase() === 'chuck norris' || args.fighterTwo.toLowerCase() === 'chuck norris') {
-      if (args.fighterOne.toLowerCase() === 'favna' || args.fighterTwo.toLowerCase() === 'favna') {
+    if (fighterOne.toLowerCase() === 'chuck norris' || fighterTwo.toLowerCase() === 'chuck norris') {
+      if (fighterOne.toLowerCase() === 'favna' || fighterTwo.toLowerCase() === 'favna') {
         fighterEmbed
           .addField('All right, you asked for it...', '***The universe was destroyed due to this battle between two unstoppable forces. Good Job.***')
-          .setImage('https://i.imgur.com/Witob4j.png');
+          .setImage('https://favna.xyz/images/ribbonhost/universeblast.png');
       } else {
         fighterEmbed
           .addField('You fokn wot m8', '***Chuck Norris cannot be beaten***')
-          .setImage('https://i.imgur.com/WCFyXRr.png');
+          .setImage('https://favna.xyz/images/ribbonhost/chucknorris.png');
       }
 
       deleteCommandMessages(msg, this.client);
 
       return msg.embed(fighterEmbed);
     }
-    if (args.fighterOne.toLowerCase() === 'favna' || args.fighterTwo.toLowerCase() === 'favna') {
+    if (fighterOne.toLowerCase() === 'favna' || fighterTwo.toLowerCase() === 'favna') {
       fighterEmbed
         .addField('You got mega rekt', '***Favna always wins***')
-        .setImage('https://i.imgur.com/XRsLP7Q.gif');
+        .setImage('https://favna.xyz/images/ribbonhost/pyrrhawins.gif');
 
       deleteCommandMessages(msg, this.client);
 
       return msg.embed(fighterEmbed);
     }
-    random.integers({number: 2}, (error, randoms) => {
+    random.integers({number: 2}, (error, data) => {
       if (!error) {
-        const fighterOneChance = parseInt(randoms[0], 10),
-          fighterTwoChance = parseInt(randoms[1], 10),
-          loser = Math.min(fighterOneChance, fighterTwoChance) === fighterOneChance ? args.fighterOne : args.fighterTwo,
-          winner = Math.max(fighterOneChance, fighterTwoChance) === fighterOneChance ? args.fighterOne : args.fighterTwo;
+        const fighterOneChance = parseInt(data[0], 10),
+          fighterTwoChance = parseInt(data[1], 10),
+          loser = Math.min(fighterOneChance, fighterTwoChance) === fighterOneChance ? fighterOne : fighterTwo,
+          winner = Math.max(fighterOneChance, fighterTwoChance) === fighterOneChance ? fighterOne : fighterTwo;
 
         fighterEmbed
           .addField('🇼 Winner', `**${winner}**`, true)
           .addField('🇱 Loser', `**${loser}**`, true)
-          .setFooter(`${winner} bodied ${loser} on ${momentFormat(new Date(), this.client)}`);
+          .setFooter(`${winner} bodied ${loser}`)
+          .setTimestamp();
 
         deleteCommandMessages(msg, this.client);
 
         return msg.embed(fighterEmbed);
       }
 
-      return msg.reply('⚠️ an error occured pitting these combatants against each other 😦');
+      deleteCommandMessages(msg, this.client);
+
+      return msg.reply('an error occurred pitting these combatants against each other 😦');
     });
 
     return null;

@@ -15,11 +15,21 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  moment = require('moment'),
+/**
+ * @file Searches MovieCommand - Find information about a movie using TheMovieDatabase  
+ * **Aliases**: `movie`
+ * @module
+ * @category searches
+ * @name tmdb
+ * @example tmdb Pokemon 2000
+ * @param {StringResolvable} MovieName Name of the movie you want to find
+ * @returns {MessageEmbed} Information about the requested movie
+ */
+
+const moment = require('moment'),
   request = require('snekfetch'),
-  {TheMovieDBV3ApiKey} = process.env.moviedbkey,
+  {Command} = require('discord.js-commando'),
+  {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class movieCommand extends Command {
@@ -43,48 +53,38 @@ module.exports = class movieCommand extends Command {
     });
   }
 
-  async run (msg, args) {
-    const embed = new Discord.MessageEmbed(),
-      search = await request.get('https://api.themoviedb.org/3/search/movie')
-        .query('api_key', TheMovieDBV3ApiKey)
-        .query('query', args.name)
-        .query('include_adult', false);
+  async run (msg, {name}) {
+    try {
+      const movieEmbed = new MessageEmbed(),
+        movieSearch = await request.get('https://api.themoviedb.org/3/search/movie')
+          .query('api_key', process.env.moviedbkey)
+          .query('query', name)
+          .query('include_adult', false),
+        movieStats = await request.get(`https://api.themoviedb.org/3/movie/${movieSearch.body.results[0].id}`)
+          .query('api_key', process.env.moviedbkey);
 
-    if (search.ok && search.body.total_results > 0) {
-      const details = await request.get(`https://api.themoviedb.org/3/movie/${search.body.results[0].id}`)
-        .query('api_key', TheMovieDBV3ApiKey);
-
-      if (details.ok) {
-        const movie = details.body;
-
-        embed
-          .setTitle(movie.title)
-          .setURL(`https://www.themoviedb.org/movie/${movie.id}`)
-          .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
-          .setImage(`https://image.tmdb.org/t/p/original${movie.backdrop_path}`)
-          .setThumbnail(`https://image.tmdb.org/t/p/original${movie.poster_path}`)
-          .setDescription(movie.overview)
-          .addField('Runtime', `${movie.runtime} minutes`, true)
-          .addField('User Score', movie.vote_average, true)
-          .addField('Status', movie.status, true)
-          .addField('Release Date', moment(movie.release_date).format('MMMM Do YYYY'), true)
-          .addField('Collection', movie.belongs_to_collection !== null ? movie.belongs_to_collection.name : 'none', true)
-          .addField('IMDB Page', movie.imdb_id_id !== '' ? `[Click Here](http://www.imdb.com/title/${movie.imdb_id})` : 'none', true)
-          .addField('Genres', movie.genres.length !== 0 ? movie.genres.map(genre => genre.name).join(', ') : 'None on TheMovieDB')
-          .addField('Production Companies', movie.production_companies.length !== 0 ? movie.production_companies.map(company => company.name).join(', ') : 'None on TheMovieDB');
-
-        deleteCommandMessages(msg, this.client);
-
-        return msg.embed(embed);
-      }
+      movieEmbed
+        .setTitle(movieStats.body.title)
+        .setURL(`https://www.themoviedb.org/movie/${movieStats.body.id}`)
+        .setColor(msg.guild ? msg.member.displayHexColor : '#7CFC00')
+        .setImage(`https://image.tmdb.org/t/p/original${movieStats.body.backdrop_path}`)
+        .setThumbnail(`https://image.tmdb.org/t/p/original${movieStats.body.poster_path}`)
+        .setDescription(movieStats.body.overview)
+        .addField('Runtime', `${movieStats.body.runtime} minutes`, true)
+        .addField('User Score', movieStats.body.vote_average, true)
+        .addField('Status', movieStats.body.status, true)
+        .addField('Release Date', moment(movieStats.body.release_date).format('MMMM Do YYYY'), true)
+        .addField('Collection', movieStats.body.belongs_to_collection ? movieStats.body.belongs_to_collection.name : 'none', true)
+        .addField('IMDB Page', movieStats.body.imdb_id ? `[Click Here](http://www.imdb.com/title/${movieStats.body.imdb_id})` : 'none', true)
+        .addField('Genres', movieStats.body.genres.length ? movieStats.body.genres.map(genre => genre.name).join(', ') : 'None on TheMovieDB');
 
       deleteCommandMessages(msg, this.client);
-			
-      return msg.reply(`***Failed to fetch details for \`${args.name}\`***`);
+
+      return msg.embed(movieEmbed);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
+
+      return msg.reply(`no movies found for \`${name}\``);
     }
-
-    deleteCommandMessages(msg, this.client);
-
-    return msg.reply(`***No movies found for \`${args.name}\`***`);
   }
 };

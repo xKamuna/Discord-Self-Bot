@@ -15,13 +15,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file Extra CreditGenCommand - Generate a credit card number for those pesky sites that ask for one  
+ * Validity is not guaranteed. Many sites properly check validity but this will work for some.
+ * **Aliases**: `cg`
+ * @module
+ * @category extra
+ * @name creditgen
+ * @param {StringResolvable} [network] Network for the credit card. One of visa, mastercard or amex
+ * @returns {MessageEmbed} The generated credit card info
+ */
+
 const card = require('creditcardutils'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {stripIndents} = require('common-tags'),
   {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
 
-module.exports = class creditgenCommand extends Command {
+module.exports = class CreditGenCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'creditgen',
@@ -31,7 +42,6 @@ module.exports = class creditgenCommand extends Command {
       description: 'Generate a credit card number for those pesky sites that ask for one',
       details: 'Validity is not guaranteed. Many sites properly check validity but this will work for some',
       format: 'CreditcardNetwork',
-      examples: ['creditgen'],
       guildOnly: false,
       args: [
         {

@@ -15,15 +15,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  Pornsearch = require('pornsearch').default,
+/**
+ * @file nsfw PornVidsCommand - Gets a NSFW video from pornhub  
+ * Can only be used in NSFW marked channels!  
+ * **Aliases**: `porn`, `nsfwvids`
+ * @module
+ * @category nsfw
+ * @name pornvids
+ * @example pornvids babe
+ * @param {StringResolvable} Query Something you want to find
+ * @returns {MessageEmbed} URL, duration and embedded thumbnail
+ */
+
+const Pornsearch = require('pornsearch'),
+  {MessageEmbed} = require('discord.js'),
   {Command} = require('discord.js-commando'),
-  random = require('node-random'),
   {deleteCommandMessages} = require('../../util.js');
 
-const pornEmbed = new Discord.MessageEmbed(); // eslint-disable-line one-var
-
-module.exports = class pornvidsCommand extends Command {
+module.exports = class PornVidsCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'pornvids',
@@ -37,7 +46,7 @@ module.exports = class pornvidsCommand extends Command {
       nsfw: true,
       args: [
         {
-          key: 'pornInput',
+          key: 'porn',
           prompt: 'What pornography do you want to find?',
           type: 'string'
         }
@@ -45,31 +54,30 @@ module.exports = class pornvidsCommand extends Command {
     });
   }
 
-  async run (msg, args) {
-    const search = new Pornsearch(args.pornInput),
-      vids = await search.videos();
+  async run (msg, {porn}) {
+    try {
+      /* eslint-disable sort-vars */
+      const search = new Pornsearch(porn),
+        vids = await search.videos(),
+        pornEmbed = new MessageEmbed(),
+        random = Math.floor(Math.random() * vids.length);
+      /* eslint-enable sort-vars */
 
-    if (vids) {
-      random.integers({
-        number: 1,
-        minimum: 0,
-        maximum: vids.length - 1
-      }, (error, vid) => {
-        if (error) {
-          return msg.reply('⚠ An error occured while drawing a random number.');
-        }
-        pornEmbed
-          .setURL(vids[vid].url)
-          .setTitle(vids[vid].title)
-          .setImage(vids[vid].thumb)
-          .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-          .addField('Porn video URL', `[Click Here](${vids[vid].url})`, true)
-          .addField('Porn video duration', vids[vid].duration === !'' ? vids[vid].url : 'unknown', true);
+      pornEmbed
+        .setURL(vids[random].url)
+        .setTitle(vids[random].title)
+        .setImage(vids[random].thumb)
+        .setColor('#FFB6C1')
+        .addField('Porn video URL', `[Click Here](${vids[random].url})`, true)
+        .addField('Porn video duration', vids[random].duration !== '' ? vids[random].duration : 'unknown', true);
 
-        deleteCommandMessages(msg, this.client);
+      deleteCommandMessages(msg, this.client);
 
-        return msg.embed(pornEmbed, vids[vid].url);
-      });
+      return msg.embed(pornEmbed, vids[random].url);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
+
+      return msg.reply(`nothing found for \`${porn}\``);
     }
   }
 };

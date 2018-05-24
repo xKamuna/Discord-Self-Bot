@@ -15,17 +15,28 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file Extra LinkifyCommand - Easily get a URL for any upload  
+ * This is the for mobile users ;)
+ * Send this command when uploading anything and the bot will reply with the URL
+ * **Aliases**: `link`, `imglink`
+ * @module
+ * @category extra
+ * @name linkify
+ * @returns {Message} URL of whatever you uploaded
+ */
+
 const {Command} = require('discord.js-commando');
 
-module.exports = class linkifyCommand extends Command {
+module.exports = class LinkifyCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'linkify',
       memberName: 'linkify',
       group: 'extra',
       aliases: ['link', 'imglink'],
-      description: 'Create a discord cdn link from an attachment - for mobile',
-      examples: ['linkify while sending a message with an attachment'],
+      description: 'Easily get a URL for any upload',
+      details: 'This is for the mobile users ;)\nSend this command when uploading anything and the bot will reply with the URL',
       guildOnly: false
     });
   }

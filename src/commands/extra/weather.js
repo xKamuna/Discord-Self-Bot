@@ -15,10 +15,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  weather = require('yahoo-weather'),
+/**
+ * @file Extra Weather - Get the current weather forecast in any city  
+ * Potentially you'll have to specify city if the city is in multiple countries, i.e. `weather amsterdam` will not be the same as `weather amsterdam missouri`  
+ * **Aliases**: `temp`, `forecast`, `fc`, `wth`
+ * @module
+ * @category extra
+ * @name weather
+ * @example weather Amsterdam
+ * @param {StringResolvable} CityName Name of the city to get the weather forecast for
+ * @returns {MessageEmbed} Various statistics about the current forecast
+ */
+
+const weather = require('yahoo-weather'),
   {Command} = require('discord.js-commando'),
-  {deleteCommandMessages, momentFormat} = require('../../util.js');
+  {MessageEmbed} = require('discord.js'),
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class weatherCommand extends Command {
   constructor (client) {
@@ -41,7 +53,7 @@ module.exports = class weatherCommand extends Command {
     });
   }
 
-  convertTimeFormat (input) { // eslint-disable-line one-var
+  convertTimeFormat (input) {
     const ampm = input.match(/\s(.*)$/)[1],
       minutes = Number(input.match(/:(\d+)/)[1]);
     let hours = Number(input.match(/^(\d+)/)[1]),
@@ -87,16 +99,17 @@ module.exports = class weatherCommand extends Command {
     }
   }
 
-  async run (msg, args) {
-    const info = await weather(args.city),
-      weatherEmbed = new Discord.MessageEmbed();
+  async run (msg, {city}) {
+    const info = await weather(city),
+      weatherEmbed = new MessageEmbed();
 
     if (info) {
       weatherEmbed
         .setAuthor(`Weather data for ${info.location.city} - ${info.location.country}`)
-        .setFooter(`Weather data pulled from ${info.image.title} on ${momentFormat(new Date(), this.client)}`)
         .setThumbnail(info.item.description.slice(19, 56))
-        .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+        .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+        .setFooter('Powered by Yahoo! Weather')
+        .setTimestamp()
         .addField('💨 Wind Speed', `${info.wind.speed} ${info.units.speed}`, true)
         .addField('💧 Humidity', `${info.atmosphere.humidity}%`, true)
         .addField('🌅 Sunrise', this.convertTimeFormat(info.astronomy.sunrise), true)
@@ -114,6 +127,7 @@ module.exports = class weatherCommand extends Command {
 
       return msg.embed(weatherEmbed);
     }
+    deleteCommandMessages(msg, this.client);
 
     return msg.reply('an error occurred getting weather info for that city');
   }

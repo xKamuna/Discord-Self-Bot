@@ -15,21 +15,30 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  Pornsearch = require('pornsearch').default,
+/**
+ * @file nsfw PornGifsCommand - Gets a NSFW gif and webm from pornhub  
+ * Can only be used in NSFW marked channels!  
+ * **Aliases**: `nsfwgifs`
+ * @module
+ * @category nsfw
+ * @name porngifs
+ * @example porngifs babe
+ * @param {StringResolvable} Query Something you want to find
+ * @returns {MessageEmbed} Webm link and embeds gif
+ */
+
+const Pornsearch = require('pornsearch'),
   {Command} = require('discord.js-commando'),
-  random = require('node-random'),
+  {MessageEmbed} = require('discord.js'),
   {deleteCommandMessages} = require('../../util.js');
 
-const pornEmbed = new Discord.MessageEmbed(); // eslint-disable-line one-var
-
-module.exports = class porngifsCommand extends Command {
+module.exports = class PornGifsCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'porngifs',
       memberName: 'porngifs',
       group: 'nsfw',
-      aliases: ['gifs', 'nsfwgifs'],
+      aliases: ['nsfwgifs'],
       description: 'Search porn gifs',
       format: 'NSFWToLookUp',
       examples: ['porngifs babe'],
@@ -37,7 +46,7 @@ module.exports = class porngifsCommand extends Command {
       nsfw: true,
       args: [
         {
-          key: 'pornInput',
+          key: 'porn',
           prompt: 'What pornography do you want to find?',
           type: 'string'
         }
@@ -45,32 +54,28 @@ module.exports = class porngifsCommand extends Command {
     });
   }
 
-  async run (msg, args) {
-    const search = new Pornsearch(args.pornInput),
-      gifs = await search.gifs(); // eslint-disable-line sort-vars
+  async run (msg, {porn}) {
+    try {
+      /* eslint-disable sort-vars */
+      const search = new Pornsearch(porn),
+        pornEmbed = new MessageEmbed(),
+        gifs = await search.gifs(),
+        random = Math.floor(Math.random() * gifs.length);
+      /* eslint-enable sort-vars */
 
-    if (gifs) {
-      random.integers({
-        number: 1,
-        minimum: 0,
-        maximum: gifs.length - 1
-      }, (error, gif) => {
-        if (error) {
-          return msg.reply('⚠ An error occured while drawing a random number.');
-        }
-        pornEmbed
-          .setURL(gifs[gif].url)
-          .setTitle(gifs[gif].title)
-          .setImage(`${gifs[gif].url}`)
-          .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-          .addField('Gif webm', `[Click Here](${gifs[gif].webm})`, true);
+      pornEmbed
+        .setURL(gifs[random].url)
+        .setTitle(gifs[random].title)
+        .setImage(`${gifs[random].url}`)
+        .setColor('#FFB6C1')
+        .addField('Gif webm', `[Click Here](${gifs[random].webm})`, true);
+      deleteCommandMessages(msg, this.client);
 
-        deleteCommandMessages(msg, this.client);
+      return msg.embed(pornEmbed, gifs[random].webm);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
 
-        return msg.embed(pornEmbed, gifs[gif].webm);
-      });
+      return msg.reply(`nothing found for \`${porn}\``);
     }
-
-
   }
 };

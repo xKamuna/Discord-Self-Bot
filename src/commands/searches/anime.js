@@ -15,25 +15,36 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
+/**
+ * @file Searches AnimeCommand - Gets information about any anime from MyAnimeList  
+ * **Aliases**: `ani`, `mal`
+ * @module
+ * @category searches
+ * @name anime
+ * @example anime Yu-Gi-Oh Dual Monsters
+ * @param {StringResolvable} AnimeName anime to look up
+ * @returns {MessageEmbed} Information about the requested anime
+ */
+
+const maljs = require('maljs'),
+  {MessageEmbed} = require('discord.js'),
   {Command} = require('discord.js-commando'),
-  maljs = require('maljs'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class animeCommand extends Command {
+module.exports = class AnimeCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'anime',
       memberName: 'anime',
       group: 'searches',
       aliases: ['ani', 'mal'],
-      description: 'Finds anime on MyAnimeList',
+      description: 'Gets information about any anime from MyAnimeList',
       format: 'AnimeName',
-      examples: ['anime Pokemon'],
+      examples: ['anime Yu-Gi-Oh Dual Monsters'],
       guildOnly: false,
       args: [
         {
-          key: 'query',
+          key: 'anime',
           prompt: 'What anime do you want to find?',
           type: 'string'
         }
@@ -41,29 +52,29 @@ module.exports = class animeCommand extends Command {
     });
   }
 
-  async run (msg, args) {
-    const aniEmbed = new Discord.MessageEmbed(),
-      res = await maljs.quickSearch(args.query, 'anime');
+  async run (msg, {anime}) {
+    try {
+      const aniEmbed = new MessageEmbed(),
+        search = await maljs.quickSearch(anime, 'anime'),
+        searchDetails = await search.anime[0].fetch();
 
-    if (res) {
-      const anime = await res.anime[0].fetch();
+      aniEmbed
+        .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+        .setTitle(searchDetails.title)
+        .setImage(searchDetails.cover)
+        .setDescription(searchDetails.description)
+        .setURL(`${searchDetails.mal.url}${searchDetails.path}`)
+        .addField('Score', searchDetails.score, true)
+        .addField('Popularity', searchDetails.popularity, true)
+        .addField('Rank', searchDetails.ranked, true);
 
-      if (anime) {
+      deleteCommandMessages(msg, this.client);
 
-        aniEmbed
-          .setColor(msg.guild ? msg.member.displayHexColor : '#FF0000')
-          .setTitle(anime.title)
-          .setImage(anime.cover)
-          .setDescription(anime.description)
-          .setURL(`${anime.mal.url}${anime.path}`)
-          .addField('Score', anime.score, true)
-          .addField('Popularity', anime.popularity, true)
-          .addField('Rank', anime.ranked, true);
+      return msg.embed(aniEmbed, `${searchDetails.mal.url}${searchDetails.path}`);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
 
-        deleteCommandMessages(msg, this.client);
-
-        msg.embed(aniEmbed, `${anime.mal.url}${anime.path}`);
-      }
+      return msg.reply(`no anime found for the input \`${anime}\` `);
     }
   }
 };

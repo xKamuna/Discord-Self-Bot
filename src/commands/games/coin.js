@@ -15,11 +15,20 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Discord = require('discord.js'),
-  {Command} = require('discord.js-commando'),
-  {deleteCommandMessages} = require('../../util.js');
+/**
+ * @file Games CoinCommand - Flips a coin  
+ * **Aliases**: `coinflip`, `dndc`, `dcoin`
+ * @module
+ * @category games
+ * @name dndc
+ * @returns {MessageEmbed} Side the coin landed on
+ */
 
-module.exports = class coinCommand extends Command {
+const {Command} = require('discord.js-commando'), 
+  {MessageEmbed} = require('discord.js'), 
+  {deleteCommandMessages, roundNumber} = require('../../util.js');
+
+module.exports = class CoinCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'coin',
@@ -33,13 +42,13 @@ module.exports = class coinCommand extends Command {
   }
 
   run (msg) {
-    const coinEmbed = new Discord.MessageEmbed(),
-      res = Math.round(Math.randon()) ? 'head' : 'tail';
+    const coinEmbed = new MessageEmbed(),
+      flip = roundNumber(Math.random());
 
     coinEmbed
-      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
-      .setImage(res === 'head' ? 'https://favna.s-ul.eu/8ZKmpiKO.png' : 'https://favna.s-ul.eu/NTsDbSUo.png')
-      .setTitle(`Flipped ${res}s`);
+      .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
+      .setImage(flip === 1 ? 'https://favna.xyz/images/ribbonhost/dndheads.png' : 'https://favna.xyz/images/ribbonhost/dndtails.png')
+      .setTitle(`Flipped ${flip === 1 ? 'heads' : 'tails'}`);
 
     deleteCommandMessages(msg, this.client);
 

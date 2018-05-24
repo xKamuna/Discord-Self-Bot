@@ -142,23 +142,6 @@ class DiscordSelfBot {
           }
         }
       }
-
-      if (this.client.provider.get('global', 'channellinktoggle', false) && msg.guild) {
-        const dataArr = this.client.provider.get('global', 'clconfig', []),
-          forwardEmbed = new MessageEmbed();
-
-        if (dataArr.length !== 0 && msg.guild.id === dataArr[0][0] && msg.channel.id === dataArr[0][1]) {
-          forwardEmbed
-            .setColor(msg.member ? msg.member.displayHexColor : '#FF0000')
-            .setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({format: 'png'}))
-            .setTitle(`Message from ${this.client.guilds.get(dataArr[0][0]).channels.get(dataArr[0][1]).name} on ${this.client.guilds.get(dataArr[1][0]).name}`)
-            .setDescription(msg.content)
-            .setFooter('Message date')
-            .setTimestamp(msg.createdAt);
-
-          this.client.guilds.get(dataArr[1][0]).channels.get(dataArr[1][1]).send({embed: forwardEmbed});
-        }
-      }
     };
   }
 

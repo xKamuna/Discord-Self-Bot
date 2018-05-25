@@ -17,10 +17,10 @@
 
 /**
  * @file Games CoinCommand - Flips a coin  
- * **Aliases**: `coinflip`, `dndc`, `dcoin`
+ * **Aliases**: `flip`, `coinflip`
  * @module
  * @category games
- * @name dndc
+ * @name coin
  * @returns {MessageEmbed} Side the coin landed on
  */
 

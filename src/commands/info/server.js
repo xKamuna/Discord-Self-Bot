@@ -21,6 +21,7 @@
  * @module
  * @category info
  * @name server
+ * @param {GuildResolvable} [Server] Optionally the server you want to get the stats for
  * @returns {MessageEmbed} Info about the server
  */
 
@@ -37,7 +38,7 @@ module.exports = class ServerInfoCommand extends Command {
       group: 'info',
       aliases: ['serverinfo', 'sinfo'],
       description: 'Gets information about any server you\'re in',
-      format: 'ServerID|ServerName(partial or full)',
+      format: '[ServerID|ServerName(partial or full)]',
       examples: ['server Bots by Favna'],
       guildOnly: false,
       args: [
@@ -45,7 +46,7 @@ module.exports = class ServerInfoCommand extends Command {
           key: 'server',
           prompt: 'Get info from which server?',
           type: 'guild',
-          default: 'current'
+          default: ''
         }
       ]
     });
@@ -82,13 +83,14 @@ module.exports = class ServerInfoCommand extends Command {
   }
 
   run (msg, {server}) {
-    if (msg.channel.type !== 'text' && server === 'current') {
-      return msg.reply('An argument of server name (partial or full) or server ID is required when talking outside of a server');
+    if (msg.channel.type !== 'text' && !server) {
+      return msg.reply('an argument of server name (partial or full) or server ID is required when talking outside of a server');
     }
 
-    const guild = server === 'current' ? msg.guild : server,
-      channels = guild.channels.map(ty => ty.type), // eslint-disable-line sort-vars
-      presences = guild.presences.map(st => st.status),
+    server = server ? server : msg.guild;
+
+    const channels = server.channels.map(ty => ty.type),
+      presences = server.presences.map(st => st.status),
       serverEmbed = new MessageEmbed();
 
     let guildChannels = 0,
@@ -106,24 +108,24 @@ module.exports = class ServerInfoCommand extends Command {
     }
 
     serverEmbed
-      .setColor(guild.owner ? guild.owner.displayHexColor : '#FF0000')
+      .setColor(server.owner ? server.owner.displayHexColor : '#FF0000')
       .setAuthor('Server Info', 'https://favna.s-ul.eu/O0qc0yt7.png')
-      .setThumbnail(guild.iconURL({format: 'png'}))
-      .setFooter(`Server ID: ${guild.id}`)
-      .addField('Server Name', guild.name, true)
-      .addField('Owner', guild.owner ? guild.owner.user.tag : 'Owner is MIA', true)
-      .addField('Members', guild.memberCount, true)
+      .setThumbnail(server.iconURL({format: 'png'}))
+      .setFooter(`Server ID: ${server.id}`)
+      .addField('Server Name', server.name, true)
+      .addField('Owner', server.owner ? server.owner.user.tag : 'Owner is MIA', true)
+      .addField('Members', server.memberCount, true)
       .addField('Currently Online', onlineMembers, true)
-      .addField('Region', guild.region, true)
-      .addField('Highest Role', guild.roles.sort((a, b) => a.position - b.position || a.id - b.id).last().name, true)
-      .addField('Number of emojis', guild.emojis.size, true)
-      .addField('Number of roles', guild.roles.size, true)
+      .addField('Region', server.region, true)
+      .addField('Highest Role', server.roles.sort((a, b) => a.position - b.position || a.id - b.id).last().name, true)
+      .addField('Number of emojis', server.emojis.size, true)
+      .addField('Number of roles', server.roles.size, true)
       .addField('Number of channels', guildChannels, true)
-      .addField('Created At', moment(guild.createdTimestamp).format('MMMM Do YYYY [at] HH:mm'), false)
-      .addField('Verification Level', this.verificationFilter(guild.verificationLevel), false)
-      .addField('Explicit Content Filter', this.contentFilter(guild.explicitContentFilter), false);
+      .addField('Created At', moment(server.createdTimestamp).format('MMMM Do YYYY [at] HH:mm'), false)
+      .addField('Verification Level', this.verificationFilter(server.verificationLevel), false)
+      .addField('Explicit Content Filter', this.contentFilter(server.explicitContentFilter), false);
 
-    guild.splashURL() !== null ? serverEmbed.setImage(guild.splashURL()) : null;
+    server.splashURL() !== null ? serverEmbed.setImage(server.splashURL()) : null;
 
     deleteCommandMessages(msg, this.client);
 

@@ -114,8 +114,8 @@ Has a very specific syntax! Be sure to adapt the example!
 <dt><a href="#module_8ball">8ball</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Games EightBallCommand - Rolls a magic 8 ball using your input<br><strong>Aliases</strong>: <code>eightball</code></p>
 </dd>
-<dt><a href="#module_dndc">dndc</a> ⇒ <code>MessageEmbed</code></dt>
-<dd><p>Games CoinCommand - Flips a coin<br><strong>Aliases</strong>: <code>coinflip</code>, <code>dndc</code>, <code>dcoin</code></p>
+<dt><a href="#module_coin">coin</a> ⇒ <code>MessageEmbed</code></dt>
+<dd><p>Games CoinCommand - Flips a coin<br><strong>Aliases</strong>: <code>flip</code>, <code>coinflip</code></p>
 </dd>
 <dt><a href="#module_coppers">coppers</a> ⇒ <code>Message</code></dt>
 <dd><p>Games CoppersCommand - YOU ARE SURROUNDED!<br><strong>Aliases</strong>: <code>police</code>, <code>cops</code></p>
@@ -513,11 +513,11 @@ Games EightBallCommand - Rolls a magic 8 ball using your input
 ```js
 8ball is Favna a genius coder?
 ```
-<a name="module_dndc"></a>
+<a name="module_coin"></a>
 
-## dndc ⇒ <code>MessageEmbed</code>
+## coin ⇒ <code>MessageEmbed</code>
 Games CoinCommand - Flips a coin  
-**Aliases**: `coinflip`, `dndc`, `dcoin`
+**Aliases**: `flip`, `coinflip`
 
 **Returns**: <code>MessageEmbed</code> - Side the coin landed on  
 **Category**: games  
@@ -645,6 +645,11 @@ Info EmotesCommand - Lists all emotes from the server
 
 **Returns**: <code>MessageEmbed</code> - List of emotes  
 **Category**: info  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [Server] | <code>GuildResolvable</code> | Optionally the server you want to get the emotes for |
+
 <a name="module_invite"></a>
 
 ## invite ⇒ <code>MessageEmbed</code>
@@ -661,6 +666,11 @@ Info ServerInfoCommand - Gets information about any server you're in
 
 **Returns**: <code>MessageEmbed</code> - Info about the server  
 **Category**: info  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [Server] | <code>GuildResolvable</code> | Optionally the server you want to get the stats for |
+
 <a name="module_stats"></a>
 
 ## stats ⇒ <code>MessageEmbed</code>

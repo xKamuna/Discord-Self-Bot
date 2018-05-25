@@ -21,6 +21,7 @@
  * @module
  * @category info
  * @name emotes
+ * @param {GuildResolvable} [Server] Optionally the server you want to get the emotes for
  * @returns {MessageEmbed} List of emotes
  */
 
@@ -36,7 +37,7 @@ module.exports = class EmotesCommand extends Command {
       group: 'info',
       aliases: ['listemo', 'emolist', 'listemoji', 'listemojis'],
       description: 'Gets all available custom emojis from a server',
-      format: 'ServerID|ServerName(partial or full)',
+      format: '[ServerID|ServerName(partial or full)]',
       examples: ['emotes Bots By Favna'],
       guildOnly: false,
       args: [

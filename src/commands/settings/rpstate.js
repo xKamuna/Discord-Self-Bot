@@ -19,29 +19,29 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpdetailsCommand extends Command {
+module.exports = class rpstateCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rpdetails',
-      memberName: 'rpdetails',
-      group: 'provider',
-      aliases: ['details', 'rpdetail'],
-      description: 'Set your Rich Presence details',
-      format: 'DetailsText',
-      examples: ['rpappid Made by Favna'],
+      name: 'rpstate',
+      memberName: 'rpstate',
+      group: 'settings',
+      aliases: ['state'],
+      description: 'Set your Rich Presence state',
+      format: 'StateText',
+      examples: ['rpstate https://favna.xyz/selfbot'],
       guildOnly: false,
       args: [
         {
-          key: 'details',
-          prompt: 'What is the detail string for your richpresence?',
+          key: 'state',
+          prompt: 'What is the state string for your richpresence?',
           type: 'string',
-          label: 'details',
-          validate: (details) => {
-            if (Buffer.byteLength(details, 'utf8') <= 128) {
+          label: 'state',
+          validate: (state) => {
+            if (Buffer.byteLength(state, 'utf8') <= 128) {
               return true;
             }
 
-            return 'The detail string cannot be longer than 128 UTF-8 bytes';
+            return 'The state string cannot be longer than 128 bytes';
           }
         }
       ]
@@ -49,10 +49,10 @@ module.exports = class rpdetailsCommand extends Command {
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'rpdetails', args.details);
+    this.client.provider.set('global', 'rpstate', args.state);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence Details have been set to \`${args.details}\``);
+    return msg.reply(oneLine`Your RichPresence State has been set to \`${args.state}\``);
   }
 };

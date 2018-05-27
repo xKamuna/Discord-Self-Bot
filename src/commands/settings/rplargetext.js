@@ -19,46 +19,40 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rptoggleCommand extends Command {
+module.exports = class rplargetextCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rptoggle',
-      memberName: 'rptoggle',
-      group: 'provider',
-      aliases: ['presencetoggle'],
-      description: 'Configure whether you want a Rich Presence or normal presence',
-      format: 'enable|disable',
-      examples: ['rptoggle enable'],
+      name: 'rplargetext',
+      memberName: 'rplargetext',
+      group: 'settings',
+      aliases: ['largetext', 'ltext'],
+      description: 'Set your Rich Presence largetext',
+      format: 'LargeText',
+      examples: ['rplargetext See the website'],
       guildOnly: false,
       args: [
         {
-          key: 'option',
-          prompt: 'Enable or disable rich presences?',
-          type: 'boolean',
-          label: 'Option for toggling',
-          validate: (bool) => {
-            const validBools = ['true', 't', 'yes', 'y', 'on', 'enable', 'enabled', '1', '+', 'false', 'f', 'no', 'n', 'off', 'disable', 'disabled', '0', '-'];
-
-            if (validBools.includes(bool.toLowerCase())) {
+          key: 'largetext',
+          prompt: 'What is the largetext string for your richpresence?',
+          type: 'string',
+          label: 'largetext',
+          validate: (largetext) => {
+            if (Buffer.byteLength(largetext, 'utf8') <= 128) {
               return true;
             }
 
-            return `Has to be one of ${validBools.join(', ')}`;
+            return 'The largetext string cannot be longer than 128 bytes';
           }
         }
       ]
     });
   }
-
+	
   run (msg, args) {
-    this.client.provider.set('global', 'rptoggle', args.option);
+    this.client.provider.set('global', 'rplargetext', args.largetext);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Rich Presence is now ${args.option
-      ? 'enabled'
-      : 'disabled'}. Run ${msg.guild
-      ? msg.guild.commandPrefix
-      : this.client.commandPrefix}rpreload to reload your presence.`);
+    return msg.reply(oneLine`Your RichPresence LargeText has been set to \`${args.largetext}\``);
   }
 };

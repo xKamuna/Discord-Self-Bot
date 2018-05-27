@@ -19,21 +19,21 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rptimestamptoggleCommand extends Command {
+module.exports = class webhooktoggleCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rptimestamptoggle',
-      memberName: 'rptimestamptoggle',
-      group: 'provider',
-      aliases: ['timetoggle', 'tst', 'rptimestamp'],
-      description: 'Configure whether you want a timestamp in your Rich Presence',
+      name: 'webhooktoggle',
+      memberName: 'webhooktoggle',
+      group: 'settings',
+      aliases: ['wht', 'hooktoggle'],
+      description: 'Configure whether you want a the Webhook Notification System (WNS)',
       format: 'enable|disable',
-      examples: ['rptimestamptoggle enable'],
+      examples: ['webhooktoggle {option}', 'webhooktoggle enable'],
       guildOnly: false,
       args: [
         {
           key: 'option',
-          prompt: 'Enable or disable the timestamp in rich presences?',
+          prompt: 'Enable or disable Webhook Notification System?',
           type: 'boolean',
           label: 'Option for toggling',
           validate: (bool) => {
@@ -51,14 +51,14 @@ module.exports = class rptimestamptoggleCommand extends Command {
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'rptimestamptoggle', args.option);
+    this.client.provider.set('global', 'webhooktoggle', args.option);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`The Timestamp in Rich Presence is now ${args.option 
-      ? 'enabled' 
-      : 'disabled'}. Run ${msg.guild 
-      ? msg.guild.commandPrefix 
-      : this.client.commandPrefix}rpreload to reload your presence.`);
+    return msg.reply(oneLine`Webhook Notification System is now ${args.option 
+      ? `enabled. Make sure to set up your keywords with \`${msg.guild 
+        ? msg.guild.commandPrefix : this.client.commandPrefix}webhookkeywords\` and optionally word exclusions with \`${msg.guild 
+        ? msg.guild.commandPrefix : this.client.commandPrefix}webhookexclusions\`.` 
+      : 'disabled.'}`);
   }
 };

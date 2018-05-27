@@ -19,21 +19,21 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rptoggletimeendCommand extends Command {
+module.exports = class rptoggleCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rptoggletimeend',
-      memberName: 'rptoggletimeend',
-      group: 'provider',
-      aliases: ['rptoggleend', 'toggleend', 'tte'],
-      description: 'Toggle ending timestamp on or off',
+      name: 'rptoggle',
+      memberName: 'rptoggle',
+      group: 'settings',
+      aliases: ['presencetoggle'],
+      description: 'Configure whether you want a Rich Presence or normal presence',
       format: 'enable|disable',
-      examples: ['rptoggletimeend enable'],
+      examples: ['rptoggle enable'],
       guildOnly: false,
       args: [
         {
           key: 'option',
-          prompt: 'Enable or disable ending timestamps?',
+          prompt: 'Enable or disable rich presences?',
           type: 'boolean',
           label: 'Option for toggling',
           validate: (bool) => {
@@ -51,12 +51,14 @@ module.exports = class rptoggletimeendCommand extends Command {
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'rptoggletimeend', args.option);
+    this.client.provider.set('global', 'rptoggle', args.option);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Ending timestamps are now ${args.option 
-      ? `enabled Run ${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}rptimeend set your ending timestamp` 
-      : 'disabled'}.`);
+    return msg.reply(oneLine`Rich Presence is now ${args.option
+      ? 'enabled'
+      : 'disabled'}. Run ${msg.guild
+      ? msg.guild.commandPrefix
+      : this.client.commandPrefix}rpreload to reload your presence.`);
   }
 };

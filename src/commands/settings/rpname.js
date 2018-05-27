@@ -19,30 +19,29 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpurlCommand extends Command {
+module.exports = class rpnameCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rpurl',
-      memberName: 'rpurl',
-      group: 'provider',
-      aliases: ['url'],
-      description: 'Set your Rich Presence URL',
-      examples: ['rpurl https://twitch.tv/favna'],
-      format: 'url',
+      name: 'rpname',
+      memberName: 'rpname',
+      group: 'settings',
+      aliases: ['name'],
+      description: 'Set your Rich Presence name',
+      format: 'NameText',
+      examples: ['rpname Discord-Self-Bot'],
       guildOnly: false,
       args: [
         {
-          key: 'url',
-          prompt: 'What is the Type you want for your Rich Presence?',
+          key: 'name',
+          prompt: 'What is the activity for your richpresence?',
           type: 'string',
-          label: 'url',
-          validate: (url) => {
-            // eslint-disable-next-line max-len
-            if (/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/.test(url)) {
+          label: 'name',
+          validate: (name) => {
+            if (Buffer.byteLength(name, 'utf8') <= 128) {
               return true;
             }
 
-            return 'Has to be a valid URL';
+            return 'The name string cannot be longer than 128 bytes';
           }
         }
       ]
@@ -50,10 +49,10 @@ module.exports = class rpurlCommand extends Command {
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'rpurl', args.url);
-
+    this.client.provider.set('global', 'rpname', args.name);
+		
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence URL has been set to \`${args.url}\``);
+    return msg.reply(oneLine`Your RichPresence Name has been set to \`${args.name}\``);
   }
 };

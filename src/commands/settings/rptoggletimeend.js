@@ -19,31 +19,31 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rptypeCommand extends Command {
+module.exports = class rptoggletimeendCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rptype',
-      memberName: 'rptype',
-      group: 'provider',
-      aliases: ['rtyp'],
-      description: 'Set your Rich Presence Type',
-      format: 'playing|watching|listening|streaming',
-      examples: ['rptype PLAYING'],
+      name: 'rptoggletimeend',
+      memberName: 'rptoggletimeend',
+      group: 'settings',
+      aliases: ['rptoggleend', 'toggleend', 'tte'],
+      description: 'Toggle ending timestamp on or off',
+      format: 'enable|disable',
+      examples: ['rptoggletimeend enable'],
       guildOnly: false,
       args: [
         {
-          key: 'type',
-          prompt: 'What is the Type you want for your Rich Presence?',
-          type: 'string',
-          label: 'typeID',
-          validate: (type) => {
-            const validTypes = ['playing', 'watching', 'listening', 'streaming'];
+          key: 'option',
+          prompt: 'Enable or disable ending timestamps?',
+          type: 'boolean',
+          label: 'Option for toggling',
+          validate: (bool) => {
+            const validBools = ['true', 't', 'yes', 'y', 'on', 'enable', 'enabled', '1', '+', 'false', 'f', 'no', 'n', 'off', 'disable', 'disabled', '0', '-'];
 
-            if (validTypes.includes(type.toLowerCase())) {
+            if (validBools.includes(bool.toLowerCase())) {
               return true;
             }
 
-            return `Has to be one of ${validTypes.join(', ')}`;
+            return `Has to be one of ${validBools.join(', ')}`;
           }
         }
       ]
@@ -51,10 +51,12 @@ module.exports = class rptypeCommand extends Command {
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'rptype', args.type.toUpperCase());
+    this.client.provider.set('global', 'rptoggletimeend', args.option);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence Type has been set to \`${args.type}\``);
+    return msg.reply(oneLine`Ending timestamps are now ${args.option 
+      ? `enabled Run ${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}rptimeend set your ending timestamp` 
+      : 'disabled'}.`);
   }
 };

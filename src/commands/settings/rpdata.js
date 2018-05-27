@@ -24,7 +24,7 @@ module.exports = class rpdataCommand extends Command {
     super(client, {
       name: 'rpdata',
       memberName: 'rpdata',
-      group: 'provider',
+      group: 'settings',
       aliases: ['rdata'],
       description: 'View your currently set Rich Presence data',
       examples: ['rpdata'],

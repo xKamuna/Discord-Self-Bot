@@ -19,40 +19,40 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rplargetextCommand extends Command {
+module.exports = class rpsmalltextCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rplargetext',
-      memberName: 'rplargetext',
-      group: 'provider',
-      aliases: ['largetext', 'ltext'],
-      description: 'Set your Rich Presence largetext',
-      format: 'LargeText',
-      examples: ['rplargetext See the website'],
+      name: 'rpsmalltext',
+      memberName: 'rpsmalltext',
+      group: 'settings',
+      aliases: ['smalltext', 'smalltext'],
+      description: 'Set your Rich Presence smalltext',
+      format: 'SmallText',
+      examples: ['rpsmalltext Or the GitHub'],
       guildOnly: false,
       args: [
         {
-          key: 'largetext',
-          prompt: 'What is the largetext string for your richpresence?',
+          key: 'smalltext',
+          prompt: 'What is the smalltext string for your richpresence?',
           type: 'string',
-          label: 'largetext',
-          validate: (largetext) => {
-            if (Buffer.byteLength(largetext, 'utf8') <= 128) {
+          label: 'smalltext',
+          validate: (smalltext) => {
+            if (Buffer.byteLength(smalltext, 'utf8') <= 128) {
               return true;
             }
 
-            return 'The largetext string cannot be longer than 128 bytes';
+            return 'The smalltext string cannot be longer than 128 bytes';
           }
         }
       ]
     });
   }
-	
+
   run (msg, args) {
-    this.client.provider.set('global', 'rplargetext', args.largetext);
+    this.client.provider.set('global', 'rpsmalltext', args.smalltext);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence LargeText has been set to \`${args.largetext}\``);
+    return msg.reply(oneLine`Your RichPresence SmallText has been set to \`${args.smalltext}\``);
   }
 };

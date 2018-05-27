@@ -19,21 +19,21 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class webhooktoggleCommand extends Command {
+module.exports = class deleteCommandMessagesCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'webhooktoggle',
-      memberName: 'webhooktoggle',
-      group: 'provider',
-      aliases: ['wht', 'hooktoggle'],
-      description: 'Configure whether you want a the Webhook Notification System (WNS)',
+      name: 'deletecommandmessages',
+      memberName: 'deletecommandmessages',
+      group: 'settings',
+      aliases: ['dcm'],
+      description: 'Configure whether the bot should delete command messages',
       format: 'enable|disable',
-      examples: ['webhooktoggle {option}', 'webhooktoggle enable'],
+      examples: ['deletecommandmessages enable'],
       guildOnly: false,
       args: [
         {
           key: 'option',
-          prompt: 'Enable or disable Webhook Notification System?',
+          prompt: 'Enable or disable deleting of command messages?',
           type: 'boolean',
           label: 'Option for toggling',
           validate: (bool) => {
@@ -51,14 +51,10 @@ module.exports = class webhooktoggleCommand extends Command {
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'webhooktoggle', args.option);
-
+    this.client.provider.set('global', 'deletecommandmessages', args.option);
+		
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Webhook Notification System is now ${args.option 
-      ? `enabled. Make sure to set up your keywords with \`${msg.guild 
-        ? msg.guild.commandPrefix : this.client.commandPrefix}webhookkeywords\` and optionally word exclusions with \`${msg.guild 
-        ? msg.guild.commandPrefix : this.client.commandPrefix}webhookexclusions\`.` 
-      : 'disabled.'}`);
+    return msg.reply(oneLine`command messages will now be ${args.option ? 'deleted' : 'kept'}.`);
   }
 };

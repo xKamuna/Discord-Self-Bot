@@ -19,40 +19,35 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpsmalltextCommand extends Command {
+module.exports = class webhookexclusionsCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rpsmalltext',
-      memberName: 'rpsmalltext',
-      group: 'provider',
-      aliases: ['smalltext', 'smalltext'],
-      description: 'Set your Rich Presence smalltext',
-      format: 'SmallText',
-      examples: ['rpsmalltext Or the GitHub'],
+      name: 'webhookexclusions',
+      memberName: 'webhookexclusions',
+      group: 'settings',
+      aliases: ['whe', 'hookexclusions'],
+      description: 'Configure the keywords to be avoided in your Webhook Notification System (WNS)',
+      format: 'user,name,nick,name',
+      examples: ['webhookexclusions Fantasy'],
       guildOnly: false,
       args: [
         {
-          key: 'smalltext',
-          prompt: 'What is the smalltext string for your richpresence?',
+          key: 'exclusions',
+          prompt: 'What keyword should be filtered for Webhook Notification System?',
           type: 'string',
-          label: 'smalltext',
-          validate: (smalltext) => {
-            if (Buffer.byteLength(smalltext, 'utf8') <= 128) {
-              return true;
-            }
-
-            return 'The smalltext string cannot be longer than 128 bytes';
-          }
+          label: 'exclusions for WNS'
         }
       ]
     });
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'rpsmalltext', args.smalltext);
+    this.client.provider.set('global', 'webhookexclusions', args.exclusions.split(','));
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence SmallText has been set to \`${args.smalltext}\``);
+    return msg.reply(oneLine`\`${args.exclusions.replace(/,/gim, ', ')}\` excluded from WNS. 
+        Make sure to enable webhooks with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhooktoggle\`
+        and set your keywords with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhookkeywords\` command`);
   }
 };

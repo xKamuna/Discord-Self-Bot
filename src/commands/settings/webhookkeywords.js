@@ -19,40 +19,35 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpnameCommand extends Command {
+module.exports = class webhookkeywordsCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rpname',
-      memberName: 'rpname',
-      group: 'provider',
-      aliases: ['name'],
-      description: 'Set your Rich Presence name',
-      format: 'NameText',
-      examples: ['rpname Discord-Self-Bot'],
+      name: 'webhookkeywords',
+      memberName: 'webhookkeywords',
+      group: 'settings',
+      aliases: ['whk', 'hookwords', 'hookkeywords'],
+      description: 'Configure the keywords used in your Webhook Notification System (WNS)',
+      format: 'user,name,nick,name',
+      examples: ['webhookkeywords Favna,Fanava,Fav'],
       guildOnly: false,
       args: [
         {
-          key: 'name',
-          prompt: 'What is the activity for your richpresence?',
+          key: 'keywords',
+          prompt: 'What keyword should be set for Webhook Notification System?',
           type: 'string',
-          label: 'name',
-          validate: (name) => {
-            if (Buffer.byteLength(name, 'utf8') <= 128) {
-              return true;
-            }
-
-            return 'The name string cannot be longer than 128 bytes';
-          }
+          label: 'keywords for WNS'
         }
       ]
     });
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'rpname', args.name);
+    this.client.provider.set('global', 'webhookkeywords', args.keywords.split(','));
 		
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence Name has been set to \`${args.name}\``);
+    return msg.reply(oneLine`Webhook Keywords have been set to \`${args.keywords.replace(/,/gim, ', ')}\`. 
+        Make sure to enable webhooks with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhooktoggle\`
+        and optionally set your word exclusions with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhookexclusions\` command`);
   }
 };

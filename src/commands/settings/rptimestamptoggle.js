@@ -19,21 +19,21 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class deleteCommandMessagesCommand extends Command {
+module.exports = class rptimestamptoggleCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'deletecommandmessages',
-      memberName: 'deletecommandmessages',
-      group: 'provider',
-      aliases: ['dcm'],
-      description: 'Configure whether the bot should delete command messages',
+      name: 'rptimestamptoggle',
+      memberName: 'rptimestamptoggle',
+      group: 'settings',
+      aliases: ['timetoggle', 'tst', 'rptimestamp'],
+      description: 'Configure whether you want a timestamp in your Rich Presence',
       format: 'enable|disable',
-      examples: ['deletecommandmessages enable'],
+      examples: ['rptimestamptoggle enable'],
       guildOnly: false,
       args: [
         {
           key: 'option',
-          prompt: 'Enable or disable deleting of command messages?',
+          prompt: 'Enable or disable the timestamp in rich presences?',
           type: 'boolean',
           label: 'Option for toggling',
           validate: (bool) => {
@@ -51,10 +51,14 @@ module.exports = class deleteCommandMessagesCommand extends Command {
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'deletecommandmessages', args.option);
-		
+    this.client.provider.set('global', 'rptimestamptoggle', args.option);
+
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`command messages will now be ${args.option ? 'deleted' : 'kept'}.`);
+    return msg.reply(oneLine`The Timestamp in Rich Presence is now ${args.option 
+      ? 'enabled' 
+      : 'disabled'}. Run ${msg.guild 
+      ? msg.guild.commandPrefix 
+      : this.client.commandPrefix}rpreload to reload your presence.`);
   }
 };

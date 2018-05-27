@@ -19,29 +19,30 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpappidCommand extends Command {
+module.exports = class rpurlCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rpappid',
-      memberName: 'rpappid',
-      group: 'provider',
-      aliases: ['appid', 'rpapp', 'rpapplication'],
-      description: 'Set your Rich Presence app ID',
-      format: 'ApplicationID',
-      examples: ['rpappid 355326429178757131'],
+      name: 'rpurl',
+      memberName: 'rpurl',
+      group: 'settings',
+      aliases: ['url'],
+      description: 'Set your Rich Presence URL',
+      examples: ['rpurl https://twitch.tv/favna'],
+      format: 'url',
       guildOnly: false,
       args: [
         {
-          key: 'appid',
-          prompt: 'What is the ClientID of your Discord application?',
+          key: 'url',
+          prompt: 'What is the Type you want for your Rich Presence?',
           type: 'string',
-          label: 'appid',
-          validate: (id) => {
-            if (id.length === 18) {
+          label: 'url',
+          validate: (url) => {
+            // eslint-disable-next-line max-len
+            if (/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/.test(url)) {
               return true;
             }
 
-            return 'The AppID has to be 18 digits';
+            return 'Has to be a valid URL';
           }
         }
       ]
@@ -49,10 +50,10 @@ module.exports = class rpappidCommand extends Command {
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'rpappid', args.appid);
+    this.client.provider.set('global', 'rpurl', args.url);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence AppID has been set to \`${args.appid}\``);
+    return msg.reply(oneLine`Your RichPresence URL has been set to \`${args.url}\``);
   }
 };

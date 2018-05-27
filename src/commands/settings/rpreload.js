@@ -23,7 +23,7 @@ module.exports = class rpreloadCommand extends Command {
     super(client, {
       name: 'rpreload',
       memberName: 'rpreload',
-      group: 'provider',
+      group: 'settings',
       aliases: ['setpresence', 'setrp', 'rpset'],
       description: 'Reload your RichPresence data',
       examples: ['rpreload'],

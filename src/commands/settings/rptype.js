@@ -19,35 +19,42 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class webhookkeywordsCommand extends Command {
+module.exports = class rptypeCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'webhookkeywords',
-      memberName: 'webhookkeywords',
-      group: 'provider',
-      aliases: ['whk', 'hookwords', 'hookkeywords'],
-      description: 'Configure the keywords used in your Webhook Notification System (WNS)',
-      format: 'user,name,nick,name',
-      examples: ['webhookkeywords Favna,Fanava,Fav'],
+      name: 'rptype',
+      memberName: 'rptype',
+      group: 'settings',
+      aliases: ['rtyp'],
+      description: 'Set your Rich Presence Type',
+      format: 'playing|watching|listening|streaming',
+      examples: ['rptype PLAYING'],
       guildOnly: false,
       args: [
         {
-          key: 'keywords',
-          prompt: 'What keyword should be set for Webhook Notification System?',
+          key: 'type',
+          prompt: 'What is the Type you want for your Rich Presence?',
           type: 'string',
-          label: 'keywords for WNS'
+          label: 'typeID',
+          validate: (type) => {
+            const validTypes = ['playing', 'watching', 'listening', 'streaming'];
+
+            if (validTypes.includes(type.toLowerCase())) {
+              return true;
+            }
+
+            return `Has to be one of ${validTypes.join(', ')}`;
+          }
         }
       ]
     });
   }
 
   run (msg, args) {
-    this.client.provider.set('global', 'webhookkeywords', args.keywords.split(','));
-		
+    this.client.provider.set('global', 'rptype', args.type.toUpperCase());
+
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Webhook Keywords have been set to \`${args.keywords.replace(/,/gim, ', ')}\`. 
-        Make sure to enable webhooks with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhooktoggle\`
-        and optionally set your word exclusions with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhookexclusions\` command`);
+    return msg.reply(oneLine`Your RichPresence Type has been set to \`${args.type}\``);
   }
 };

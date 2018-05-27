@@ -19,23 +19,23 @@ const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rplargeimageCommand extends Command {
+module.exports = class rpsmallimageCommand extends Command {
   constructor (client) {
     super(client, {
-      name: 'rplargeimage',
-      memberName: 'rplargeimage',
-      group: 'provider',
-      aliases: ['largeimage', 'limage'],
-      description: 'Set your Rich Presence LargeImage ID',
-      format: 'LargeImageID|LargeImageName',
-      examples: ['rplargeimage 379734851206512640'],
+      name: 'rpsmallimage',
+      memberName: 'rpsmallimage',
+      group: 'settings',
+      aliases: ['smallimage', 'simage'],
+      description: 'Set your Rich Presence SmallImage ID',
+      format: 'SmallImageID|SmallImageName',
+      examples: ['rpsmallimage 379734813751377921'],
       guildOnly: false,
       args: [
         {
-          key: 'largeimage',
-          prompt: 'What is the LargeImageID for the "large" Rich Presence image you want?',
+          key: 'smallimage',
+          prompt: 'What is the SmallImageID for the "small" Rich Presence image you want?',
           type: 'string',
-          label: 'largeimageID'
+          label: 'smallimageID'
         }
       ]
     });
@@ -59,7 +59,7 @@ module.exports = class rplargeimageCommand extends Command {
             return msg.reply(`No assets found in application with ID \`${appID}\``);
           }
           for (const i in assets) {
-            if (assets[i].type === 'BIG') {
+            if (assets[i].type === 'SMALL') {
               array.push({
                 id: assets[i].id,
                 name: assets[i].name
@@ -67,8 +67,8 @@ module.exports = class rplargeimageCommand extends Command {
             }
           }
 
-          const id = array.find(o => o.id === args.largeimage), // eslint-disable-line one-var
-            name = array.find(o => o.name === args.largeimage);
+          const id = array.find(o => o.id === args.smallimage), // eslint-disable-line one-var
+            name = array.find(o => o.name === args.smallimage);
           let imageID = '';
 
           if (id) {
@@ -78,21 +78,21 @@ module.exports = class rplargeimageCommand extends Command {
           }
 
           if (!imageID) {
-            return msg.reply(`Can't find \`${args.largeimage}\` in application with ID \`${appID}\``);
+            return msg.reply(`Can't find \`${args.smallimage}\` in application with ID \`${appID}\``);
           }
 
-          this.client.provider.set('global', 'rplargeimage', imageID);
+          this.client.provider.set('global', 'rpsmallimage', imageID);
 					
           deleteCommandMessages(msg, this.client);
 
-          return msg.reply(oneLine`Your RichPresence LargeImageID has been set to \`${args.largeimage}\``);
+          return msg.reply(oneLine`Your RichPresence Small Image has been set to \`${args.smallimage}\``);
         }
 
         return msg.reply(`No assets found in application with ID \`${appID}\``);
       }
 
       return msg.reply(oneLine`An error occurred fetching that application. Are you sure the ID is correct? Set it with the \`${msg.guild
-        ? msg.guild.commandPrefix 
+        ? msg.guild.commandPrefix
         : this.client.commandPrefix}rpappid\`command `);
     }
 

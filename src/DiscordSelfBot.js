@@ -183,7 +183,7 @@ class DiscordSelfBot {
         ['images', 'Images - Send emojis and memes directly to the chat'],
         ['quoting', 'Quoting - Quote other users to really reply to them'],
         ['nsfw', 'NSFW - For all you dirty minds ( ͡° ͜ʖ ͡°)'],
-        ['provider', 'Provider - Control the data the bot has stored for you']
+        ['settings', 'Settings - Control the settings the bot has for you']
       ])
       .registerDefaultGroups()
       .registerDefaultTypes()

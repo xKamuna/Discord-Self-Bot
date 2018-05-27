@@ -1,20 +1,3 @@
-/*
- *   This file is part of discord-self-bot
- *   Copyright (C) 2017-2018 Favna
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, version 3 of the License
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 /**
  * @file Games StrawpollCommand - Create a strawpoll and find out what people really think (hopefully)
  * Has a very specific syntax! Be sure to adapt the example!
@@ -53,42 +36,35 @@ module.exports = class StrawpollCommand extends Command {
         {
           key: 'title',
           prompt: 'Title of the strawpoll',
-          type: 'string',
-          wait: 60
+          type: 'string'
         },
         {
           key: 'options',
-          prompt: 'Options for the strawpoll?',
+          prompt: 'What are the messages for the strawpoll (minimum is 2)? Send 1 option per message and end with `finish`',
           type: 'string',
-          wait: 60,
-          validate: (opts) => {
-            if (/([\S ]*\|[\S ]*)*/i.test(opts) &&
-              opts.split('|').length >= 2 && opts.split('|').length <= 30) {
-              return true;
-            }
-
-            return 'You need between 2 and 30 options and the valid format for the options is `Question 1|Question 2|Question 3 etc..`';
-
-          }
+          infinite: true
         }
       ]
     });
   }
 
-  async run (msg, args) {
-    const pollEmbed = new MessageEmbed(),
-      strawpoll = await request
-        .post('https://www.strawpoll.me/api/v2/polls')
-        .set('Content-Type', 'application/json')
-        .send({
-          title: args.title,
-          options: args.options.split('|'),
-          multi: false,
-          dupcheck: 'normal',
-          captcha: true
-        });
+  async run (msg, {title, options}) {
+    if (options.length <= 2) {
+      return msg.reply('a poll needs to have at least 2 options to pick from');
+    }
+    try {
+      const pollEmbed = new MessageEmbed(),
+        strawpoll = await request
+          .post('https://www.strawpoll.me/api/v2/polls')
+          .set('Content-Type', 'application/json')
+          .send({
+            title,
+            options,
+            multi: false,
+            dupcheck: 'normal',
+            captcha: true
+          });
 
-    if (strawpoll.ok) {
       pollEmbed
         .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
         .setTitle(strawpoll.body.title)
@@ -99,10 +75,10 @@ module.exports = class StrawpollCommand extends Command {
       deleteCommandMessages(msg, this.client);
 
       return msg.embed(pollEmbed, `http://www.strawpoll.me/${strawpoll.body.id}`);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
+
+      return msg.reply('an error occurred creating the strawpoll');
     }
-
-    deleteCommandMessages(msg, this.client);
-
-    return msg.reply('an error occurred creating the strawpoll');
   }
 };

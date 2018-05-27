@@ -1,5 +1,4 @@
 /* eslint-disable one-var */
-
 const arrayClean = function (deleteValue, array) {
   for (let val in array) {
     if (array[val] === deleteValue) {

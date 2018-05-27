@@ -71,7 +71,7 @@ module.exports = class DexCommand extends Command {
     case 'Yellow':
       return '#FFF359';
     default:
-      return '#FF0000';
+      return '#7CFC00';
     }
   }
 

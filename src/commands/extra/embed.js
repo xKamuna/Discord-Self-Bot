@@ -67,7 +67,7 @@ module.exports = class EmbedCommand extends Command {
     });
 
     customEmbed
-      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+      .setColor(msg.member !== null ? msg.member.displayHexColor : '#7CFC00')
       .setImage(image ? image : null);
 
     deleteCommandMessages(msg, this.client);

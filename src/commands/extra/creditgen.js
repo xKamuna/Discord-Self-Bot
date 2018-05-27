@@ -242,7 +242,7 @@ module.exports = class CreditGenCommand extends Command {
 			**Exp**: ${this.randomizeExpire()}`;
 
     embed
-      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+      .setColor(msg.member !== null ? msg.member.displayHexColor : '#7CFC00')
       .setDescription(info)
       .setTimestamp()
       .setThumbnail(network === 'visa' // eslint-disable-line no-nested-ternary

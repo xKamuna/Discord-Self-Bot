@@ -78,7 +78,7 @@ module.exports = class rpsCommand extends Command {
         }
 
         rpsEmbed
-          .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+          .setColor(msg.member !== null ? msg.member.displayHexColor : '#7CFC00')
           .setTitle('Rock Paper Scissors')
           .setDescription(resString);
 

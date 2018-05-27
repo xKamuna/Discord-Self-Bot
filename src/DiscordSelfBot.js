@@ -116,7 +116,7 @@ class DiscordSelfBot {
                 : `${msg.author.username} sent a message with your name`, msg.author.displayAvatarURL())
               .setFooter('Message date')
               .setTimestamp(msg.createdAt)
-              .setColor(msg.member ? msg.member.displayHexColor : '#535B62')
+              .setColor(msg.member ? msg.member.displayHexColor : '#7CFC00')
               .setThumbnail(msg.author.displayAvatarURL())
               .addField('Message Content', msg.cleanContent.length > 1024 ? msg.cleanContent.slice(0, 1024) : msg.cleanContent)
               .addField('Message Attachments', msg.attachments.first() && msg.attachments.first().url ? msg.attachments.map(au => au.url) : 'None');

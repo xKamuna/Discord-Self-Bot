@@ -45,6 +45,7 @@ module.exports = class QRGenCommand extends Command {
       qrEmbed
         .attachFiles([embedAttachment])
         .setTitle(`QR code for ${url}`)
+        .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
         .setImage('attachment://qrcode.png');
 
       deleteCommandMessages(msg, this.client);

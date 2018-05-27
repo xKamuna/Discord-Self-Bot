@@ -87,11 +87,11 @@ module.exports = class QuoteCommand extends Command {
       if (quote.member === null) {
         quoteEmbed
           .setAuthor(`Quoting ${quote.author.username}`, quote.author.displayAvatarURL())
-          .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000');
+          .setColor(msg.member !== null ? msg.member.displayHexColor : '#7CFC00');
       } else {
         quoteEmbed
           .setAuthor(`Quoting ${quote.member.displayName}`, quote.author.displayAvatarURL())
-          .setColor(quote.channel.type === 'text' ? quote.member.displayHexColor : '#FF0000');
+          .setColor(quote.channel.type === 'text' ? quote.member.displayHexColor : '#7CFC00');
       }
 
       if (content.match(/\bhttps?:\/\/(?![^"\s<>]*(?:png|jpg|gif|webp|jpeg|svg))[^"\s<>]+\.[^"\s<>]+/im) && !quote.attachments.first()) {

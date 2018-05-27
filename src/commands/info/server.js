@@ -91,7 +91,7 @@ module.exports = class ServerInfoCommand extends Command {
     }
 
     serverEmbed
-      .setColor(server.owner ? server.owner.displayHexColor : '#FF0000')
+      .setColor(server.owner ? server.owner.displayHexColor : '#7CFC00')
       .setAuthor('Server Info', 'https://favna.s-ul.eu/O0qc0yt7.png')
       .setThumbnail(server.iconURL({format: 'png'}))
       .setFooter(`Server ID: ${server.id}`)

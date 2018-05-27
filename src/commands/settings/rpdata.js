@@ -19,7 +19,7 @@ module.exports = class rpdataCommand extends Command {
     const rpEmbed = new Discord.MessageEmbed();
 
     rpEmbed
-      .setColor(msg.member !== null ? msg.member.displayHexColor : '#FF0000')
+      .setColor(msg.member !== null ? msg.member.displayHexColor : '#7CFC00')
       .setFooter(`Rich Presence data on ${momentFormat(new Date(), this.client)}`)
       .setAuthor(`${this.client.user.tag} (${this.client.user.id})`)
       .setDescription(this.client.provider.get('global', 'rptoggle', false) ? 'Rich Presence Data' : 'Presence Data')

@@ -59,7 +59,7 @@ module.exports = class DefineCommand extends Command {
         final.push(`**${(parseInt(index, 10) + 1)}:** ${item}`);
       }
       defineEmbed
-        .setColor(msg.member ? msg.member.displayHexColor : '#FF0000')
+        .setColor(msg.member ? msg.member.displayHexColor : '#7CFC00')
         .setDescription(final);
 
       deleteCommandMessages(msg, this.client);

@@ -198,12 +198,6 @@ aws4@^1.6.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.7.0.tgz#d4d0e9b9dbfca77bf08eeb0a8a471550fe39e289"
 
-axios@^0.15.3:
-  version "0.15.3"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.15.3.tgz#2c9d638b2e191a08ea1d6cc988eadd6ba5bdc053"
-  dependencies:
-    follow-redirects "1.0.0"
-
 babel-code-frame@^6.22.0, babel-code-frame@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-6.26.0.tgz#63fd43f7dc1e3bb7ce35947db8fe369a3f58c74b"
@@ -1240,12 +1234,6 @@ flat-cache@^1.2.1:
     del "^2.0.2"
     graceful-fs "^4.1.2"
     write "^0.2.1"
-
-follow-redirects@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.0.0.tgz#8e34298cbd2e176f254effec75a1c78cc849fd37"
-  dependencies:
-    debug "^2.2.0"
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -2548,14 +2536,6 @@ pluralize@^7.0.0:
 pngjs@^3.3.0:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-3.3.3.tgz#85173703bde3edac8998757b96e5821d0966a21b"
-
-pornsearch@^2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/pornsearch/-/pornsearch-2.4.2.tgz#3834ee199290ccfcb7c8a13485b3d5713eb164c2"
-  dependencies:
-    axios "^0.15.3"
-    babel-runtime "^6.26.0"
-    cheerio "^0.22.0"
 
 posix-character-classes@^0.1.0:
   version "0.1.1"

@@ -126,6 +126,9 @@ Has a very specific syntax! Be sure to adapt the example!
 <dt><a href="#module_fight">fight</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Games FightCommand - Pit two things against each other in a fight to the death.<br>Winner is determined with random.org randomization.<br><strong>Aliases</strong>: <code>combat</code></p>
 </dd>
+<dt><a href="#module_rps">rps</a> ⇒ <code>MessageEmbed</code></dt>
+<dd><p>Games RockPaperScissorCommand - Play Rock Paper Scissors against random.org randomization<br><strong>Aliases</strong>: <code>rockpaperscissors</code></p>
+</dd>
 <dt><a href="#module_emojis">emojis</a> ⇒ <code>Message</code></dt>
 <dd><p>images EmojisCommand - Sends a png image along with a message to fake sending global emojis<br><strong>Aliases</strong>: <code>emoji</code>, <code>emo</code>, <code>sendemo</code>, <code>emosend</code>, <code>sendemoji</code></p>
 </dd>
@@ -161,9 +164,6 @@ Has a very specific syntax! Be sure to adapt the example!
 </dd>
 <dt><a href="#module_paheal">paheal</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>nsfw PahealCommand - Gets a NSFW image from paheal<br>Can only be used in NSFW marked channels!<br><strong>Aliases</strong>: <code>pa</code>, <code>heal</code></p>
-</dd>
-<dt><a href="#module_porngifs">porngifs</a> ⇒ <code>MessageEmbed</code></dt>
-<dd><p>nsfw PornGifsCommand - Gets a NSFW gif and webm from pornhub<br>Can only be used in NSFW marked channels!<br><strong>Aliases</strong>: <code>nsfwgifs</code></p>
 </dd>
 <dt><a href="#module_pornvids">pornvids</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>nsfw PornVidsCommand - Gets a NSFW video from pornhub<br>Can only be used in NSFW marked channels!<br><strong>Aliases</strong>: <code>porn</code>, <code>nsfwvids</code></p>
@@ -233,10 +233,6 @@ For item names existing of multiple words (for example <code>life orb</code>) yo
 <dd><p>Searches MangaCommand - Gets information about any manga from MyAnimeList<br><strong>Aliases</strong>: <code>cartoon</code>, <code>man</code></p>
 </dd>
 <dt><a href="#module_steam">steam</a> ⇒ <code>MessageEmbed</code></dt>
-<dd><p>Searches SteamCommand - Gets information about a game using Steam
-<strong>Aliases</strong>: <code>valve</code></p>
-</dd>
-<dt><a href="#module_steam">steam</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Searches SteamCommand - Gets information about a game using Steam<br><strong>Aliases</strong>: <code>valve</code></p>
 </dd>
 <dt><a href="#module_tmdb">tmdb</a> ⇒ <code>MessageEmbed</code></dt>
@@ -250,6 +246,73 @@ For item names existing of multiple words (for example <code>life orb</code>) yo
 </dd>
 <dt><a href="#module_youtube">youtube</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Searches YouTubeCommand - Find a video on YouTube<br>By default returns MessageEmbed. use <code>yts</code> to return just the URL and have in-client playback<br><strong>Aliases</strong>: <code>yt</code>, <code>tube</code>, <code>yts</code></p>
+</dd>
+<dt><a href="#module_deletecommandmessages">deletecommandmessages</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings DeleteCommandMessagesCommand - Configure whether the bot should delete command messages<br><strong>Aliases</strong>: <code>dcm</code></p>
+</dd>
+<dt><a href="#module_globalprefix">globalprefix</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings GlobalPrefixCommand - Change the bot&#39;s global prefix. Keep in mind that any server prefix will always overwrite the global one!<br><strong>Aliases</strong>: <code>gp</code></p>
+</dd>
+<dt><a href="#module_RPAppID">RPAppID</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPAppIDCommand - Set your Rich Presence App ID<br><strong>Aliases</strong>: <code>appid</code>, <code>rpapp</code>, <code>rpapplication</code></p>
+</dd>
+<dt><a href="#module_rpclear">rpclear</a> ⇒ <code>MessageEmbed</code></dt>
+<dd><p>Settings RPClearCommand - Clear All Rich Presence Data<br><strong>Aliases</strong>: <code>rpc</code></p>
+</dd>
+<dt><a href="#module_rpdata">rpdata</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPDataCommand - View your currently set Rich Presence Data<br><strong>Aliases</strong>: <code>rdata</code></p>
+</dd>
+<dt><a href="#module_rpdetails">rpdetails</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPDetailsCommand - Set your Rich Presence details<br><strong>Aliases</strong>: <code>details</code>, <code>rpdetail</code></p>
+</dd>
+<dt><a href="#module_rplargeimage">rplargeimage</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPLargeImageCommand - Set your Rich Presence Large Image<br><strong>Aliases</strong>: <code>largeimage</code>, <code>limage</code></p>
+</dd>
+<dt><a href="#module_rplargetext">rplargetext</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPLargeTextCommand - Set your Rich Presence Large Image Text<br><strong>Aliases</strong>: <code>largetext</code>, <code>ltext</code></p>
+</dd>
+<dt><a href="#module_RPName">RPName</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPNameCommand - Set your Rich Presence Name<br><strong>Aliases</strong>: <code>rname</code></p>
+</dd>
+<dt><a href="#module_rpreload">rpreload</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPReloadCommand - Reload and set your Rich Presence<br><strong>Aliases</strong>: <code>setpresence</code>, <code>setrp</code>, <code>rpset</code></p>
+</dd>
+<dt><a href="#module_rpsmallimage">rpsmallimage</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPSmallImageCommand - Set your Rich Presence Small Image<br><strong>Aliases</strong>: <code>smallimage</code>, <code>simage</code></p>
+</dd>
+<dt><a href="#module_rpsmalltext">rpsmalltext</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPSmallTextCommand - Set your Rich Presence Small Image Text<br><strong>Aliases</strong>: <code>smalltext</code></p>
+</dd>
+<dt><a href="#module_rpstate">rpstate</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPStateCommand - Set your Rich Presence state
+<strong>Aliases</strong>: <code>state</code></p>
+</dd>
+<dt><a href="#module_rptimeend">rptimeend</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPTimeEndCommand - Set your Rich Presence End Timestamp<br>Make sure to enable timestamps with the <code>rptoggletimeend</code> command<br><strong>Aliases</strong>: <code>timeend</code>, <code>endtime</code>, <code>rptime</code>, <code>rpend</code></p>
+</dd>
+<dt><a href="#module_rptimestamptoggle">rptimestamptoggle</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPTimestampToggleCommand - Configure whether you want a timestamp in your Rich Presence or not<br><strong>Aliases</strong>: <code>timetoggle</code>, <code>tst</code>, <code>rptimestamp</code>, <code>rpend</code></p>
+</dd>
+<dt><a href="#module_rptoggle">rptoggle</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPToggleCommand - Configure whether you want a Rich Presence or a normal presence<br><strong>Aliases</strong>: <code>presencetoggle</code></p>
+</dd>
+<dt><a href="#module_rptoggletimeend">rptoggletimeend</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPToggleTimeEndCommand - Toggle ending timestamp on or off<br><strong>Aliases</strong>: <code>rptoggleend</code>, <code>toggleend</code>, <code>tte</code></p>
+</dd>
+<dt><a href="#module_rptype">rptype</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPTypeCommand - Set your Rich Presence Type<br><strong>Aliases</strong>: <code>rtyp</code></p>
+</dd>
+<dt><a href="#module_rpurl">rpurl</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings RPUrlCommand - Set your Rich Presence URL<br>Make sure to set type to <code>streaming</code> if you want to show as streaming!<br><strong>Aliases</strong>: <code>rurl</code></p>
+</dd>
+<dt><a href="#module_webhookexclusions">webhookexclusions</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings WebhookExclusionsCommand - Configure the keywords to be avoided in your Webhook Notification System<br><strong>Aliases</strong>: <code>whe</code>, <code>hookexclusions</code></p>
+</dd>
+<dt><a href="#module_webhookkeywords">webhookkeywords</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings WebhookKeywordsCommand - Configure the keywords to be included in your Webhook Notification System<br><strong>Aliases</strong>: <code>whk</code>, <code>hookwords</code>, <code>hookkeywords</code></p>
+</dd>
+<dt><a href="#module_webhooktoggle">webhooktoggle</a> ⇒ <code>Message</code></dt>
+<dd><p>Settings WebhookToggleCommand - Toggle the Webhook Notification System on or off<br><strong>Aliases</strong>: <code>wht</code>, <code>hooktoggle</code></p>
 </dd>
 </dl>
 
@@ -566,6 +629,23 @@ Winner is determined with random.org randomization.
 ```js
 fight Pyrrha Ruby
 ```
+<a name="module_rps"></a>
+
+## rps ⇒ <code>MessageEmbed</code>
+Games RockPaperScissorCommand - Play Rock Paper Scissors against random.org randomization  
+**Aliases**: `rockpaperscissors`
+
+**Returns**: <code>MessageEmbed</code> - Result of the conflict  
+**Category**: games  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| HandToPlay | <code>StringResolvable</code> | The hand that you want to play |
+
+**Example**  
+```js
+rps Rock
+```
 <a name="module_emojis"></a>
 
 ## emojis ⇒ <code>Message</code>
@@ -749,24 +829,6 @@ Can only be used in NSFW marked channels!
 **Example**  
 ```js
 paheal pyrrha_nikos
-```
-<a name="module_porngifs"></a>
-
-## porngifs ⇒ <code>MessageEmbed</code>
-nsfw PornGifsCommand - Gets a NSFW gif and webm from pornhub  
-Can only be used in NSFW marked channels!  
-**Aliases**: `nsfwgifs`
-
-**Returns**: <code>MessageEmbed</code> - Webm link and embeds gif  
-**Category**: nsfw  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| Query | <code>StringResolvable</code> | Something you want to find |
-
-**Example**  
-```js
-porngifs babe
 ```
 <a name="module_pornvids"></a>
 
@@ -1160,23 +1222,6 @@ manga Yu-Gi-Oh
 <a name="module_steam"></a>
 
 ## steam ⇒ <code>MessageEmbed</code>
-Searches SteamCommand - Gets information about a game using Steam
-**Aliases**: `valve`
-
-**Returns**: <code>MessageEmbed</code> - Information about the requested game  
-**Category**: searches  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| GameName | <code>StringResolvable</code> | The name of any game that you want to find |
-
-**Example**  
-```js
-steam Tales of Berseria
-```
-<a name="module_steam"></a>
-
-## steam ⇒ <code>MessageEmbed</code>
 Searches SteamCommand - Gets information about a game using Steam  
 **Aliases**: `valve`
 
@@ -1259,6 +1304,355 @@ By default returns MessageEmbed. use `yts` to return just the URL and have in-cl
 **Example**  
 ```js
 youtube Voldemort Origins of the heir
+```
+<a name="module_deletecommandmessages"></a>
+
+## deletecommandmessages ⇒ <code>Message</code>
+Settings DeleteCommandMessagesCommand - Configure whether the bot should delete command messages  
+**Aliases**: `dcm`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| TrueOrFalse | <code>BooleanResolvable</code> | Some value that is either true or false |
+
+**Example**  
+```js
+deletecommandmessages on
+```
+<a name="module_globalprefix"></a>
+
+## globalprefix ⇒ <code>Message</code>
+Settings GlobalPrefixCommand - Change the bot's global prefix. Keep in mind that any server prefix will always overwrite the global one!  
+**Aliases**: `gp`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| Prefix | <code>StringResolvable</code> | The new prefix you want to set |
+
+**Example**  
+```js
+globalprefix self!!
+```
+<a name="module_RPAppID"></a>
+
+## RPAppID ⇒ <code>Message</code>
+Settings RPAppIDCommand - Set your Rich Presence App ID  
+**Aliases**: `appid`, `rpapp`, `rpapplication`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| AppID | <code>StringResolvable</code> | The application ID to set |
+
+**Example**  
+```js
+rpappid 355326429178757131
+```
+<a name="module_rpclear"></a>
+
+## rpclear ⇒ <code>MessageEmbed</code>
+Settings RPClearCommand - Clear All Rich Presence Data  
+**Aliases**: `rpc`
+
+**Returns**: <code>MessageEmbed</code> - confirmation the rich presence data was cleared  
+**Category**: settings  
+<a name="module_rpdata"></a>
+
+## rpdata ⇒ <code>Message</code>
+Settings RPDataCommand - View your currently set Rich Presence Data  
+**Aliases**: `rdata`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+<a name="module_rpdetails"></a>
+
+## rpdetails ⇒ <code>Message</code>
+Settings RPDetailsCommand - Set your Rich Presence details  
+**Aliases**: `details`, `rpdetail`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| DetailsText | <code>StringResolvable</code> | The text you want to set as the Rich Presence Details |
+
+**Example**  
+```js
+rpdetails Living the good life
+```
+<a name="module_rplargeimage"></a>
+
+## rplargeimage ⇒ <code>Message</code>
+Settings RPLargeImageCommand - Set your Rich Presence Large Image  
+**Aliases**: `largeimage`, `limage`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| LargeImage | <code>StringResolvable</code> | Either the name or ID of the large image |
+
+**Example**  
+```js
+rplargeimage 450426682151534602
+```
+<a name="module_rplargetext"></a>
+
+## rplargetext ⇒ <code>Message</code>
+Settings RPLargeTextCommand - Set your Rich Presence Large Image Text  
+**Aliases**: `largetext`, `ltext`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| LargeText | <code>StringResolvable</code> | The large image text you want to set |
+
+**Example**  
+```js
+rplargetext what is love
+```
+<a name="module_RPName"></a>
+
+## RPName ⇒ <code>Message</code>
+Settings RPNameCommand - Set your Rich Presence Name  
+**Aliases**: `rname`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| RichPresenceName | <code>StringResolvable</code> | Name for your Rich Presence |
+
+**Example**  
+```js
+rpname The Game of Life
+```
+<a name="module_rpreload"></a>
+
+## rpreload ⇒ <code>Message</code>
+Settings RPReloadCommand - Reload and set your Rich Presence  
+**Aliases**: `setpresence`, `setrp`, `rpset`
+
+**Returns**: <code>Message</code> - Confirmation the rich presence was reloaded  
+**Category**: settings  
+<a name="module_rpsmallimage"></a>
+
+## rpsmallimage ⇒ <code>Message</code>
+Settings RPSmallImageCommand - Set your Rich Presence Small Image  
+**Aliases**: `smallimage`, `simage`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| SmallImage | <code>StringResolvable</code> | Either the name or ID of the small image |
+
+**Example**  
+```js
+smallimage 450426771276431390
+```
+<a name="module_rpsmalltext"></a>
+
+## rpsmalltext ⇒ <code>Message</code>
+Settings RPSmallTextCommand - Set your Rich Presence Small Image Text  
+**Aliases**: `smalltext`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| SmallText | <code>StringResolvable</code> | The small image text you want to set |
+
+**Example**  
+```js
+smalltext baby don't hurt me
+```
+<a name="module_rpstate"></a>
+
+## rpstate ⇒ <code>Message</code>
+Settings RPStateCommand - Set your Rich Presence state
+**Aliases**: `state`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| StateText | <code>StringResolvable</code> | The text you want to use for the state |
+
+**Example**  
+```js
+rpstate And the bad life
+```
+<a name="module_rptimeend"></a>
+
+## rptimeend ⇒ <code>Message</code>
+Settings RPTimeEndCommand - Set your Rich Presence End Timestamp  
+Make sure to enable timestamps with the `rptoggletimeend` command    
+**Aliases**: `timeend`, `endtime`, `rptime`, `rpend`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| AmountOfHours | <code>NumberResolvable</code> | The amount of hours to which the Rich Presence should count down |
+
+**Example**  
+```js
+rptimeend 3
+```
+<a name="module_rptimestamptoggle"></a>
+
+## rptimestamptoggle ⇒ <code>Message</code>
+Settings RPTimestampToggleCommand - Configure whether you want a timestamp in your Rich Presence or not  
+**Aliases**: `timetoggle`, `tst`, `rptimestamp`, `rpend`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| Option | <code>BooleanResolvable</code> | True or false value |
+
+**Example**  
+```js
+rptimestamptoggle off
+```
+<a name="module_rptoggle"></a>
+
+## rptoggle ⇒ <code>Message</code>
+Settings RPToggleCommand - Configure whether you want a Rich Presence or a normal presence  
+**Aliases**: `presencetoggle`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| Option | <code>BooleanResolvable</code> | True or false value |
+
+**Example**  
+```js
+rptoggle on
+```
+<a name="module_rptoggletimeend"></a>
+
+## rptoggletimeend ⇒ <code>Message</code>
+Settings RPToggleTimeEndCommand - Toggle ending timestamp on or off  
+**Aliases**: `rptoggleend`, `toggleend`, `tte`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| Option | <code>BooleanResolvable</code> | True or false value |
+
+**Example**  
+```js
+rptoggletimeend off
+```
+<a name="module_rptype"></a>
+
+## rptype ⇒ <code>Message</code>
+Settings RPTypeCommand - Set your Rich Presence Type  
+**Aliases**: `rtyp`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| TypeText | <code>PresenceType</code> | One of `playing`, `watching`, `streaming` or `listening` |
+
+**Example**  
+```js
+rptype watching
+```
+<a name="module_rpurl"></a>
+
+## rpurl ⇒ <code>Message</code>
+Settings RPUrlCommand - Set your Rich Presence URL  
+Make sure to set type to `streaming` if you want to show as streaming!  
+**Aliases**: `rurl`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| URL | <code>StringResolvable</code> | A Twitch URL to use for the Rich Presence |
+
+**Example**  
+```js
+rpurl https://twitch.tv/favna
+```
+<a name="module_webhookexclusions"></a>
+
+## webhookexclusions ⇒ <code>Message</code>
+Settings WebhookExclusionsCommand - Configure the keywords to be avoided in your Webhook Notification System  
+**Aliases**: `whe`, `hookexclusions`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| Keywords | <code>StringResolvable</code> | The keyword(s) to avoid in the WNS |
+
+**Example**  
+```js
+webhookexclusions Fantasy
+```
+<a name="module_webhookkeywords"></a>
+
+## webhookkeywords ⇒ <code>Message</code>
+Settings WebhookKeywordsCommand - Configure the keywords to be included in your Webhook Notification System  
+**Aliases**: `whk`, `hookwords`, `hookkeywords`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| Keywords | <code>StringResolvable</code> | The keyword(s) to include in the WNS |
+
+**Example**  
+```js
+webhookkeywords favna
+```
+<a name="module_webhooktoggle"></a>
+
+## webhooktoggle ⇒ <code>Message</code>
+Settings WebhookToggleCommand - Toggle the Webhook Notification System on or off  
+**Aliases**: `wht`, `hooktoggle`
+
+**Returns**: <code>Message</code> - Confirmation the setting was stored  
+**Category**: settings  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| Option | <code>BooleanResolvable</code> | True or false value |
+
+**Example**  
+```js
+webhooktoggle on
 ```
 
 <a name="module_groups"></a>

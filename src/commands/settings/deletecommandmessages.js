@@ -1,8 +1,19 @@
+/**
+ * @file Settings DeleteCommandMessagesCommand - Configure whether the bot should delete command messages  
+ * **Aliases**: `dcm`
+ * @module
+ * @category settings
+ * @name deletecommandmessages
+ * @example deletecommandmessages on
+ * @param {BooleanResolvable} TrueOrFalse Some value that is either true or false
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class deleteCommandMessagesCommand extends Command {
+module.exports = class DeleteCommandMessagesCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'deletecommandmessages',

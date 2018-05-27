@@ -1,17 +1,28 @@
+/**
+ * @file Settings RPNameCommand - Set your Rich Presence Name  
+ * **Aliases**: `rname`
+ * @module
+ * @category settings
+ * @name RPName
+ * @example rpname The Game of Life
+ * @param {StringResolvable} RichPresenceName Name for your Rich Presence
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpnameCommand extends Command {
+module.exports = class RPNameCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rpname',
       memberName: 'rpname',
       group: 'settings',
-      aliases: ['name'],
+      aliases: ['rname'],
       description: 'Set your Rich Presence name',
       format: 'NameText',
-      examples: ['rpname Discord-Self-Bot'],
+      examples: ['rpname The Game of Life'],
       guildOnly: false,
       args: [
         {

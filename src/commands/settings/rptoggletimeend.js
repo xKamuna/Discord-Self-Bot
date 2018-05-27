@@ -1,8 +1,19 @@
+/**
+ * @file Settings RPToggleTimeEndCommand - Toggle ending timestamp on or off  
+ * **Aliases**: `rptoggleend`, `toggleend`, `tte`
+ * @module
+ * @category settings
+ * @name rptoggletimeend
+ * @example rptoggletimeend off
+ * @param {BooleanResolvable} Option True or false value
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine, stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rptoggletimeendCommand extends Command {
+module.exports = class RPToggleTimeEndCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rptoggletimeend',

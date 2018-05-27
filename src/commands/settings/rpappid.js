@@ -1,8 +1,19 @@
+/**
+ * @file Settings RPAppIDCommand - Set your Rich Presence App ID  
+ * **Aliases**: `appid`, `rpapp`, `rpapplication`
+ * @module
+ * @category settings
+ * @name RPAppID
+ * @example rpappid 355326429178757131
+ * @param {StringResolvable} AppID The application ID to set
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpappidCommand extends Command {
+module.exports = class RPAppIDCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rpappid',

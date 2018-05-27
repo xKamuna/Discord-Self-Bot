@@ -1,8 +1,19 @@
+/**
+ * @file Settings RPStateCommand - Set your Rich Presence state
+ * **Aliases**: `state`
+ * @module
+ * @category settings
+ * @name rpstate
+ * @example rpstate And the bad life
+ * @param {StringResolvable} StateText The text you want to use for the state
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpstateCommand extends Command {
+module.exports = class RPStateCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rpstate',
@@ -11,7 +22,7 @@ module.exports = class rpstateCommand extends Command {
       aliases: ['state'],
       description: 'Set your Rich Presence state',
       format: 'StateText',
-      examples: ['rpstate https://favna.xyz/selfbot'],
+      examples: ['rpstate And the bad life'],
       guildOnly: false,
       args: [
         {

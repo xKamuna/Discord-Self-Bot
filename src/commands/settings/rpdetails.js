@@ -1,8 +1,19 @@
+/**
+ * @file Settings RPDetailsCommand - Set your Rich Presence details  
+ * **Aliases**: `details`, `rpdetail`
+ * @module
+ * @category settings
+ * @name rpdetails
+ * @example rpdetails Living the good life
+ * @param {StringResolvable} DetailsText The text you want to set as the Rich Presence Details  
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpdetailsCommand extends Command {
+module.exports = class RPDetailsCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rpdetails',
@@ -11,7 +22,7 @@ module.exports = class rpdetailsCommand extends Command {
       aliases: ['details', 'rpdetail'],
       description: 'Set your Rich Presence details',
       format: 'DetailsText',
-      examples: ['rpappid Made by Favna'],
+      examples: ['rpdetails Living the good life'],
       guildOnly: false,
       args: [
         {

@@ -2,7 +2,7 @@
  * @file Settings RPClearCommand - Clear All Rich Presence Data  
  * **Aliases**: `rpc`
  * @module
- * @category Settings
+ * @category settings
  * @name rpclear
  * @returns {MessageEmbed} confirmation the rich presence data was cleared
  */

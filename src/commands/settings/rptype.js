@@ -1,8 +1,19 @@
+/**
+ * @file Settings RPTypeCommand - Set your Rich Presence Type  
+ * **Aliases**: `rtyp`
+ * @module
+ * @category settings
+ * @name rptype
+ * @example rptype watching
+ * @param {PresenceType} TypeText One of `playing`, `watching`, `streaming` or `listening`
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rptypeCommand extends Command {
+module.exports = class RPTypeCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rptype',

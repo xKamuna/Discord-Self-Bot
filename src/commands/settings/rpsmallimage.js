@@ -1,8 +1,19 @@
+/**
+ * @file Settings RPSmallImageCommand - Set your Rich Presence Small Image  
+ * **Aliases**: `smallimage`, `simage`
+ * @module
+ * @category settings
+ * @name rpsmallimage
+ * @example smallimage 450426771276431390
+ * @param {StringResolvable} SmallImage Either the name or ID of the small image
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpsmallimageCommand extends Command {
+module.exports = class RPSmallImageCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rpsmallimage',
@@ -11,7 +22,7 @@ module.exports = class rpsmallimageCommand extends Command {
       aliases: ['smallimage', 'simage'],
       description: 'Set your Rich Presence SmallImage ID',
       format: 'SmallImageID|SmallImageName',
-      examples: ['rpsmallimage 379734813751377921'],
+      examples: ['rpsmallimage 450426771276431390'],
       guildOnly: false,
       args: [
         {

@@ -1,3 +1,14 @@
+/**
+ * @file Settings RPLargeImageCommand - Set your Rich Presence Large Image  
+ * **Aliases**: `largeimage`, `limage`
+ * @module
+ * @category settings
+ * @name rplargeimage
+ * @example rplargeimage 450426682151534602
+ * @param {StringResolvable} LargeImage Either the name or ID of the large image
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
@@ -9,9 +20,9 @@ module.exports = class rplargeimageCommand extends Command {
       memberName: 'rplargeimage',
       group: 'settings',
       aliases: ['largeimage', 'limage'],
-      description: 'Set your Rich Presence LargeImage ID',
+      description: 'Set your Rich Presence Large Image',
       format: 'LargeImageID|LargeImageName',
-      examples: ['rplargeimage 379734851206512640'],
+      examples: ['rplargeimage 450426682151534602'],
       guildOnly: false,
       args: [
         {

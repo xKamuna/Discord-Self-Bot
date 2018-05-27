@@ -1,17 +1,28 @@
+/**
+ * @file Settings RPSmallTextCommand - Set your Rich Presence Small Image Text  
+ * **Aliases**: `smalltext`
+ * @module
+ * @category settings
+ * @name rpsmalltext
+ * @example smalltext baby don't hurt me
+ * @param {StringResolvable} SmallText The small image text you want to set 
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpsmalltextCommand extends Command {
+module.exports = class RPSmallTextCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rpsmalltext',
       memberName: 'rpsmalltext',
       group: 'settings',
-      aliases: ['smalltext', 'smalltext'],
-      description: 'Set your Rich Presence smalltext',
+      aliases: ['smalltext'],
+      description: 'Set your Rich Presence Small Image Text',
       format: 'SmallText',
-      examples: ['rpsmalltext Or the GitHub'],
+      examples: ['rpsmalltext baby don\'t hurt me'],
       guildOnly: false,
       args: [
         {

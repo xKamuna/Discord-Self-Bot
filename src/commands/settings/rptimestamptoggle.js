@@ -1,8 +1,19 @@
+/**
+ * @file Settings RPTimestampToggleCommand - Configure whether you want a timestamp in your Rich Presence or not  
+ * **Aliases**: `timetoggle`, `tst`, `rptimestamp`, `rpend`
+ * @module
+ * @category settings
+ * @name rptimestamptoggle
+ * @example rptimestamptoggle off
+ * @param {BooleanResolvable} Option True or false value
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine, stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rptimestamptoggleCommand extends Command {
+module.exports = class RPTimestampToggleCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rptimestamptoggle',

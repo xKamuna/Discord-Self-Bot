@@ -1,8 +1,19 @@
+/**
+ * @file Settings WebhookExclusionsCommand - Configure the keywords to be avoided in your Webhook Notification System  
+ * **Aliases**: `whe`, `hookexclusions`
+ * @module
+ * @category settings
+ * @name webhookexclusions
+ * @example webhookexclusions Fantasy
+ * @param {StringResolvable} Keywords The keyword(s) to avoid in the WNS
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class webhookexclusionsCommand extends Command {
+module.exports = class WebhookExclusionsCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'webhookexclusions',
@@ -18,14 +29,15 @@ module.exports = class webhookexclusionsCommand extends Command {
           key: 'exclusions',
           prompt: 'What keyword should be filtered for Webhook Notification System?',
           type: 'string',
-          label: 'exclusions for WNS'
+          label: 'exclusions for WNS',
+          infinite: true
         }
       ]
     });
   }
 
   run (msg, {exclusions}) {
-    this.client.provider.set('global', 'webhookexclusions', exclusions.split(','));
+    this.client.provider.set('global', 'webhookexclusions');
 
     deleteCommandMessages(msg, this.client);
 

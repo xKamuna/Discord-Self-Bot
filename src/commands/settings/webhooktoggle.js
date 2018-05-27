@@ -1,15 +1,26 @@
+/**
+ * @file Settings WebhookToggleCommand - Toggle the Webhook Notification System on or off  
+ * **Aliases**: `wht`, `hooktoggle`
+ * @module
+ * @category settings
+ * @name webhooktoggle
+ * @example webhooktoggle on
+ * @param {BooleanResolvable} Option True or false value
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine, stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class webhooktoggleCommand extends Command {
+module.exports = class WebhookToggleCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'webhooktoggle',
       memberName: 'webhooktoggle',
       group: 'settings',
       aliases: ['wht', 'hooktoggle'],
-      description: 'Configure whether you want a the Webhook Notification System (WNS)',
+      description: 'Toggle the Webhook Notification System on or off',
       format: 'enable|disable',
       examples: ['webhooktoggle {option}', 'webhooktoggle enable'],
       guildOnly: false,

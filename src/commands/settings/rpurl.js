@@ -1,14 +1,26 @@
+/**
+ * @file Settings RPUrlCommand - Set your Rich Presence URL  
+ * Make sure to set type to `streaming` if you want to show as streaming!  
+ * **Aliases**: `rurl`
+ * @module
+ * @category settings
+ * @name rpurl
+ * @example rpurl https://twitch.tv/favna
+ * @param {StringResolvable} URL A Twitch URL to use for the Rich Presence
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpurlCommand extends Command {
+module.exports = class RPUrlCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rpurl',
       memberName: 'rpurl',
       group: 'settings',
-      aliases: ['url'],
+      aliases: ['rurl'],
       description: 'Set your Rich Presence URL',
       examples: ['rpurl https://twitch.tv/favna'],
       format: 'url',

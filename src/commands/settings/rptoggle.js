@@ -1,8 +1,19 @@
+/**
+ * @file Settings RPToggleCommand - Configure whether you want a Rich Presence or a normal presence  
+ * **Aliases**: `presencetoggle`
+ * @module
+ * @category settings
+ * @name rptoggle
+ * @example rptoggle on
+ * @param {BooleanResolvable} Option True or false value
+ * @returns {Message} Confirmation the setting was stored
+ */
+
 const {Command} = require('discord.js-commando'),
   {oneLine, stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rptoggleCommand extends Command {
+module.exports = class RPToggleCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rptoggle',
@@ -39,10 +50,7 @@ module.exports = class rptoggleCommand extends Command {
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Rich Presence is now ${option
-      ? 'enabled'
-      : 'disabled'}. Run ${msg.guild
-      ? msg.guild.commandPrefix
-      : this.client.commandPrefix}rpreload to reload your presence.`);
+    return msg.reply(oneLine`Rich Presence is now ${option ? 'enabled' : 'disabled'}.
+    Run \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}rpreload\` to reload your presence.`);
   }
 };

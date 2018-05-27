@@ -1,8 +1,21 @@
+/**
+ * @file Settings RPTimeEndCommand - Set your Rich Presence End Timestamp  
+ * Make sure to enable timestamps with the `rptoggletimeend` command    
+ * **Aliases**: `timeend`, `endtime`, `rptime`, `rpend`
+ * @module
+ * @category settings
+ * @name rptimeend
+ * @example rptimeend 3
+ * @param {NumberResolvable} AmountOfHours The amount of hours to which the Rich Presence should count down
+ * @returns {Message} Confirmation the setting was stored
+ */
+
+
 const {Command} = require('discord.js-commando'),
   {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
-module.exports = class rpTimeEndCommand extends Command {
+module.exports = class RPTimeEndCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'rptimeend',

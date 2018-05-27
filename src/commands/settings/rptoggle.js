@@ -1,5 +1,5 @@
 const {Command} = require('discord.js-commando'),
-  {oneLine} = require('common-tags'),
+  {oneLine, stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class rptoggleCommand extends Command {
@@ -26,19 +26,20 @@ module.exports = class rptoggleCommand extends Command {
               return true;
             }
 
-            return `Has to be one of ${validBools.join(', ')}`;
+            return stripIndents`Has to be one of ${validBools.map(val => `\`${val}\``).join(', ')}
+            Respond with your new selection or`;
           }
         }
       ]
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rptoggle', args.option);
+  run (msg, {option}) {
+    this.client.provider.set('global', 'rptoggle', option);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Rich Presence is now ${args.option
+    return msg.reply(oneLine`Rich Presence is now ${option
       ? 'enabled'
       : 'disabled'}. Run ${msg.guild
       ? msg.guild.commandPrefix

@@ -26,7 +26,7 @@ module.exports = class rplargeimageCommand extends Command {
 
   /* eslint max-depth: ["error", 5]*/
 
-  async run (msg, args) {
+  async run (msg, {largeimage}) {
     const appID = this.client.provider.get('global', 'rpappid');
 
     if (appID) {
@@ -50,8 +50,8 @@ module.exports = class rplargeimageCommand extends Command {
             }
           }
 
-          const id = array.find(o => o.id === args.largeimage), // eslint-disable-line one-var
-            name = array.find(o => o.name === args.largeimage);
+          const id = array.find(o => o.id === largeimage), // eslint-disable-line one-var
+            name = array.find(o => o.name === largeimage);
           let imageID = '';
 
           if (id) {
@@ -61,14 +61,14 @@ module.exports = class rplargeimageCommand extends Command {
           }
 
           if (!imageID) {
-            return msg.reply(`Can't find \`${args.largeimage}\` in application with ID \`${appID}\``);
+            return msg.reply(`Can't find \`${largeimage}\` in application with ID \`${appID}\``);
           }
 
           this.client.provider.set('global', 'rplargeimage', imageID);
 					
           deleteCommandMessages(msg, this.client);
 
-          return msg.reply(oneLine`Your RichPresence LargeImageID has been set to \`${args.largeimage}\``);
+          return msg.reply(oneLine`Your RichPresence LargeImageID has been set to \`${largeimage}\``);
         }
 
         return msg.reply(`No assets found in application with ID \`${appID}\``);

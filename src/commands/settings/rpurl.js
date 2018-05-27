@@ -32,11 +32,11 @@ module.exports = class rpurlCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rpurl', args.url);
+  run (msg, {url}) {
+    this.client.provider.set('global', 'rpurl', url);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence URL has been set to \`${args.url}\``);
+    return msg.reply(oneLine`Your RichPresence URL has been set to \`${url}\``);
   }
 };

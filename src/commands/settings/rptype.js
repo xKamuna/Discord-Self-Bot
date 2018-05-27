@@ -33,11 +33,11 @@ module.exports = class rptypeCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rptype', args.type.toUpperCase());
+  run (msg, {type}) {
+    this.client.provider.set('global', 'rptype', type.toUpperCase());
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence Type has been set to \`${args.type}\``);
+    return msg.reply(oneLine`Your RichPresence Type has been set to \`${type}\``);
   }
 };

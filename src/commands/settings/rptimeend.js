@@ -32,11 +32,11 @@ module.exports = class rpTimeEndCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rptimeend', args.time);
+  run (msg, {time}) {
+    this.client.provider.set('global', 'rptimeend', time);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence End Timestamp has been set to \`${args.time} hour(s)\``);
+    return msg.reply(oneLine`Your RichPresence End Timestamp has been set to \`${time} hour(s)\``);
   }
 };

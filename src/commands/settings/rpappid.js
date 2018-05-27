@@ -20,7 +20,7 @@ module.exports = class rpappidCommand extends Command {
           type: 'string',
           label: 'appid',
           validate: (id) => {
-            if (id.length === 18) {
+            if (/[0-9]{18}/.test(id)) {
               return true;
             }
 
@@ -31,11 +31,11 @@ module.exports = class rpappidCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rpappid', args.appid);
+  run (msg, {appid}) {
+    this.client.provider.set('global', 'rpappid', appid);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence AppID has been set to \`${args.appid}\``);
+    return msg.reply(oneLine`Your RichPresence AppID has been set to \`${appid}\``);
   }
 };

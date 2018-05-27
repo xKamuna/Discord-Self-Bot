@@ -24,12 +24,12 @@ module.exports = class webhookexclusionsCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'webhookexclusions', args.exclusions.split(','));
+  run (msg, {exclusions}) {
+    this.client.provider.set('global', 'webhookexclusions', exclusions.split(','));
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`\`${args.exclusions.replace(/,/gim, ', ')}\` excluded from WNS. 
+    return msg.reply(oneLine`\`${exclusions.replace(/,/gim, ', ')}\` excluded from WNS. 
         Make sure to enable webhooks with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhooktoggle\`
         and set your keywords with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhookkeywords\` command`);
   }

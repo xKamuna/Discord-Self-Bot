@@ -31,11 +31,11 @@ module.exports = class rpstateCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rpstate', args.state);
+  run (msg, {state}) {
+    this.client.provider.set('global', 'rpstate', state);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence State has been set to \`${args.state}\``);
+    return msg.reply(oneLine`Your RichPresence State has been set to \`${state}\``);
   }
 };

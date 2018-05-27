@@ -25,8 +25,7 @@ module.exports = class rpsmallimageCommand extends Command {
   }
 
   /* eslint max-depth: ["error", 5]*/
-
-  async run (msg, args) {
+  async run (msg, {smallimage}) {
     const appID = this.client.provider.get('global', 'rpappid');
 
     if (appID) {
@@ -50,8 +49,8 @@ module.exports = class rpsmallimageCommand extends Command {
             }
           }
 
-          const id = array.find(o => o.id === args.smallimage), // eslint-disable-line one-var
-            name = array.find(o => o.name === args.smallimage);
+          const id = array.find(o => o.id === smallimage), // eslint-disable-line one-var
+            name = array.find(o => o.name === smallimage);
           let imageID = '';
 
           if (id) {
@@ -61,14 +60,14 @@ module.exports = class rpsmallimageCommand extends Command {
           }
 
           if (!imageID) {
-            return msg.reply(`Can't find \`${args.smallimage}\` in application with ID \`${appID}\``);
+            return msg.reply(`Can't find \`${smallimage}\` in application with ID \`${appID}\``);
           }
 
           this.client.provider.set('global', 'rpsmallimage', imageID);
 					
           deleteCommandMessages(msg, this.client);
 
-          return msg.reply(oneLine`Your RichPresence Small Image has been set to \`${args.smallimage}\``);
+          return msg.reply(oneLine`Your RichPresence Small Image has been set to \`${smallimage}\``);
         }
 
         return msg.reply(`No assets found in application with ID \`${appID}\``);

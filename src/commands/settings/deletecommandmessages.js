@@ -18,7 +18,6 @@ module.exports = class deleteCommandMessagesCommand extends Command {
           key: 'option',
           prompt: 'Enable or disable deleting of command messages?',
           type: 'boolean',
-          label: 'Option for toggling',
           validate: (bool) => {
             const validBools = ['true', 't', 'yes', 'y', 'on', 'enable', 'enabled', '1', '+', 'false', 'f', 'no', 'n', 'off', 'disable', 'disabled', '0', '-'];
 
@@ -33,11 +32,11 @@ module.exports = class deleteCommandMessagesCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'deletecommandmessages', args.option);
+  run (msg, {option}) {
+    this.client.provider.set('global', 'deletecommandmessages', option);
 		
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`command messages will now be ${args.option ? 'deleted' : 'kept'}.`);
+    return msg.reply(oneLine`command messages will now be ${option ? 'deleted' : 'kept'}.`);
   }
 };

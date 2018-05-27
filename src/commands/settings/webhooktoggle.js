@@ -1,5 +1,5 @@
 const {Command} = require('discord.js-commando'),
-  {oneLine} = require('common-tags'),
+  {oneLine, stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class webhooktoggleCommand extends Command {
@@ -26,19 +26,20 @@ module.exports = class webhooktoggleCommand extends Command {
               return true;
             }
 
-            return `Has to be one of ${validBools.join(', ')}`;
+            return stripIndents`Has to be one of ${validBools.map(val => `\`${val}\``).join(', ')}
+            Respond with your new selection or`;
           }
         }
       ]
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'webhooktoggle', args.option);
+  run (msg, {option}) {
+    this.client.provider.set('global', 'webhooktoggle', option);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Webhook Notification System is now ${args.option 
+    return msg.reply(oneLine`Webhook Notification System is now ${option 
       ? `enabled. Make sure to set up your keywords with \`${msg.guild 
         ? msg.guild.commandPrefix : this.client.commandPrefix}webhookkeywords\` and optionally word exclusions with \`${msg.guild 
         ? msg.guild.commandPrefix : this.client.commandPrefix}webhookexclusions\`.` 

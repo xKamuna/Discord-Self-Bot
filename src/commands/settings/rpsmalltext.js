@@ -31,11 +31,11 @@ module.exports = class rpsmalltextCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rpsmalltext', args.smalltext);
+  run (msg, {smalltext}) {
+    this.client.provider.set('global', 'rpsmalltext', smalltext);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence SmallText has been set to \`${args.smalltext}\``);
+    return msg.reply(oneLine`Your RichPresence SmallText has been set to \`${smalltext}\``);
   }
 };

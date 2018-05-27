@@ -31,11 +31,11 @@ module.exports = class rplargetextCommand extends Command {
     });
   }
 	
-  run (msg, args) {
-    this.client.provider.set('global', 'rplargetext', args.largetext);
+  run (msg, {largetext}) {
+    this.client.provider.set('global', 'rplargetext', largetext);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence LargeText has been set to \`${args.largetext}\``);
+    return msg.reply(oneLine`Your RichPresence LargeText has been set to \`${largetext}\``);
   }
 };

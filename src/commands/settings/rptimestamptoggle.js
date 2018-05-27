@@ -1,5 +1,5 @@
 const {Command} = require('discord.js-commando'),
-  {oneLine} = require('common-tags'),
+  {oneLine, stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class rptimestamptoggleCommand extends Command {
@@ -26,19 +26,20 @@ module.exports = class rptimestamptoggleCommand extends Command {
               return true;
             }
 
-            return `Has to be one of ${validBools.join(', ')}`;
+            return stripIndents`Has to be one of ${validBools.map(val => `\`${val}\``).join(', ')}
+            Respond with your new selection or`;
           }
         }
       ]
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rptimestamptoggle', args.option);
+  run (msg, {option}) {
+    this.client.provider.set('global', 'rptimestamptoggle', option);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`The Timestamp in Rich Presence is now ${args.option 
+    return msg.reply(oneLine`The Timestamp in Rich Presence is now ${option 
       ? 'enabled' 
       : 'disabled'}. Run ${msg.guild 
       ? msg.guild.commandPrefix 

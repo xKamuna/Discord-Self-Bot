@@ -31,11 +31,11 @@ module.exports = class rpnameCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rpname', args.name);
+  run (msg, {name}) {
+    this.client.provider.set('global', 'rpname', name);
 		
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence Name has been set to \`${args.name}\``);
+    return msg.reply(oneLine`Your RichPresence Name has been set to \`${name}\``);
   }
 };

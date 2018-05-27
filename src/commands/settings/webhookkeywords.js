@@ -24,12 +24,12 @@ module.exports = class webhookkeywordsCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'webhookkeywords', args.keywords.split(','));
+  run (msg, {keywords}) {
+    this.client.provider.set('global', 'webhookkeywords', keywords.split(','));
 		
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Webhook Keywords have been set to \`${args.keywords.replace(/,/gim, ', ')}\`. 
+    return msg.reply(oneLine`Webhook Keywords have been set to \`${keywords.replace(/,/gim, ', ')}\`. 
         Make sure to enable webhooks with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhooktoggle\`
         and optionally set your word exclusions with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhookexclusions\` command`);
   }

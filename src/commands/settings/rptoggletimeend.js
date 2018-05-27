@@ -1,5 +1,5 @@
 const {Command} = require('discord.js-commando'),
-  {oneLine} = require('common-tags'),
+  {oneLine, stripIndents} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class rptoggletimeendCommand extends Command {
@@ -26,19 +26,20 @@ module.exports = class rptoggletimeendCommand extends Command {
               return true;
             }
 
-            return `Has to be one of ${validBools.join(', ')}`;
+            return stripIndents`Has to be one of ${validBools.map(val => `\`${val}\``).join(', ')}
+            Respond with your new selection or`;
           }
         }
       ]
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rptoggletimeend', args.option);
+  run (msg, {option}) {
+    this.client.provider.set('global', 'rptoggletimeend', option);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Ending timestamps are now ${args.option 
+    return msg.reply(oneLine`Ending timestamps are now ${option 
       ? `enabled Run ${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}rptimeend set your ending timestamp` 
       : 'disabled'}.`);
   }

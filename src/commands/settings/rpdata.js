@@ -39,12 +39,6 @@ module.exports = class rpdataCommand extends Command {
       .addField('Small Image', this.client.provider.get('global', 'rpsmallimage', 'None Set'), true)
       .addField('Large Image Text', this.client.provider.get('global', 'rplargetext', 'None Set'), true)
       .addField('Small Image Text', this.client.provider.get('global', 'rpsmalltext', 'None Set'), true)
-      .addField('Party Minimum', this.client.provider.get('global', 'rppartysize')
-        ? this.client.provider.get('global', 'rppartysize')[0]
-        : 'None Set', true)
-      .addField('Party Maximum', this.client.provider.get('global', 'rppartysize')
-        ? this.client.provider.get('global', 'rppartysize')[1]
-        : 'None Set', true)
       .addField('End Time Enabled', this.client.provider.get('global', 'rptoggletimeend', 'Disabled'), true)
       .addField('End Time Duration', this.client.provider.get('global', 'rptimeend', '1'), true)
       .addField('Timestamp', this.client.provider.get('global', 'rptimestamptoggle', 'Disabled'), true)

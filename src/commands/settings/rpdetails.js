@@ -31,11 +31,11 @@ module.exports = class rpdetailsCommand extends Command {
     });
   }
 
-  run (msg, args) {
-    this.client.provider.set('global', 'rpdetails', args.details);
+  run (msg, {details}) {
+    this.client.provider.set('global', 'rpdetails', details);
 
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Your RichPresence Details have been set to \`${args.details}\``);
+    return msg.reply(oneLine`Your RichPresence Details have been set to \`${details}\``);
   }
 };

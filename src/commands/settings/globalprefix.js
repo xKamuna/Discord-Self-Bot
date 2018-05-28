@@ -35,6 +35,6 @@ module.exports = class GlobalPrefixCommand extends Command {
   run (msg, {prefix}) {
     this.client.commandPrefix = prefix;
 
-    return msg.reply(`changed the global prefix to ${prefix}. Keep in mind that server prefixes take priority over global ones!`);
+    return msg.reply(`changed the global prefix to \`${prefix}\`. Keep in mind that server prefixes take priority over global ones!`);
   }
 };

@@ -1,3 +1,11 @@
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+function Unzip
+{
+    param([string]$zipfile, [string]$outpath)
+
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $outpath)
+}
+
 function Install-Dependancies {
     Write-Host "WARNING: IF YOUR SCRIPT THROWS ERRORS SUCH AS 'the term npm is not recognized' AND 'the term yarn is not recognized' THEN YOU INCORRECTLY TOLD THE SCRIPT THIS IS THE SECOND TIME YOU RUN IT. CANCEL THE SCRIPT AND RE-RUN IT THEN ANSWER 'N' AT THE FIRST PROMPT! IF YOU HAVE DONE THIS PLEASE REBOOT YOUR SYSTEM, RUN THE SCRIPT AGAIN AND ANSWER 'Y' AT THE FIRST PROMPT. IF IT STILL DOESN'T WORK YOU CAN CONTACT ME ON MY SERVER!" -ForegroundColor Red -BackgroundColor Black
     Write-Host "Next lets get your Discord Token" -ForegroundColor Green -BackgroundColor Black
@@ -115,6 +123,10 @@ function Install-Programs {
         Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.17.0.windows.1/Git-2.17.0-64-bit.exe" -OutFile "Downloads/git.exe"
         Write-Host "Downloading Python" -ForegroundColor Cyan -BackgroundColor Black
         Invoke-WebRequest "https://www.python.org/ftp/python/3.6.5/python-3.6.5-amd64.exe" -OutFile "Downloads/python.exe"
+        Write-Host "Download GTK" -ForegroundColor Cyan -BackgroundColor Black
+        Invoke-WebRequest "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -OutFile "Downloads/GTK.zip"
+        Write-Host "Downloading libjpeg-turbo" -ForegroundColor Cyan -BackgroundColor Black
+        Invoke-WebRequest "https://sourceforge.net/projects/libjpeg-turbo/files/1.5.3/libjpeg-turbo-1.5.3-vc64.exe/download" -OutFile "Downloads/turbo.exe"
     
         Write-Host "About to install NodeJS. Make sure you select the option ""Add to PATH"" while installing!!" -ForegroundColor Cyan -BackgroundColor Black
         Start-Process msiexec.exe -Wait -ArgumentList "/I Downloads/nodejs.msi"
@@ -127,6 +139,15 @@ function Install-Programs {
         Write-Host "About to start installing Python. Make sure to select the option ""Add Python 3.6 to PATH"" at the very beginning of the installer!!" -ForegroundColor Cyan -BackgroundColor Black
         Start-Process "Downloads/python.exe" -Wait
         Write-Host "Python Installed"  -ForegroundColor Cyan -BackgroundColor Black
+
+        Write-Host "Unzipping GTK to C:\GTK" -ForegroundColor Cyan -BackgroundColor Black
+        Unzip ".\Downloads\GTK.zip" "C:\GTK"
+        Write-Host "GTK Unzipped successfully"  -ForegroundColor Cyan -BackgroundColor Black
+
+        Write-Host "About to start installing libjpeg-turbo" -ForegroundColor Cyan -BackgroundColor Black
+        Start-Process "Downloads/turbo.exe" -Wait
+        Write-Host "libjpeg-turbo installed"  -ForegroundColor Cyan -BackgroundColor Black
+
     
         if($CodeOpt) {
             Write-Host "Downloading Visual Studio Code" -ForegroundColor Cyan -BackgroundColor Black
@@ -142,6 +163,10 @@ function Install-Programs {
         Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.17.0.windows.1/Git-2.17.0-32-bit.exe" -OutFile "Downloads/git.exe"
         Write-Host "Downloading Python" -ForegroundColor Cyan -BackgroundColor Black
         Invoke-WebRequest "https://www.python.org/ftp/python/3.6.5/python-3.6.5.exe" -OutFile "Downloads/python.exe"
+        Write-Host "Download GTK" -ForegroundColor Cyan -BackgroundColor Black
+        Invoke-WebRequest "http://ftp.gnome.org/pub/GNOME/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip" -OutFile "Downloads/GTK.zip"
+        Write-Host "Downloading libjpeg-turbo" -ForegroundColor Cyan -BackgroundColor Black
+        Invoke-WebRequest "https://sourceforge.net/projects/libjpeg-turbo/files/1.5.3/libjpeg-turbo-1.5.3-vc.exe/download" -OutFile "Downloads/turbo.exe"
     
         Write-Host "About to install NodeJS. Make sure you select the option ""Add to PATH"" while installing!!" -ForegroundColor Cyan -BackgroundColor Black
         Start-Process msiexec.exe -Wait -ArgumentList "/I Downloads/nodejs.msi"
@@ -154,6 +179,14 @@ function Install-Programs {
         Write-Host "About to start installing Python. Make sure to select the option ""Add Python 3.6 to PATH"" at the very beginning of the installer!!" -ForegroundColor Cyan -BackgroundColor Black
         Start-Process "Downloads/python.exe" -Wait
         Write-Host "Python Installed"  -ForegroundColor Cyan -BackgroundColor Black
+
+        Write-Host "Unzipping GTK to C:\GTK" -ForegroundColor Cyan -BackgroundColor Black
+        Unzip ".\Downloads\GTK.zip" "C:\GTK"
+        Write-Host "GTK Unzipped successfully"  -ForegroundColor Cyan -BackgroundColor Black
+
+        Write-Host "About to start installing libjpeg-turbo" -ForegroundColor Cyan -BackgroundColor Black
+        Start-Process "Downloads/turbo.exe" -Wait
+        Write-Host "libjpeg-turbo installed"  -ForegroundColor Cyan -BackgroundColor Black
     
         if($CodeOpt) {
             Write-Host "Downloading Visual Studio Code" -ForegroundColor Cyan -BackgroundColor Black

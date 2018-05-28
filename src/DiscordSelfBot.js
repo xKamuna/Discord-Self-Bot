@@ -1,6 +1,6 @@
 const Database = require('better-sqlite3'),
   path = require('path'),
-  {Client, FriendlyError, SyncSQLiteProvider} = require('discord.js-commando'),
+  {Client, SyncSQLiteProvider} = require('discord.js-commando'),
   {WebhookClient, MessageEmbed} = require('discord.js'),
   {oneLine, stripIndents} = require('common-tags');
 
@@ -15,23 +15,6 @@ class DiscordSelfBot {
     });
   }
 
-  onCmdBlock () {
-    return (msg, reason) => {
-      console.log(oneLine`
-		Command ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''}
-		blocked; ${reason}`);
-    };
-  }
-
-  onCmdErr () {
-    return (cmd, err) => {
-      if (err instanceof FriendlyError) {
-        return;
-      }
-      console.error(`Error in command ${cmd.groupID}:${cmd.memberName}`, err);
-    };
-  }
-
   onCommandPrefixChange () {
     return (guild, prefix) => {
       console.log(oneLine` 
@@ -40,39 +23,6 @@ class DiscordSelfBot {
 		`);
     };
   }
-
-  onCmdStatusChange () {
-    return (guild, command, enabled) => {
-      console.log(oneLine`
-            Command ${command.groupID}:${command.memberName}
-            ${enabled ? 'enabled' : 'disabled'}
-            ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.
-        `);
-    };
-  }
-
-  onDisconnect () {
-    return () => {
-      console.warn('Disconnected!');
-    };
-  }
-
-  onError () {
-    return (e) => {
-      console.error(e);
-    };
-  }
-
-  onGroupStatusChange () {
-    return (guild, group, enabled) => {
-      console.log(oneLine`
-            Group ${group.id}
-            ${enabled ? 'enabled' : 'disabled'}
-            ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.
-        `);
-    };
-  }
-
 
   onReady () {
     return () => {
@@ -128,26 +78,11 @@ class DiscordSelfBot {
     };
   }
 
-  onReconnect () {
-    return () => {
-      console.warn('Reconnecting...');
-    };
-  }
-
   init () {
     this.client
-      .on('commandBlocked', this.onCmdBlock())
-      .on('commandError', this.onCmdErr())
       .on('commandPrefixChange', this.onCommandPrefixChange())
-      .on('commandStatusChange', this.onCmdStatusChange())
-      .on('debug', console.log)
-      .on('disconnect', this.onDisconnect())
-      .on('error', console.error)
-      .on('groupStatusChange', this.onGroupStatusChange())
       .on('message', this.onMessage())
-      .on('ready', this.onReady())
-      .on('reconnecting', this.onReconnect())
-      .on('warn', console.warn);
+      .on('ready', this.onReady());
 
     const db = new Database(path.join(__dirname, 'data/databases/settings.sqlite3'));
 
@@ -173,7 +108,7 @@ class DiscordSelfBot {
       .registerDefaultCommands({
         help: true,
         prefix: true,
-        ping: true,
+        ping: false,
         eval_: true,
         commandState: true
       })

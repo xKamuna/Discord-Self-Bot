@@ -10,7 +10,7 @@ machine:
 general:
   branches:
     ignore:
-      - master
+      - development
 jobs:
   build:
     docker:

@@ -32,7 +32,7 @@ module.exports = class EmbedCommand extends Command {
               return true;
             }
 
-            return 'The format for a custom rich embed should at least be `FieldName>Value`';
+            return 'The format for a custom rich embed should at least be `FieldName>Value`. If you want to use spaces wrap the entire argument in `" "`';
           },
           wait: 60
         },

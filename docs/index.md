@@ -147,6 +147,9 @@ Has a very specific syntax! Be sure to adapt the example!
 <dt><a href="#module_invite">invite</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Info InviteCommand - Shill the selfbot everywhere you want :^)<br><strong>Aliases</strong>: <code>inv</code>, <code>links</code>, <code>shill</code></p>
 </dd>
+<dt><a href="#module_ping">ping</a> ⇒ <code>Message</code></dt>
+<dd><p>Info PingCommand - Checks the bot\&#39;s ping to the Discord server<br><strong>Aliases</strong>: <code>pong</code></p>
+</dd>
 <dt><a href="#module_server">server</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Info ServerInfoCommand - Gets information about any server you&#39;re in<br><strong>Aliases</strong>: <code>serverinfo</code>, <code>sinfo</code></p>
 </dd>
@@ -737,6 +740,14 @@ Info InviteCommand - Shill the selfbot everywhere you want :^)
 **Aliases**: `inv`, `links`, `shill`
 
 **Returns**: <code>MessageEmbed</code> - Invite link along with other links  
+**Category**: info  
+<a name="module_ping"></a>
+
+## ping ⇒ <code>Message</code>
+Info PingCommand - Checks the bot\'s ping to the Discord server  
+**Aliases**: `pong`
+
+**Returns**: <code>Message</code> - Ping result  
 **Category**: info  
 <a name="module_server"></a>
 

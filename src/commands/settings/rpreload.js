@@ -8,6 +8,7 @@
  */
 
 const {Command} = require('discord.js-commando'),
+  {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class RPReloadCommand extends Command {
@@ -29,12 +30,17 @@ module.exports = class RPReloadCommand extends Command {
 
   run (msg) {
     if (this.client.provider.get('global', 'rptoggle', false)) {
+      if (this.client.provider.get('global', 'rptype', 'PLAYING') === 'STREAMING') {
+        msg.reply(oneLine`when using streaming rich presence type be sure to set a Rich Presence URL, otherwise it won\'t work
+        Furthermore, it will only show Twitch purple when you use a Twitch URL`);
+        this.client.user.setPresence({activity: {url: this.client.provider.get('global', 'rpurl', '')}});
+      }
+
       this.client.user.setPresence({
         activity: {
           application: this.client.provider.get('global', 'rpappid', ''),
           name: this.client.provider.get('global', 'rpname', ''),
           type: this.client.provider.get('global', 'rptype', ''),
-          url: this.client.provider.get('global', 'rpurl', ''),
           details: this.client.provider.get('global', 'rpdetails', ''),
           state: this.client.provider.get('global', 'rpstate', ''),
           timestamps: this.client.provider.get('global', 'rptimestamptoggle', false) ? {

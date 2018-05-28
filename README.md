@@ -6,8 +6,14 @@
 
   <p>
   <a href="https://github.com/Favna/Discord-Self-Bot/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/favna/discord-self-bot.svg?style=for-the-badge" alt="License"></a><!--
---><a href="https://twitter.com/Favna_"><img src="https://img.shields.io/twitter/follow/espadrine.svg?style=for-the-badge&label=Follow" alt="Twitter Follow"></a><!--
---><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GY3CFCL25HQNJ"><img src="https://img.shields.io/badge/Donate-PayPal-547ab8.svg?style=for-the-badge" alt="donate" title="Donate with PayPal" /></a>
+--><a href="https://depfu.com/repos/Favna/Discord-Self-Bot"><img src="https://img.shields.io/depfu/Favna/Discord-Self-Bot.svg?style=for-the-badge" alt="Depfu" /></a><!--
+--><a href="https://circleci.com/gh/Favna/Discord-Self-Bot/tree/master"><img src="https://img.shields.io/circleci/project/github/Favna/Discord-Self-Bot.svg?style=for-the-badge" alt="CircleCI"></a>
+  </p>
+  
+   <p>
+<a href="https://twitter.com/Favna_"><img src="https://img.shields.io/twitter/follow/espadrine.svg?style=for-the-badge&label=Follow" alt="Twitter Follow"></a><!--
+--><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GY3CFCL25HQNJ"><img src="https://img.shields.io/badge/Donate-PayPal-547ab8.svg?style=for-the-badge" alt="donate" title="Donate with PayPal" /></a><!--
+--><a href="https://www.patreon.com/bePatron?u=9336537"><img src="https://i.imgur.com/05PzBRU.png" alt="patreon badge" title="Become a Patron"></a>
   </p>
 
   <p>
@@ -24,21 +30,15 @@
 
 ***
 
-_**Silent Update**_  
-Previously this readme said the selfbot would no longer be updated. I hereby want to in part retract that statement as the dust of previous selfbot issues seems to have settled down and also because I see there is still a lot of traction towards it (spying those GitHub stars). While I cannot promise any ETA on major updates, the next one will likely be a massive refactor to make the selfbot work much in like how Ribbon works.
 
-**Update**  
-Refactoring has started slowly in the `development` branch. Master will retain stable state until `development` is done when it will be pushed to master.
 
-**To those who need support with the current status of the selfbot you can always join my server!**
-
-_Note that many features that are in this selfbot are also in my public server bot, Ribbon. Ribbon is way ahead on its codebase compared to the selfbot due to continued support while I dropped it for the selfbot, if you are interested please consider adding it to your server by [clicking here](https://discord.now.sh/376520643862331396?p8)!_
+# [***Wiki***](https://github.com/Favna/Discord-Self-Bot/wiki)
+# [***Install Guide***](https://github.com/Favna/Discord-Self-Bot/wiki/Installation-&-Setup)
+# [***List Of Commands***](https://github.com/Favna/Discord-Self-Bot/wiki/All-Commands)
 
 ***
 
-### [**Install guide + list of all commands.**](https://github.com/Favna/Discord-Self-Bot/wiki)
-
-![FeaturesGif](https://i.imgur.com/Op5CO0Y.gif)
+![FeaturesGif](https://i.imgur.com/C3p29TH.gif)
 
 
 ## Features

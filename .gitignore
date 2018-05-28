@@ -1,22 +1,29 @@
 # Node modules need to be installed through yarn
 node_modules/
 
-# VS Code workspace settings
-.vscode/
+# Environment variables
+.env
 
 # Any logs created
 *.log
 
-# Files that are specific to each user
-src/settings.sqlite3
-src/auth.json
-src/commands/memes/images/
-src/commands/emojis/images/
-src/commands/fun/pastas/
-src/commands/search/data/
+# Data folders
+src/data/databases/
+src/data/images/emojis/
+src/data/images/memes/
+src/data/pastas/
 
-# Ignore gitkeep files to keep folders on git
-!src/commands/memes/images/*.gitkeep
-!src/commands/emojis/images/*.gitkeep
-!src/commands/fun/pastas/*.gitkeep
-!src/commands/search/data/*.gitkeep
+# Folder keep
+!**/*.gitkeep
+!src/data/databases/*.gitkeep
+!src/data/pastas/*.gitkeep
+!src/data/images/emojis/*.gitkeep
+!src/data/images/memes/*.gitkeep
+
+# IDE Settings
+.vscode/
+.idea/
+
+# Code coverage results
+coverage/
+.nyc_output/

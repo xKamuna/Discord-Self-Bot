@@ -1,4 +1,5 @@
 function Install-Dependancies {
+    Write-Host "WARNING: IF YOUR SCRIPT THROWS ERRORS SUCH AS 'the term npm is not recognized' AND 'the term yarn is not recognized' THEN YOU INCORRECTLY TOLD THE SCRIPT THIS IS THE SECOND TIME YOU RUN IT. CANCEL THE SCRIPT AND RE-RUN IT THEN ANSWER 'N' AT THE FIRST PROMPT! IF YOU HAVE DONE THIS PLEASE REBOOT YOUR SYSTEM, RUN THE SCRIPT AGAIN AND ANSWER 'Y' AT THE FIRST PROMPT. IF IT STILL DOESN'T WORK YOU CAN CONTACT ME ON MY SERVER!" -ForegroundColor Red -BackgroundColor Black
     Write-Host "Next lets get your Discord Token" -ForegroundColor Green -BackgroundColor Black
     Write-Host "1. From either the web application, or the installed Discord app, do ""Ctrl + Shift + i""" -ForegroundColor Green -BackgroundColor Black
     Write-Host "2. This brings up the ""Developer Tools"". Go to the ""Application tab""" -ForegroundColor Green -BackgroundColor Black
@@ -12,15 +13,15 @@ function Install-Dependancies {
     Write-Host "Enable Discord developer mode by opening settings -> going to appearance -> Enabling Developer Mode" -ForegroundColor Green -BackgroundColor Black
     Write-Host "Click your own name on any message sent by you and click ""COPY ID""" -ForegroundColor Green -BackgroundColor Black
     
-    $ownerid  = Read-Host -Prompt "Please paste your OwnerID, ONLY the number!"
+    $owner  = Read-Host -Prompt "Please paste your User ID, ONLY the number (so no "" marks)!"
     
     Write-Host "Would you like to set your own global command prefix (default $)? [Y/N]" -ForegroundColor Green 
          $Readhost = Read-Host "[Y/N] " 
          Switch ($ReadHost) 
           { 
-            Y {Write-Host "Queueing Visual Studio Code installation"-ForegroundColor Yellow -BackgroundColor Black; $gcpOpt=$true}
-            N {Write-Host "Skipping Visual Studio Code installation"-ForegroundColor DarkRed -BackgroundColor Black; $gcpOpt=$false} 
-            Default {Write-Host "Skipping Visual Studio Code installation"-ForegroundColor DarkRed -BackgroundColor Black; $gcpOpt=$false} 
+            Y {Write-Host "Querying for global command prefix"-ForegroundColor Yellow -BackgroundColor Black; $gcpOpt=$true}
+            N {Write-Host "Skipping global command prefix setup and setting it to '$'"-ForegroundColor DarkRed -BackgroundColor Black; $gcpOpt=$false} 
+            Default {Write-Host "Skipping global command prefix setup and setting it to '$'"-ForegroundColor DarkRed -BackgroundColor Black; $gcpOpt=$false} 
           }
     
     $gcp = "$"
@@ -31,35 +32,33 @@ function Install-Dependancies {
     
     Write-Host "Setting up some dependancies. This may take a couple of minutes to more than 10 minutes depending on fast your system and download speeds are" -ForegroundColor Green -BackgroundColor Black
     
-    Write-Host "Installing yarn"
+    Write-Host "Installing yarn and build dependencies (this can take some time!)"
     npm i -g yarn windows-build-tools node-pre-gyp node-gyp pm2
        
     Write-Host "Setting up node modules (can take a long time!)"
     yarn install
     
-    Write-Host "Ensuring sqlite is properly installed"
-    yarn add sqlite
-    
-    Write-Host "Generating auth.json file"
-    $AuthDetailsToFile =
+    Write-Host "Generating .env file"
+    $EnvVarsToFile =
 @"
-    {{
-        "token": {0},
-        "ownerID": "{1}",
-        "globalCommandPrefix": "{2}",
-        "googleapikey": "null",
-        "imageEngineKey": "null",  
-        "searchEngineKey": "null",
-        "oxrAppID": "null",
-        "TheMovieDBV3ApiKey": "null",
-        "steamAPIKey": "null",
-        "igdbAPIKey": "null",
-        "webhookID": "null",
-        "webhooktoken": "null"
-    }}
-"@  -f $token, $ownerid, $gcp
+token={0}
+owner="{1}"
+prefix="{2}"
+googleapikey="API Key for Google Cloud Platform"
+imagekey="Google Custom Search Engine key (can be the same as searchkey but not recommended)"
+searchkey="Google Custom Search Engine key (can be the same as imagekey but not recommended)"
+oxrkey="Open-Exchange-Rates App ID"
+moviedbkey="TheMovieDB API Key"
+steamkey="Steam API Key"
+igdbkey="IGDB API Key"
+spotifyid="Spotify App ID"
+spotifysecret="Spotify App Secret"
+timezonedbkey="Timezonedb API Key"
+webhookid="The ID of a webhook"
+webhooktoken="The token of a webhook"
+"@  -f $token, $owner, $gcp
 
-    $AuthDetailsToFile | Out-File -FilePath src\auth.json -Encoding UTF8
+    $EnvVarsToFile | Out-File -FilePath src\.env -Encoding UTF8
     
     Write-Host "Cleaning up" -ForegroundColor Red -BackgroundColor Black
     Write-Host "Deleting Downloads folder" -ForegroundColor Green -BackgroundColor Black
@@ -78,7 +77,7 @@ function Install-Dependancies {
     
     Write-Host "Further Resources:" -ForegroundColor Red -BackgroundColor Black
     Write-Host "GitHub Wiki: https://github.com/Favna/Discord-Self-Bot/wiki" -ForegroundColor Green -BackgroundColor Black
-    Write-Host "Join the support server: https://discord.gg/zdt5yQt" -ForegroundColor Green -BackgroundColor Black
+    Write-Host "Join the support server: https://favna.xyz/redirect/server" -ForegroundColor Green -BackgroundColor Black
     Write-Host "Starting the bot without pm2: yarn start" -ForegroundColor Green -BackgroundColor Black
 }
 function Install-Programs {
@@ -111,71 +110,64 @@ function Install-Programs {
           
     If($64bit) {
         Write-Host "Downloading NodeJS" -ForegroundColor Cyan -BackgroundColor Black
-        Invoke-WebRequest "https://nodejs.org/dist/v8.9.4/node-v8.9.4-x64.msi" -OutFile "Downloads/nodejsInstaller-x64.msi"
+        Invoke-WebRequest "https://nodejs.org/dist/v8.11.2/node-v8.11.2-x64.msi" -OutFile "Downloads/nodejs.msi"
         Write-Host "Downloading Git" -ForegroundColor Cyan -BackgroundColor Black
-        Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.16.1.windows.2/Git-2.16.1.2-64-bit.exe" -OutFile "Downloads/GitInstaller-x64.exe"
+        Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.17.0.windows.1/Git-2.17.0-64-bit.exe" -OutFile "Downloads/git.exe"
         Write-Host "Downloading Python" -ForegroundColor Cyan -BackgroundColor Black
-        Invoke-WebRequest "https://www.python.org/ftp/python/3.6.2/python-3.6.2-amd64.exe" -OutFile "Downloads/PythonInstaller-x64.exe"
+        Invoke-WebRequest "https://www.python.org/ftp/python/3.6.5/python-3.6.5-amd64.exe" -OutFile "Downloads/python.exe"
     
         Write-Host "About to install NodeJS. Make sure you select the option ""Add to PATH"" while installing!!" -ForegroundColor Cyan -BackgroundColor Black
-        Start-Process msiexec.exe -Wait -ArgumentList "/I Downloads/nodejsInstaller-x64.msi"
+        Start-Process msiexec.exe -Wait -ArgumentList "/I Downloads/nodejs.msi"
         Write-Host "NodeJS Installed"  -ForegroundColor Cyan -BackgroundColor Black
     
         Write-Host "About to start installing Git. Make sure you select ""Run Git from Windows Command Prompt"" and ""Use Windows' default console view"" when these options are asked by the installer!!" -ForegroundColor Cyan -BackgroundColor Black
-        Start-Process "Downloads/GitInstaller-x64.exe" -Wait
+        Start-Process "Downloads/git.exe" -Wait
         Write-Host "Git Installed" -ForegroundColor Cyan -BackgroundColor Black
     
         Write-Host "About to start installing Python. Make sure to select the option ""Add Python 3.6 to PATH"" at the very beginning of the installer!!" -ForegroundColor Cyan -BackgroundColor Black
-        Start-Process "Downloads/PythonInstaller-x64.exe" -Wait
+        Start-Process "Downloads/python.exe" -Wait
         Write-Host "Python Installed"  -ForegroundColor Cyan -BackgroundColor Black
-    
-        if($NppOpt) {
-            Write-Host "Downloading Notepad++" -ForegroundColor Cyan -BackgroundColor Black
-            Invoke-WebRequest "https://notepad-plus-plus.org/repository/7.x/7.5.4/npp.7.5.4.Installer.x64.exe" -OutFile "Downloads/Npp-x64.exe"
-            Write-Host "About to start installing Notepad++" -ForegroundColor Cyan -BackgroundColor Black
-            Start-Process "Downloads/Npp-x64.exe" -Wait
-        }
     
         if($CodeOpt) {
             Write-Host "Downloading Visual Studio Code" -ForegroundColor Cyan -BackgroundColor Black
-            Invoke-WebRequest "https://go.microsoft.com/fwlink/?Linkid=852157" -OutFile "Downloads/Code-x64.exe"
+            Invoke-WebRequest "https://go.microsoft.com/fwlink/?Linkid=852157" -OutFile "Downloads/vscode.exe"
             Write-Host "About to start installing Visual Studio Code" -ForegroundColor Cyan -BackgroundColor Black
-            Start-Process "Downloads/Code-x64.exe" -Wait
+            Start-Process "Downloads/vscode.exe" -Wait
         }
     
     } else {
         Write-Host "Downloading NodeJS" -ForegroundColor Cyan -BackgroundColor Black
-        Invoke-WebRequest "https://nodejs.org/dist/v8.9.4/node-v8.9.4-x86.msi" -OutFile "Downloads/nodejsInstaller-x32.msi"
+        Invoke-WebRequest "https://nodejs.org/dist/v8.11.2/node-v8.11.2-x86.msi" -OutFile "Downloads/nodejs.msi"
         Write-Host "Downloading Git" -ForegroundColor Cyan -BackgroundColor Black
-        Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.16.1.windows.2/Git-2.16.1.2-32-bit.exe" -OutFile "Downloads/GitInstaller-x32.exe"
+        Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.17.0.windows.1/Git-2.17.0-32-bit.exe" -OutFile "Downloads/git.exe"
         Write-Host "Downloading Python" -ForegroundColor Cyan -BackgroundColor Black
-        Invoke-WebRequest "https://www.python.org/ftp/python/3.6.2/python-3.6.2.exe" -OutFile "Downloads/PythonInstaller-x32.exe"
+        Invoke-WebRequest "https://www.python.org/ftp/python/3.6.5/python-3.6.5.exe" -OutFile "Downloads/python.exe"
     
         Write-Host "About to install NodeJS. Make sure you select the option ""Add to PATH"" while installing!!" -ForegroundColor Cyan -BackgroundColor Black
-        Start-Process msiexec.exe -Wait -ArgumentList "/I Downloads/nodejsInstaller-x32.msi"
+        Start-Process msiexec.exe -Wait -ArgumentList "/I Downloads/nodejs.msi"
         Write-Host "NodeJS Installed" -ForegroundColor Cyan -BackgroundColor Black
     
         Write-Host "About to start installing Git. Make sure you select ""Run Git from Windows Command Prompt"" and ""Use Windows' default console view"" when these options are asked by the installer!!" -ForegroundColor Cyan -BackgroundColor Black
-        Start-Process "Downloads/GitInstaller-x32.exe" -Wait
+        Start-Process "Downloads/git.exe" -Wait
         Write-Host "Git Installed" -ForegroundColor Cyan -BackgroundColor Black
     
         Write-Host "About to start installing Python. Make sure to select the option ""Add Python 3.6 to PATH"" at the very beginning of the installer!!" -ForegroundColor Cyan -BackgroundColor Black
-        Start-Process "Downloads/PythonInstaller-x32.exe" -Wait
+        Start-Process "Downloads/python.exe" -Wait
         Write-Host "Python Installed"  -ForegroundColor Cyan -BackgroundColor Black
-    
-        if($NppOpt) {
-            Write-Host "Downloading Notepad++" -ForegroundColor Cyan -BackgroundColor Black
-            Invoke-WebRequest "https://notepad-plus-plus.org/repository/7.x/7.5.4/npp.7.5.4.Installer.exe" -OutFile "Downloads/Npp-x32.exe"
-            Write-Host "About to start installing Notepad++" -ForegroundColor Cyan -BackgroundColor Black
-            Start-Process "Downloads/Npp-x32.exe" -Wait
-        }
     
         if($CodeOpt) {
             Write-Host "Downloading Visual Studio Code" -ForegroundColor Cyan -BackgroundColor Black
-            Invoke-WebRequest "https://go.microsoft.com/fwlink/?LinkID=623230" -OutFile "Downloads/Code-x32.exe"
+            Invoke-WebRequest "https://go.microsoft.com/fwlink/?LinkID=623230" -OutFile "Downloads/vscode.exe"
             Write-Host "About to start installing Visual Studio Code" -ForegroundColor Cyan -BackgroundColor Black
-            Start-Process "Downloads/Code-x32.exe" -Wait
+            Start-Process "Downloads/vscode.exe" -Wait
         }
+    }
+
+    if($NppOpt) {
+        Write-Host "Downloading Notepad++" -ForegroundColor Cyan -BackgroundColor Black
+        Invoke-WebRequest "https://notepad-plus-plus.org/repository/7.x/7.5.6/npp.7.5.6.Installer.exe" -OutFile "Downloads/notepadplusplus.exe"
+        Write-Host "About to start installing Notepad++" -ForegroundColor Cyan -BackgroundColor Black
+        Start-Process "Downloads/notepadplusplus.exe" -Wait
     }
 
     Install-Dependancies

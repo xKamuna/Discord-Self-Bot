@@ -1,234 +1,121 @@
-/*
- *   This file is part of discord-self-bot
- *   Copyright (C) 2017-2018 Favna
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, version 3 of the License
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   Additional Terms 7.b and 7.c of GPLv3 apply to this file:
- *       * Requiring preservation of specified reasonable legal notices or
- *         author attributions in that material or in the Appropriate Legal
- *         Notices displayed by works containing it.
- *       * Prohibiting misrepresentation of the origin of that material,
- *         or requiring that modified versions of such material be marked in
- *         reasonable ways as different from the original version.
- */
-
-const Commando = require('discord.js-commando'),
-	Discord = require('discord.js'),
-	path = require('path'),
-	sqlite = require('sqlite'),
-	{momentFormat} = require(path.join(__dirname, 'util.js')),
-	{oneLine, stripIndents} = require('common-tags'),
-	{globalCommandPrefix, ownerID, webhookID, webhooktoken} = require(path.join(__dirname, 'auth.json'));
+const Database = require('better-sqlite3'),
+  path = require('path'),
+  {Client, SyncSQLiteProvider} = require('discord.js-commando'),
+  {WebhookClient, MessageEmbed} = require('discord.js'),
+  {oneLine, stripIndents} = require('common-tags');
 
 class DiscordSelfBot {
-	constructor (token) { // eslint-disable-line no-unused-vars
-		this.token = token;
-		this.client = new Commando.Client({
-			'owner': ownerID,
-			'commandPrefix': globalCommandPrefix.toLowerCase().includes('favna') ? '$' : globalCommandPrefix,
-			'selfbot': true
-		});
-		this.isReady = false;
-	}
+  constructor (token) {
+    this.token = token;
+    this.client = new Client({
+      owner: process.env.owner,
+      commandPrefix: (/(?:favna)/gim).test(process.env.prefix) ? '$' : process.env.prefix,
+      selfbot: true,
+      unknownCommandResponse: false
+    });
+  }
 
-	onReady () {
-		return () => {
-			// eslint-disable-next-line no-console
-			console.log(stripIndents `Client ready
-			logged in as ${this.client.user.tag} (${this.client.user.id})
-			Prefix set to ${this.client.commandPrefix}
-			Use ${this.client.commandPrefix}help to view the commands list!`);
-			this.client.user.setAFK(true); // Set bot to AFK to enable mobile notifications
-			this.isReady = true;
-		};
-	}
-
-	onCommandPrefixChange () {
-		return (guild, prefix) => {
-			// eslint-disable-next-line no-console
-			console.log(oneLine ` 
+  onCommandPrefixChange () {
+    return (guild, prefix) => {
+      console.log(oneLine` 
 			Prefix ${prefix === '' ? 'removed' : `changed to ${prefix || 'the default'}`}
 			${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.
 		`);
-		};
-	}
+    };
+  }
 
-	onDisconnect () {
-		return () => {
-			console.warn('Disconnected!'); // eslint-disable-line no-console
-		};
-	}
+  onReady () {
+    return () => {
+      console.log(stripIndents`Client ready
+			logged in as ${this.client.user.tag} (${this.client.user.id})
+			Prefix set to ${this.client.commandPrefix}
+			Use ${this.client.commandPrefix}help to view the commands list!`);
+      this.client.user.setAFK(true); // Set bot to AFK to enable mobile notifications
+    };
+  }
 
-	onReconnect () {
-		return () => {
-			console.warn('Reconnecting...'); // eslint-disable-line no-console
-		};
-	}
+  onMessage () {
+    return (msg) => {
 
-	onCmdErr () {
-		return (cmd, err) => {
-			if (err instanceof Commando.FriendlyError) {
-				return;
-			}
-			console.error(`Error in command ${cmd.groupID}:${cmd.memberName}`, err); // eslint-disable-line no-console
-		};
-	}
+      if (this.client.provider.get('global', 'webhooktoggle', false) && msg.author.id !== process.env.owner && !msg.mentions.users.get(process.env.owner)) {
+        const hookClient = new WebhookClient(process.env.webhookid, process.env.webhooktoken, {disableEveryone: true}),
+          mentionEmbed = new MessageEmbed(),
+          regexpExclusions = [],
+          regexpKeywords = [],
+          wnsExclusions = this.client.provider.get('global', 'webhookexclusions', ['none']),
+          wnsKeywords = this.client.provider.get('global', 'webhookkeywords', ['username', 'nickname']);
 
-	onCmdBlock () {
-		return (msg, reason) => {
-			// eslint-disable-next-line no-console
-			console.log(oneLine `
-		Command ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''}
-		blocked; ${reason}
-	`);
-		};
-	}
+        for (const keyword in wnsKeywords) {
+          const regex = new RegExp(`.*${wnsKeywords[keyword]}.*`, 'im');
 
-	onCmdStatusChange () {
-		return (guild, command, enabled) => {
-			// eslint-disable-next-line no-console
-			console.log(oneLine `
-            Command ${command.groupID}:${command.memberName}
-            ${enabled ? 'enabled' : 'disabled'}
-            ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.
-        `);
-		};
-	}
+          regexpKeywords.push(regex);
+        }
 
-	onGroupStatusChange () {
-		return (guild, group, enabled) => {
-			// eslint-disable-next-line no-console
-			console.log(oneLine `
-            Group ${group.id}
-            ${enabled ? 'enabled' : 'disabled'}
-            ${guild ? `in guild ${guild.name} (${guild.id})` : 'globally'}.
-        `);
-		};
-	}
+        for (const exclusion in wnsExclusions) {
+          const regex = new RegExp(`.*${wnsExclusions[exclusion]}.*`, 'im');
 
-	onMessage () {
-		return (msg) => {
+          regexpExclusions.push(regex);
+        }
 
-			if (this.client.provider.get('global', 'webhooktoggle', false) && msg.author.id !== ownerID && !msg.mentions.users.get(ownerID)) {
-				const hookClient = new Discord.WebhookClient(webhookID, webhooktoken, {'disableEveryone': true}),
-					mentionEmbed = new Discord.MessageEmbed(),
-					regexpExclusions = [],
-					regexpKeywords = [],
-					wnsExclusions = this.client.provider.get('global', 'webhookexclusions', ['none']),
-					wnsKeywords = this.client.provider.get('global', 'webhookkeywords', ['username', 'nickname']);
+        if (regexpKeywords.find(rx => rx.test(msg.cleanContent))) {
 
-				for (const keyword in wnsKeywords) {
-					const regex = new RegExp(`.*${wnsKeywords[keyword]}.*`, 'im');
+          if (!regexpExclusions.find(rx => rx.test(msg.cleanContent))) {
+            mentionEmbed
+              .setAuthor(msg.channel.type === 'text'
+                ? `${msg.member ? msg.member.displayName : 'someone'} dropped your name in #${msg.channel.name} in ${msg.guild.name}`
+                : `${msg.author.username} sent a message with your name`, msg.author.displayAvatarURL())
+              .setFooter('Message date')
+              .setTimestamp(msg.createdAt)
+              .setColor(msg.member ? msg.member.displayHexColor : '#7CFC00')
+              .setThumbnail(msg.author.displayAvatarURL())
+              .addField('Message Content', msg.cleanContent.length > 1024 ? msg.cleanContent.slice(0, 1024) : msg.cleanContent)
+              .addField('Message Attachments', msg.attachments.first() && msg.attachments.first().url ? msg.attachments.map(au => au.url) : 'None');
 
-					regexpKeywords.push(regex);
-				}
+            hookClient.send(`Stalkify away <@${process.env.owner}>`, {embeds: [mentionEmbed]}).catch(console.error);
+          }
+        }
+      }
+    };
+  }
 
-				for (const exclusion in wnsExclusions) {
-					const regex = new RegExp(`.*${wnsExclusions[exclusion]}.*`, 'im');
+  init () {
+    this.client
+      .on('commandPrefixChange', this.onCommandPrefixChange())
+      .on('message', this.onMessage())
+      .on('ready', this.onReady());
 
-					regexpExclusions.push(regex);
-				}
+    const db = new Database(path.join(__dirname, 'data/databases/settings.sqlite3'));
 
-				if (regexpKeywords.find(rx => rx.test(msg.cleanContent))) {
+    this.client.setProvider(
+      new SyncSQLiteProvider(db)
+    );
 
-					if (!regexpExclusions.find(rx => rx.test(msg.cleanContent))) {
-						mentionEmbed
-							.setAuthor(msg.channel.type === 'text'
-								? `${msg.member ? msg.member.displayName : 'someone'} dropped your name in #${msg.channel.name} in ${msg.guild.name}`
-								: `${msg.author.username} sent a message with your name`, msg.author.displayAvatarURL())
-							.setFooter(`Message dates from ${momentFormat(msg.createdAt, this.client)}`)
-							.setColor(msg.member ? msg.member.displayHexColor : '#535B62')
-							.setThumbnail(msg.author.displayAvatarURL())
-							.addField('Message Content', msg.cleanContent.length > 1024 ? msg.cleanContent.slice(0, 1024) : msg.cleanContent)
-							.addField('Message Attachments', msg.attachments.first() && msg.attachments.first().url ? msg.attachments.map(au => au.url) : 'None');
+    this.client.registry
+      .registerGroups([
+        ['games', 'Games - Play some games'],
+        ['info', 'Info - Discord info at your fingertips'],
+        ['searches', 'Searches - Browse the web and find results'],
+        ['leaderboards', 'Leaderboards - View leaderboards from various games'],
+        ['pokemon', 'Pokemon - Let Dexter answer your questions'],
+        ['extra', 'Extra - Extra! Extra! Read All About It! Only Two Cents!'],
+        ['images', 'Images - Send emojis and memes directly to the chat'],
+        ['quoting', 'Quoting - Quote other users to really reply to them'],
+        ['nsfw', 'NSFW - For all you dirty minds ( ͡° ͜ʖ ͡°)'],
+        ['settings', 'Settings - Control the settings the bot has for you']
+      ])
+      .registerDefaultGroups()
+      .registerDefaultTypes()
+      .registerDefaultCommands({
+        help: true,
+        prefix: true,
+        ping: false,
+        eval_: true,
+        commandState: true
+      })
+      .registerCommandsIn(path.join(__dirname, 'commands'));
 
-						hookClient.send(`Stalkify away <@${ownerID}>`, {'embeds': [mentionEmbed]}).catch(console.error); // eslint-disable-line no-console
-					}
-				}
-			}
-
-			if (this.client.provider.get('global', 'channellinktoggle', false) && msg.guild) {
-				const dataArr = this.client.provider.get('global', 'clconfig', []),
-					forwardEmbed = new Discord.MessageEmbed();
-
-				if (dataArr.length !== 0 && msg.guild.id === dataArr[0][0] && msg.channel.id === dataArr[0][1]) {
-					forwardEmbed
-						.setColor(msg.member ? msg.member.displayHexColor : '#FF0000')
-						.setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({'format': 'png'}))
-						.setTitle(`Message from ${this.client.guilds.get(dataArr[0][0]).channels.get(dataArr[0][1]).name} on ${this.client.guilds.get(dataArr[1][0]).name}`)
-						.setDescription(msg.content)
-						.setFooter(`Message dates from ${momentFormat(msg.createdAt, this.client)}`);
-
-					this.client.guilds.get(dataArr[1][0]).channels.get(dataArr[1][1]).send({'embed': forwardEmbed});
-				}
-			}
-		};
-	}
-
-	init () {
-		this.client
-			.on('ready', this.onReady())
-			.on('commandPrefixChange', this.onCommandPrefixChange())
-			.on('error', console.error) // eslint-disable-line no-console
-			.on('warn', console.warn) // eslint-disable-line no-console
-			.on('debug', console.log) // eslint-disable-line no-console
-			.on('disconnect', this.onDisconnect())
-			.on('reconnecting', this.onReconnect())
-			.on('commandError', this.onCmdErr())
-			.on('commandBlocked', this.onCmdBlock())
-			.on('commandStatusChange', this.onCmdStatusChange())
-			.on('groupStatusChange', this.onGroupStatusChange())
-			.on('message', this.onMessage());
-
-		this.client.setProvider(
-			sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => new Commando.SQLiteProvider(db))
-		).catch(console.error); // eslint-disable-line no-console
-
-		this.client.registry
-			.registerGroups([
-				['emojis', '"Global" emojis as images'],
-				['fun', 'Fun and Games to play with the bot'],
-				['info', 'Get Information on various things'],
-				['links', 'Quick Website Links'],
-				['memes', 'React with memes'],
-				['misc', 'Commands that cannot be categorized elsewhere'],
-				['nsfw', 'Find NSFW content ( ͡° ͜ʖ ͡°)'],
-				['pokedex', 'Get information from the PokéDex'],
-				['provider', 'Control your data stored in the client provider'],
-				['search', 'Search the web'],
-				['status', 'Set your status'],
-				['themeplaza', 'Browse ThemePlaza']
-			])
-			.registerDefaultGroups()
-			.registerDefaultTypes()
-			.registerDefaultCommands({
-				'help': true,
-				'prefix': true,
-				'ping': true,
-				'eval_': true,
-				'commandState': true
-			})
-			.registerCommandsIn(path.join(__dirname, 'commands'));
-
-		return this.client.login(this.token);
-	}
-
-	deinit () {
-		this.isReady = false;
-
-		return this.client.destroy();
-	}
+    return this.client.login(this.token);
+  }
 }
 
 module.exports = DiscordSelfBot;

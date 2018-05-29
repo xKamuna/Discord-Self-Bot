@@ -70,7 +70,7 @@ Build-In PingCommand - Checks the bot's ping to the Discord server
 <strong>Aliases</strong>: <code>cg</code></p>
 </dd>
 <dt><a href="#module_copypastalist">copypastalist</a> ⇒ <code>MessageEmbed</code></dt>
-<dd><p>Extra EmbedCommand - Create custom MessageEmbeds on the fly<br><strong>Aliases</strong>: <code>cplist</code>, <code>copylist</code>, <code>pastalist</code></p>
+<dd><p>Extra EmbedCommand - Create custom MessageEmbeds on the fly<br><strong>Aliases</strong>: <code>emb</code>, <code>embeds</code></p>
 </dd>
 <dt><a href="#module_jumboletters">jumboletters</a> ⇒ <code>Message</code></dt>
 <dd><p>Extra JumboLettersCommand - Create jumbo letters from your text<br><strong>Aliases</strong>: <code>jumbo</code>, <code>bigtext</code></p>
@@ -381,9 +381,9 @@ Validity is not guaranteed. Many sites properly check validity but this will wor
 
 ## copypastalist ⇒ <code>MessageEmbed</code>
 Extra EmbedCommand - Create custom MessageEmbeds on the fly  
-**Aliases**: `cplist`, `copylist`, `pastalist`
+**Aliases**: `emb`, `embeds`
 
-**Returns**: <code>MessageEmbed</code> - List of all available copypastas  
+**Returns**: <code>MessageEmbed</code> - Your custom embed  
 **Category**: extra  
 <a name="module_jumboletters"></a>
 

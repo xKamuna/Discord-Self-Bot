@@ -1,10 +1,10 @@
 /**
  * @file Extra EmbedCommand - Create custom MessageEmbeds on the fly  
- * **Aliases**: `cplist`, `copylist`, `pastalist`
+ * **Aliases**: `emb`, `embeds`
  * @module
  * @category extra
  * @name copypastalist
- * @returns {MessageEmbed} List of all available copypastas
+ * @returns {MessageEmbed} Your custom embed
  */
 
 const {Command} = require('discord.js-commando'), 

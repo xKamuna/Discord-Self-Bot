@@ -1,0 +1,26 @@
+{
+    "name": "discord-self-bot",
+    "description": "Favna#0001's Discord-Self-Bot for anyone to grant extreme power to their Discord usage",
+    "keywords": [
+        "discord",
+        "bot",
+        "selfbot",
+        "discord.js",
+        "discord.js-commando"
+    ],
+    "website": "https://favna.xyz/selfbot",
+    "repository": "https://github.com/favna/discord-self-bot",
+    "logo": "https://favna.xyz/images/svgs/selfbot.svg",
+    "env": {
+        "token": {
+            "description": "Your token"
+        },
+        "owner": {
+            "description": "Your User ID"
+        },
+        "prefix": {
+            "description": "An optional global prefix",
+            "default": "$"
+        }
+    }
+}

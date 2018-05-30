@@ -30,11 +30,14 @@
 
 ***
 
+## This bot can be deployed with 1 click on Heroku. Click this button:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 
-# [***Wiki***](https://github.com/Favna/Discord-Self-Bot/wiki)
-# [***Install Guide***](https://github.com/Favna/Discord-Self-Bot/wiki/Installation-&-Setup)
-# [***List Of Commands***](https://github.com/Favna/Discord-Self-Bot/wiki/All-Commands)
+## [***Wiki***](https://github.com/Favna/Discord-Self-Bot/wiki)
+## [***Install Guide***](https://github.com/Favna/Discord-Self-Bot/wiki/Installation-&-Setup)
+## [***List Of Commands***](https://github.com/Favna/Discord-Self-Bot/wiki/All-Commands)
 
 ***
 

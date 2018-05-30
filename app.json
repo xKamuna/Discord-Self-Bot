@@ -18,9 +18,14 @@
         "owner": {
             "description": "Your User ID"
         },
+        "heroku": {
+            "description": "Name you are giving this app? Case sensitive! Exact name as above!",
+            "required": true
+        },
         "prefix": {
             "description": "An optional global prefix",
-            "default": "$"
+            "default": "$",
+            "required": false
         }
     }
 }

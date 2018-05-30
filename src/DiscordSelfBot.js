@@ -1,5 +1,6 @@
 const Database = require('better-sqlite3'),
   path = require('path'),
+  snek = require('snekfetch'),
   {Client, SyncSQLiteProvider} = require('discord.js-commando'),
   {WebhookClient, MessageEmbed} = require('discord.js'),
   {oneLine, stripIndents} = require('common-tags');
@@ -31,6 +32,12 @@ class DiscordSelfBot {
 			Prefix set to ${this.client.commandPrefix}
 			Use ${this.client.commandPrefix}help to view the commands list!`);
       this.client.user.setAFK(true); // Set bot to AFK to enable mobile notifications
+
+      if (process.env.heroku) {
+        setInterval(async () => {
+          await snek.get(`${process.env.heroku}.herokuapp.com`);
+        }, 1500000);
+      }
     };
   }
 

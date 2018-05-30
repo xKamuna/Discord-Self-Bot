@@ -7,19 +7,14 @@ const DiscordSelfBot = require(path.join(__dirname, 'DiscordSelfBot.js')),
     new DiscordSelfBot(process.env.token).init();
   },
   heroku = function () {
-    const fs = require('fs'),
-      http = require('http'),
-      PORT = 5000;
+    const express = require('express'),
+      PORT = process.env.PORT || 5000;
 
-    const server = http.createServer((req, res) => { // eslint-disable-line one-var
-      res.writeHead(200, {'Content-Type': 'text/html'});
-
-      fs.createReadStream(path.resolve(__dirname, 'heroku/heroku.html')).pipe(res);
-    });
-
-    server.listen(PORT, () => {
-      console.log('Heroku Webserver Started');
-    });
+    express()
+      .use(express.static(path.join(__dirname, 'heroku')))
+      .set('view engine', 'html')
+      .all('/', (req, res) => res.render(path.join(__dirname, 'heroku/index')))
+      .listen(PORT, () => console.log(`Listening on ${PORT}`));
   };
 
 if (process.env.heroku) {

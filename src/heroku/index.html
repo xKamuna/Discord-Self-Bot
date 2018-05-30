@@ -12,43 +12,12 @@
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="style.css">
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-
-    <style>
-        .btn-patreon {
-            color: #fff !important;
-            background-color: #F5511E !important;
-            border-color: #F5511E !important;
-        }
-
-        .btn-dark {
-            color: #fff !important;
-            background-color: #343a40 !important;
-            border-color: #343a40 !important;
-        }
-
-        .btn-blue {
-            color: #fff !important;
-            background-color: #007bff !important;
-            border-color: #007bff !important;
-        }
-
-        section {
-            padding-top: 12.5%;
-        }
-
-        .secondRow {
-            padding-top: 5%;
-        }
-
-        a {
-            text-decoration: none !important;
-        }
-    </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -69,32 +38,41 @@
     </nav>
 
     <section>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 col-sm-offset-1 text-center">
+                <div class="col-sm-7 col-sm-offset-3 text-center">
                     <h1>Discord-Self-Bot</h1>
                     <p class="lead">Woops looks like you navigated to the Discord-Self-Bot deployed to heroku app page
                         <br>This page is intentionally left blank</p>
                     <br>Here be nothing but vicious dragoons.
                 </div>
             </div>
-
             <div class="row secondRow">
-                <div class="col-sm-3 col-sm-offset-2">
+                <div class="col-sm-4 col-sm-offset-2">
                     <a href="https://github.com/favna/discord-self-bot" target="_blank">
-                        <button type="button" class="btn btn-dark btn-lg btn-block">View GitHub Project</button>
+                        <button type="button" class="btn btn-github btn-lg btn-block">View GitHub Project</button>
                     </a>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <a href="https://favna.xyz/redirect/server" target="_blank">
-                        <button type="button" class="btn btn-blue btn-lg btn-block">Join Support Server</button>
+                        <button type="button" class="btn btn-server btn-lg btn-block">Join Support Server</button>
                     </a>
                 </div>
 
-                <div class="col-sm-3">
+
+            </div>
+
+            <div class="row thirdRow">
+                <div class="col-sm-4 col-sm-offset-2">
                     <a href="https://www.patreon.com/bePatron?u=9336537" target="_blank">
                         <button type="button" class="btn btn-patreon btn-lg btn-block">Become a patron</button>
+                    </a>
+                </div>
+
+                <div class="col-sm-4">
+                    <a href="https://dashboard.heroku.com/apps/" target="_self">
+                        <button type="button" class="btn btn-heroku btn-lg btn-block">Back to the Heroku</button>
                     </a>
                 </div>
             </div>

@@ -9,7 +9,7 @@ const DiscordSelfBot = require(path.join(__dirname, 'DiscordSelfBot.js')),
   heroku = function () {
     const fs = require('fs'),
       http = require('http'),
-      PORT = 8080;
+      PORT = 5000;
 
     const server = http.createServer((req, res) => { // eslint-disable-line one-var
       res.writeHead(200, {'Content-Type': 'text/html'});

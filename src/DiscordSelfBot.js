@@ -24,7 +24,7 @@ class DiscordSelfBot {
 		`);
     };
   }
-
+  
   onReady () {
     return () => {
       console.log(stripIndents`Client ready

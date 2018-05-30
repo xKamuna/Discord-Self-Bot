@@ -1,4 +1,4 @@
-/* eslint-disable no-mixed-requires, sort-vars, one-var */
+/* eslint-disable no-mixed-requires, sort-vars, one-var, global-require */
 const path = require('path');
 
 require('dotenv').config({path: path.join(__dirname, '.env')});
@@ -7,21 +7,19 @@ const DiscordSelfBot = require(path.join(__dirname, 'DiscordSelfBot.js')),
     new DiscordSelfBot(process.env.token).init();
   },
   heroku = function () {
-    /* eslint-disable */
-    const express = require('express');
-    const app = express();
-    const PORT = 8080;
+    const fs = require('fs'),
+      http = require('http'),
+      PORT = 8080;
 
-    app
-      .set('view engine', 'html')
-      .use(express.static(path.join(__dirname, 'heroku')))
-      .all('/', (req, res) => {
-        res.sendFile(path.join(__dirname, 'heroku/heroku.html'));
-      })
-      .listen(PORT, () => {
-        console.log(`Server started on http://localhost:${PORT}`);
-      });
-      /* eslint-enable */
+    const server = http.createServer((req, res) => { // eslint-disable-line one-var
+      res.writeHead(200, {'Content-Type': 'text/html'});
+
+      fs.createReadStream(path.resolve(__dirname, 'heroku/heroku.html')).pipe(res);
+    });
+
+    server.listen(PORT, () => {
+      console.log('Heroku Webserver Started');
+    });
   };
 
 if (process.env.heroku) {

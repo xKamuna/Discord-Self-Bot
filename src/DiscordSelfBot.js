@@ -35,7 +35,7 @@ class DiscordSelfBot {
 
       if (process.env.heroku) {
         setInterval(async () => {
-          await snek.get(`${process.env.heroku}.herokuapp.com`);
+          await snek.get(`https://${process.env.heroku}.herokuapp.com`);
         }, 1500000);
       }
     };

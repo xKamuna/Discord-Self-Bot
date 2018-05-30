@@ -26,6 +26,54 @@
             "description": "An optional global prefix",
             "default": "$",
             "required": false
+        },
+        "googleapikey": {
+            "description": "OPTIONAL: If you already have a Google API key you can enter it here",
+            "required": false
+        },
+        "imagekey": {
+            "description": "OPTIONAL: If you already have a Google Custom Search Engine key for images you can enter it here",
+            "required": false
+        },
+        "searchkey": {
+            "description": "OPTIONAL: If you already have Google Custom Search Engine key for web searches you can enter it here",
+            "required": false
+        },
+        "oxrkey": {
+            "description": "OPTIONAL: If you already have an Open Exchange Rates API key you can enter it here",
+            "required": false
+        },
+        "moviedbkey": {
+            "description": "OPTIONAL: If you already have a TheMovieDatabase API key you can enter it here",
+            "required": false
+        },
+        "steamkey": {
+            "description": "OPTIONAL: If you already have a Steam API key you can enter it here",
+            "required": false
+        },
+        "igdbkey": {
+            "description": "OPTIONAL: If you already have an IGDB API key you can enter it",
+            "required": false
+        },
+        "spotifyid": {
+            "description": "OPTIONAL: If you already have a Spotify App ID you can enter it here",
+            "required": false
+        },
+        "spotifysecret": {
+            "description": "OPTIONAL: If you already have a Spotify App Secret you can enter it here",
+            "required": false
+        },
+        "timezonedbkey": {
+            "description": "OPTIONAL: If you already have a TimezoneDB API key you can enter it here",
+            "required": false
+        },
+        "webhookid": {
+            "description": "OPTIONAL: If you already have a Webhook ID you can enter it here",
+            "required": false
+        },
+        "webhooktoken": {
+            "description": "OPTIONAL: If you already have a Webhook Token you can enter it here",
+            "required": false
         }
     }
 }

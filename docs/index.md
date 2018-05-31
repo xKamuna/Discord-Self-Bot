@@ -465,7 +465,7 @@ Extra QRGenCommand - Generates a QR code from text (like a URL)
 
 **Example**  
 ```js
-qrgen https://favna.xyz/ribbon
+qrgen https://favna.xyz/discord-self-bot
 ```
 <a name="module_randomcol"></a>
 

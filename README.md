@@ -1,7 +1,7 @@
 <div align="center">
 
   <p>
-  <a href="https://favna.xyz/selfbot"><img src="https://i.imgur.com/WOBflp9.png" height="200" alt="ribbon"/></a>
+  <a href="https://favna.xyz/selfbot"><img src="https://i.imgur.com/WOBflp9.png" height="200" alt="discordbanner"/></a>
   </p>
 
   <p>

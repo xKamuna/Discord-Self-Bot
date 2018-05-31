@@ -4,7 +4,7 @@
  * @module
  * @category extra
  * @name qrgen
- * @example qrgen https://favna.xyz/ribbon
+ * @example qrgen https://favna.xyz/discord-self-bot
  * @param {StringResolvable} URL URL you want to encode into a QR image
  * @returns {MessageEmbed} Embedded QR code and original image URL
  */

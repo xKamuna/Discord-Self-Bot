@@ -67,7 +67,7 @@ module.exports = class StatsCommand extends Command {
       .addField('\u200b', oneLine`Use the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}help\` command to get the list of commands available to you in a DM. 
             The default prefix is \`$\`. You can change this with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}prefix\` command. 
             If you ever forget the command prefix, just use \`${this.client.user.tag} prefix\``)
-      .setFooter('Ribbon', 'https://favna.xyz/images/appIcons/selfbot.png')
+      .setFooter('Discord-Self-Bot', 'https://favna.xyz/images/appIcons/selfbot.png')
       .setTimestamp();
 
     deleteCommandMessages(msg, this.client);

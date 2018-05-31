@@ -20,9 +20,8 @@ This issue tracker is only for bug reports and enhancement suggestions. You won'
 - Priority this issue should have – please be realistic and elaborate if possible:
 
 
-**If you have self hosted my code please go through the following options**
+**Some extra stuff:**
 
-- [ ] I have self hosted the code for Ribbon
 - [ ] I use yarn
 - [ ] I use npm
 - node.js version:

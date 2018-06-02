@@ -34,6 +34,14 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+Couple of important notes when using Heroku:
+1. When copying your token ***DO NOT*** copy the `" "` marks around it, JUST the text!
+2. Not launching? Follow these steps before asking for help:
+  - Download the Heroku CLI: https://devcenter.heroku.com/articles/heroku-cli
+  - Open a terminal (cmd/powershell/etc)
+  - type `heroku login` to login
+  - type `heroku logs --tail --app YOUR_APP_NAME_HERE` replacing the last part with the name of your app. You'll now see the errors Heroku is throwing and hopefully that'll tell you enough already. If not please join the server and share whatever error it is throwing.
+
 
 ## [***Wiki***](https://github.com/Favna/Discord-Self-Bot/wiki)
 ## [***Install Guide***](https://github.com/Favna/Discord-Self-Bot/wiki/Installation-&-Setup)

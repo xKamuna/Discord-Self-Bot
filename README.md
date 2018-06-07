@@ -12,7 +12,7 @@
   
    <p>
 <a href="https://twitter.com/Favna_"><img src="https://img.shields.io/twitter/follow/espadrine.svg?style=for-the-badge&label=Follow" alt="Twitter Follow"></a><!--
---><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GY3CFCL25HQNJ"><img src="https://img.shields.io/badge/Donate-PayPal-547ab8.svg?style=for-the-badge" alt="donate" title="Donate with PayPal" /></a><!--
+--><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XMAYCF9SDHZ34"><img src="https://img.shields.io/badge/Donate-PayPal-547ab8.svg?style=for-the-badge" alt="donate" title="Donate with PayPal" /></a><!--
 --><a href="https://www.patreon.com/bePatron?u=9336537"><img src="https://i.imgur.com/05PzBRU.png" alt="patreon badge" title="Become a Patron"></a>
   </p>
 
@@ -95,7 +95,7 @@ I accept donations through PayPal, BitCoin, Ethereum and LiteCoin. You can use t
 
 |Donate With|QR|Address|
 |:---:|:---:|:---:|
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GY3CFCL25HQNJ"><img src="https://favna.s-ul.eu/scrns/hqtB097v.png"></a>|<img src="https://favna.s-ul.eu/scrns/9gCHDpya.png" width="128">|[Donate with PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GY3CFCL25HQNJ)|
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XMAYCF9SDHZ34"><img src="https://favna.s-ul.eu/scrns/hqtB097v.png"></a>|<img src="https://favna.s-ul.eu/scrns/9gCHDpya.png" width="128">|[Donate with PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XMAYCF9SDHZ34)|
 <img src="https://favna.s-ul.eu/scrns/yuLvpp8Q.png">|<img src="https://favna.s-ul.eu/scrns/uH4DQbUK.png" width="128">|<a href="bitcoin:1E643TNif2MTh75rugepmXuq35Tck4TnE5?amount=0.01&label=Favna%27%20Discord-Self-Bot%20Discord%20Bot">1E643TNif2MTh75rugepmXuq35Tck4TnE5</a>|
 <img src="https://favna.s-ul.eu/scrns/XG42HAxq.png">|<img src="https://favna.s-ul.eu/scrns/cBE1WJFa.png" width="128">|<a href="ethereum:0xF653F666903cd8739030D2721bF01095896F5D6E?amount=0.01&label=Favna%27%20Discord-Self-Bot%20Discord%20Bot">0xF653F666903cd8739030D2721bF01095896F5D6E</a>|
 <img src="https://favna.s-ul.eu/scrns/5M8KMzTa.png">|<img src="https://favna.s-ul.eu/scrns/1tTFTyKZ.png" width="128">|<a href="litecoin:LZHvBkaJqKJRa8N7Dyu41Jd1PDBAofCik6?amount=0.01&label=Favna%27%20Discord-Self-Bot%20Discord%20Bot">LZHvBkaJqKJRa8N7Dyu41Jd1PDBAofCik6</a>|

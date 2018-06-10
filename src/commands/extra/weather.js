@@ -16,7 +16,7 @@ const request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {stripIndents} = require('common-tags'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../components/util.js');
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
 
 module.exports = class WeatherCommand extends Command {
   constructor (client) {

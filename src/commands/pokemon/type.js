@@ -33,9 +33,18 @@ module.exports = class TypeCommand extends Command {
       },
       args: [
         {
-          key: 'type',
-          prompt: 'Get info on which type?',
-          type: 'string'
+          key: 'types',
+          prompt: 'Get info on which type(s)?',
+          type: 'string',
+          validate: (input) => {
+            const validTypes = ['bug', 'dark', 'dragon', 'electric', 'fairy', 'fighting', 'fire', 'flying', 'ghost', 'grass', 'ground', 'ice', 'normal', 'poison', 'psychic', 'rock', 'steel', 'water'];
+
+            if (validTypes.some(val => input.split(' ').indexOf(val) >= 0)) {
+              return true;
+            }
+
+            return `one of more of your types was invalid. Valid types are ${validTypes.map(val => `\`${val}\``).join(', ')}`;
+          }
         }
       ]
     });

@@ -1,6 +1,7 @@
 /**
  * @file Extra Weather - Get the current weather forecast in any city  
  * Potentially you'll have to specify city if the city is in multiple countries, i.e. `weather amsterdam` will not be the same as `weather amsterdam missouri`  
+ * Uses Google's Geocoding to determine the correct location therefore supports any location indication, country, city or even as exact as a street.  
  * **Aliases**: `temp`, `forecast`, `fc`, `wth`
  * @module
  * @category extra

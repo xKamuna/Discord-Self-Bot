@@ -99,7 +99,7 @@ For a full list of supported currencies see <a href="https://docs.openexchangera
 <dd><p>Extra Time - Gets the current time in any place<br>Uses Google&#39;s Geocoding to determine the correct location therefore supports any location indication, country, city or even as exact as a street.<br><strong>Aliases</strong>: <code>citytime</code></p>
 </dd>
 <dt><a href="#module_weather">weather</a> ⇒ <code>MessageEmbed</code></dt>
-<dd><p>Extra Weather - Get the current weather forecast in any city<br>Potentially you&#39;ll have to specify city if the city is in multiple countries, i.e. <code>weather amsterdam</code> will not be the same as <code>weather amsterdam missouri</code><br><strong>Aliases</strong>: <code>temp</code>, <code>forecast</code>, <code>fc</code>, <code>wth</code></p>
+<dd><p>Extra Weather - Get the current weather forecast in any city<br>Potentially you&#39;ll have to specify city if the city is in multiple countries, i.e. <code>weather amsterdam</code> will not be the same as <code>weather amsterdam missouri</code><br>Uses Google&#39;s Geocoding to determine the correct location therefore supports any location indication, country, city or even as exact as a street.<br><strong>Aliases</strong>: <code>temp</code>, <code>forecast</code>, <code>fc</code>, <code>wth</code></p>
 </dd>
 <dt><a href="#module_zalgo">zalgo</a> ⇒ <code>Message</code></dt>
 <dd><p>Extra Zalgo - Create zalgo-fied text from your input
@@ -512,6 +512,7 @@ time Amsterdam
 ## weather ⇒ <code>MessageEmbed</code>
 Extra Weather - Get the current weather forecast in any city  
 Potentially you'll have to specify city if the city is in multiple countries, i.e. `weather amsterdam` will not be the same as `weather amsterdam missouri`  
+Uses Google's Geocoding to determine the correct location therefore supports any location indication, country, city or even as exact as a street.  
 **Aliases**: `temp`, `forecast`, `fc`, `wth`
 
 **Returns**: <code>MessageEmbed</code> - Various statistics about the current forecast  

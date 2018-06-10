@@ -10,12 +10,14 @@
  * @returns {MessageEmbed} Various statistics about the current forecast
  */
 
-const weather = require('yahoo-weather'),
+const request = require('snekfetch'),
+  weather = require('yahoo-weather'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
-  {deleteCommandMessages} = require('../../util.js');
+  {stripIndents} = require('common-tags'),
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../components/util.js');
 
-module.exports = class weatherCommand extends Command {
+module.exports = class WeatherCommand extends Command {
   constructor (client) {
     super(client, {
       name: 'weather',
@@ -23,13 +25,20 @@ module.exports = class weatherCommand extends Command {
       group: 'extra',
       aliases: ['temp', 'forecast', 'fc', 'wth'],
       description: 'Get the weather in a city',
+      details: stripIndents`
+      Potentially you'll have to specify city if the city is in multiple countries, i.e. \`weather amsterdam\` will not be the same as \`weather amsterdam missouri\`
+      Uses Google's Geocoding to determine the correct location therefore supports any location indication, country, city or even as exact as a street.`,
       format: 'CityName',
       examples: ['weather amsterdam'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
-          key: 'city',
-          prompt: 'Weather in which city?',
+          key: 'location',
+          prompt: 'For which city would you like to get the weather?',
           type: 'string'
         }
       ]
@@ -82,13 +91,23 @@ module.exports = class weatherCommand extends Command {
     }
   }
 
-  async run (msg, {city}) {
-    const info = await weather(city),
-      weatherEmbed = new MessageEmbed();
+  async getCity (location) {
+    const cords = await request.get('https://maps.googleapis.com/maps/api/geocode/json?')
+      .query('address', location)
+      .query('key', process.env.googleapikey);
 
-    if (info) {
+    return cords.body.results[0].formatted_address;
+  }
+
+  async run (msg, {location}) {
+    try {
+      startTyping(msg);
+      const city = await this.getCity(location),
+        info = await weather(city),
+        weatherEmbed = new MessageEmbed();
+
       weatherEmbed
-        .setAuthor(`Weather data for ${info.location.city} - ${info.location.country}`)
+        .setAuthor(`Weather forecast for ${city}`)
         .setThumbnail(info.item.description.slice(19, 56))
         .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
         .setFooter('Powered by Yahoo! Weather')
@@ -107,11 +126,16 @@ module.exports = class weatherCommand extends Command {
           `High: ${info.item.forecast[2].high} °${info.units.temperature} | Low: ${info.item.forecast[2].low} °${info.units.temperature}`, true);
 
       deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
 
       return msg.embed(weatherEmbed);
-    }
-    deleteCommandMessages(msg, this.client);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
 
-    return msg.reply('an error occurred getting weather info for that city');
+      console.error(err);
+
+      return msg.reply(`i wasn't able to find a location for \`${location}\``);
+    }
   }
 };

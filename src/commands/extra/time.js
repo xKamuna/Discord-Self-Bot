@@ -14,7 +14,7 @@ const request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {stripIndents} = require('common-tags'),
-  {deleteCommandMessages} = require('../../util.js');
+  {deleteCommandMessages, stopTyping, startTyping} = require('../../components/util.js');
 
 module.exports = class TimeCommand extends Command {
   constructor (client) {
@@ -27,57 +27,62 @@ module.exports = class TimeCommand extends Command {
       format: 'CityName',
       examples: ['time London'],
       guildOnly: false,
+      throttling: {
+        usages: 2,
+        duration: 3
+      },
       args: [
         {
-          key: 'city',
-          prompt: 'Get time in which city?',
+          key: 'location',
+          prompt: 'For which location do you want to know the current time?',
           type: 'string'
         }
       ]
     });
   }
 
-  async getCords (city) {
+  async getCords (location) {
     const cords = await request.get('https://maps.googleapis.com/maps/api/geocode/json?')
-      .query('address', city)
+      .query('address', location)
       .query('key', process.env.googleapikey);
 
-    if (cords.ok) {
-      return [cords.body.results[0].geometry.location.lat, cords.body.results[0].geometry.location.lng];
-    }
-
-    return null;
+    return {
+      lat: cords.body.results[0].geometry.location.lat,
+      long: cords.body.results[0].geometry.location.lng,
+      address: cords.body.results[0].formatted_address
+    };
   }
 
-  async run (msg, {city}) {
-    const cords = await this.getCords(city);
+  async run (msg, {location}) {
+    try {
+      startTyping(msg);
+      const cords = await this.getCords(location),
+        time = await request.get('http://api.timezonedb.com/v2/get-time-zone')
+          .query('key', process.env.timezonedbkey)
+          .query('format', 'json')
+          .query('by', 'position')
+          .query('lat', cords.lat)
+          .query('lng', cords.long),
+        timeArr = time.body.formatted.split(' '),
+        timeEmbed = new MessageEmbed();
 
-    if (cords) {
-      const time = await request.get('http://api.timezonedb.com/v2/get-time-zone')
-        .query('key', process.env.timezonedbkey)
-        .query('format', 'json')
-        .query('by', 'position')
-        .query('lat', cords[0])
-        .query('lng', cords[1]);
-
-      if (time.ok) {
-        const timeArr = time.body.formatted.split(' '),
-          timeEmbed = new MessageEmbed();
-
-        timeEmbed
-          .setTitle(`:flag_${time.body.countryCode.toLowerCase()}: ${city}`)
-          .setDescription(stripIndents`**Current Time:** ${timeArr[1]}
+      timeEmbed
+        .setTitle(`:flag_${time.body.countryCode.toLowerCase()}: ${cords.address}`)
+        .setDescription(stripIndents`**Current Time:** ${timeArr[1]}
 					**Current Date:** ${timeArr[0]}
 					**Country:** ${time.body.countryName}
 					**DST:** ${time.body.dst}`)
-          .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00');
+        .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00');
 
-        deleteCommandMessages(msg, this.client);
+      deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
 
-        return msg.embed(timeEmbed);
-      }
+      return msg.embed(timeEmbed);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
+
+      return msg.reply(`i wasn't able to find a location for \`${location}\``);
     }
-
-    return msg.reply('an error occurred, are you sure you spelled the city name correctly?');
   }
 };

@@ -14,7 +14,7 @@ const request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {stripIndents} = require('common-tags'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class TimeCommand extends Command {
   constructor (client) {
@@ -55,7 +55,6 @@ module.exports = class TimeCommand extends Command {
 
   async run (msg, {location}) {
     try {
-      startTyping(msg);
       const cords = await this.getCords(location),
         time = await request.get('http://api.timezonedb.com/v2/get-time-zone')
           .query('key', process.env.timezonedbkey)
@@ -75,12 +74,10 @@ module.exports = class TimeCommand extends Command {
         .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00');
 
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
       return msg.embed(timeEmbed);
     } catch (err) {
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
       return msg.reply(`i wasn't able to find a location for \`${location}\``);
     }

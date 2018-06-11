@@ -16,7 +16,7 @@ const request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {stripIndents} = require('common-tags'),
-  {deleteCommandMessages, stopTyping, startTyping} = require('../../util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class WeatherCommand extends Command {
   constructor (client) {
@@ -102,7 +102,6 @@ module.exports = class WeatherCommand extends Command {
 
   async run (msg, {location}) {
     try {
-      startTyping(msg);
       const city = await this.getCity(location),
         info = await weather(city),
         weatherEmbed = new MessageEmbed();
@@ -127,14 +126,10 @@ module.exports = class WeatherCommand extends Command {
           `High: ${info.item.forecast[2].high} °${info.units.temperature} | Low: ${info.item.forecast[2].low} °${info.units.temperature}`, true);
 
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
       return msg.embed(weatherEmbed);
     } catch (err) {
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
-
-      console.error(err);
 
       return msg.reply(`i wasn't able to find a location for \`${location}\``);
     }

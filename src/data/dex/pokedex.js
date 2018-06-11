@@ -1,3 +1,4 @@
+/* eslint-disable */
 const BattlePokedex = [{
     'num': 1,
     'species': 'Bulbasaur',
@@ -19344,7 +19345,7 @@ const BattlePokedex = [{
   },
   {
     'num': 669,
-    'species': 'Flabe\u0301be\u0301',
+    'species': 'Flabébé',
     'baseForme': 'Red',
     'types': ['Fairy'],
     'gender': 'F',
@@ -22427,7 +22428,7 @@ const BattlePokedex = [{
   },
   {
     'num': 772,
-    'species': 'Type: Null',
+    'species': 'Type Null',
     'types': ['Normal'],
     'gender': 'N',
     'baseStats': {

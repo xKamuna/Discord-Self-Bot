@@ -124,7 +124,7 @@ Has a very specific syntax! Be sure to adapt the example!
 <dd><p>Games DiceCommand - Rolls some dice with some sides. Great for the DnD players!<br><strong>Aliases</strong>: <code>xdicey</code>, <code>roll</code>, <code>dicey</code>, <code>die</code></p>
 </dd>
 <dt><a href="#module_fight">fight</a> ⇒ <code>MessageEmbed</code></dt>
-<dd><p>Games FightCommand - Pit two things against each other in a fight to the death.<br>Winner is determined with random.org randomization.<br><strong>Aliases</strong>: <code>combat</code></p>
+<dd><p>Games FightCommand - Pit two things against each other in a fight to the death.<br><strong>Aliases</strong>: <code>combat</code></p>
 </dd>
 <dt><a href="#module_rps">rps</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Games RockPaperScissorCommand - Play Rock Paper Scissors against random.org randomization<br><strong>Aliases</strong>: <code>rockpaperscissors</code></p>
@@ -618,7 +618,6 @@ dice 5 6
 
 ## fight ⇒ <code>MessageEmbed</code>
 Games FightCommand - Pit two things against each other in a fight to the death.  
-Winner is determined with random.org randomization.  
 **Aliases**: `combat`
 
 **Returns**: <code>MessageEmbed</code> - Result of the combat  

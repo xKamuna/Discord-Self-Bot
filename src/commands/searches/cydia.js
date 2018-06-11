@@ -91,8 +91,6 @@ module.exports = class CydiaCommand extends Command {
 
           return msg.embed(embed);
         } catch (err) {
-          console.error(err);
-
           embed.addField('Package Name', result.name, false);
           deleteCommandMessages(msg, this.client);
 

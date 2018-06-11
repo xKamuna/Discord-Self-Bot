@@ -68,7 +68,6 @@ module.exports = class Rule34Command extends Command {
 
       return msg.embed(embed);
     } catch (err) {
-      console.log(err);
       deleteCommandMessages(msg, this.client);
 
       return msg.reply(`no juicy images found for \`${tags}\``);

@@ -71,7 +71,7 @@ module.exports = class DexCommand extends Command {
     case 'Yellow':
       return '#FFF359';
     default:
-      return '#7CFC00';
+      return '#FF0000';
     }
   }
 
@@ -97,7 +97,7 @@ module.exports = class DexCommand extends Command {
       },
       pokeoptions = {
         shouldSort: true,
-        threshold: 0.3,
+        threshold: 0.2,
         location: 0,
         distance: 100,
         maxPatternLength: 32,
@@ -187,9 +187,9 @@ module.exports = class DexCommand extends Command {
       if (pokeSearch[0].num < 0) {
         pokeData.sprite = 'https://favna.xyz/images/ribbonhost/pokesprites/unknown.png';
       } else if (shines) {
-        pokeData.sprite = `https://favna.xyz/images/ribbonhost/pokesprites/shiny/${pokeSearch[0].species.replace(/ /g, '_').toLowerCase()}.png`;
+        pokeData.sprite = `https://favna.xyz/images/ribbonhost/pokesprites/shiny/${pokeSearch[0].species.replace(/ /g, '').toLowerCase()}.png`;
       } else {
-        pokeData.sprite = `https://favna.xyz/images/ribbonhost/pokesprites/regular/${pokeSearch[0].species.replace(/ /g, '_').toLowerCase()}.png`;
+        pokeData.sprite = `https://favna.xyz/images/ribbonhost/pokesprites/regular/${pokeSearch[0].species.replace(/ /g, '').toLowerCase()}.png`;
       }
 
       dexEmbed

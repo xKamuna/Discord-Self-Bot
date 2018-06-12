@@ -56,6 +56,9 @@ Build-In PingCommand - Checks the bot's ping to the Discord server
 ## Modules
 
 <dl>
+<dt><a href="#module_learn">learn</a> ⇒ <code>MessageEmbed</code></dt>
+<dd><p>Pokemon LearnCommand - Displays how a Pokemon can learn given moves, if at all<br>Moves split on every <code>,</code>. See examples for usages.<br>You can specify a generation for the match as third argument, in this case make sure to wrap the moves in <code>&#39; &#39;</code> if they have spaces!<br><strong>Aliases</strong>: <code>learnset</code>, <code>learnall</code></p>
+</dd>
 <dt><a href="#module_copypasta">copypasta</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Extra CopyPastaCommand - Sends one of your saved copypastas<br>Sends a copypasta stored in the data/databases/pastas.sqlite3 database<br><strong>Aliases</strong>: <code>cp</code>, <code>pasta</code></p>
 </dd>
@@ -319,6 +322,32 @@ For item names existing of multiple words (for example <code>life orb</code>) yo
 </dd>
 </dl>
 
+<a name="module_learn"></a>
+
+## learn ⇒ <code>MessageEmbed</code>
+Pokemon LearnCommand - Displays how a Pokemon can learn given moves, if at all  
+Moves split on every `,`. See examples for usages.  
+You can specify a generation for the match as third argument, in this case make sure to wrap the moves in `' '` if they have spaces!  
+**Aliases**: `learnset`, `learnall`
+
+**Returns**: <code>MessageEmbed</code> - Info on whether the Pokemon can learn the move and how or not  
+**Category**: Pokemon  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| PokemonName | <code>StringResolvable</code> | Name of the pokemon to get the match for |
+| [MoveName] | <code>StringResolvable</code> | Name of the move you want to find out about |
+| [AnotherMoveName] | <code>StringResolvable</code> | Any additional moves you also want to find out about |
+| [Generation] | <code>StringResolvable</code> | The generation to find the match for |
+
+**Example**  
+```js
+learn dragonite dragon dance
+```
+**Example**  
+```js
+learn dragonite dragon dance,dragon claw
+```
 <a name="module_copypasta"></a>
 
 ## copypasta ⇒ <code>MessageEmbed</code>

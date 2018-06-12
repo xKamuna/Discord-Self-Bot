@@ -62,7 +62,7 @@
     "qrcode": "1.2.0",
     "scalc": "^2.0.1",
     "snekfetch": "3.6.4",
-    "speedtest-net": "^1.4.2",
+    "speedtest-net": "^1.4.3",
     "spotify-web-api-node": "^3.1.1",
     "steamapi": "^2.0.2",
     "to-zalgo": "^1.0.1",

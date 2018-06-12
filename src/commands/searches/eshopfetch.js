@@ -37,6 +37,6 @@ module.exports = class EshopFetchCommand extends Command {
       return msg.reply('Latest eshop data stored in file');
     }
 
-    return msg.reply('An error occurred fetching latest data!');
+    return msg.reply('an error occurred fetching latest data!');
   }
 };

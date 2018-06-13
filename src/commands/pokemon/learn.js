@@ -21,7 +21,7 @@ const moment = require('moment'),
   {MessageEmbed} = require('discord.js'),
   {BattleLearnsets} = require(path.join(__dirname, '../../data/dex/learnsets')),
   {oneLine, stripIndents} = require('common-tags'),
-  {capitalizeFirstLetter, deleteCommandMessages, stopTyping, startTyping} = require('../../components/util.js');
+  {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
 
 module.exports = class LearnCommand extends Command {
   constructor (client) {
@@ -89,8 +89,6 @@ module.exports = class LearnCommand extends Command {
 
   run (msg, {pokemon, moves, gen}) {
     try {
-      startTyping(msg);
-
       const {learnset} = BattleLearnsets[pokemon],
         learnEmbed = new MessageEmbed(),
         methods = [],
@@ -142,11 +140,9 @@ module.exports = class LearnCommand extends Command {
         .setDescription(response.join('\n'));
 
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
       return msg.embed(learnEmbed);
     } catch (err) {
-      stopTyping(msg);
       this.client.channels.resolve(process.env.ribbonlogchannel).send(stripIndents`
       <@${this.client.owners[0].id}> Error occurred in \`learn\` command!
       **Server:** ${msg.guild.name} (${msg.guild.id})

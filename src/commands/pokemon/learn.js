@@ -4,7 +4,7 @@
  * You can specify a generation for the match as third argument, in this case make sure to wrap the moves in `' '` if they have spaces!  
  * **Aliases**: `learnset`, `learnall`
  * @module
- * @category Pokemon
+ * @category pokemon
  * @name learn
  * @example learn dragonite dragon dance
  * @example learn dragonite dragon dance,dragon claw
@@ -21,7 +21,7 @@ const moment = require('moment'),
   {MessageEmbed} = require('discord.js'),
   {BattleLearnsets} = require(path.join(__dirname, '../../data/dex/learnsets')),
   {oneLine, stripIndents} = require('common-tags'),
-  {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
+  {capitalizeFirstLetter, deleteCommandMessages, stopTyping, startTyping} = require('../../components/util.js');
 
 module.exports = class LearnCommand extends Command {
   constructor (client) {
@@ -86,6 +86,8 @@ module.exports = class LearnCommand extends Command {
 
   run (msg, {pokemon, moves, gen}) {
     try {
+      startTyping(msg);
+
       const {learnset} = BattleLearnsets[pokemon],
         learnEmbed = new MessageEmbed(),
         methods = [],
@@ -137,10 +139,12 @@ module.exports = class LearnCommand extends Command {
         .setDescription(response.join('\n'));
 
       deleteCommandMessages(msg, this.client);
+      stopTyping(msg);
 
       return msg.embed(learnEmbed);
     } catch (err) {
-      console.error(stripIndents`
+      stopTyping(msg);
+      this.client.channels.resolve(process.env.ribbonlogchannel).send(stripIndents`
       <@${this.client.owners[0].id}> Error occurred in \`learn\` command!
       **Server:** ${msg.guild.name} (${msg.guild.id})
       **Author:** ${msg.author.tag} (${msg.author.id})
@@ -151,7 +155,8 @@ module.exports = class LearnCommand extends Command {
       **Error Message:** ${err}
       `);
 
-      return msg.reply(oneLine`an error occurred, you can check the error log to get more information.`);
+      return msg.reply(oneLine`An error occurred but I notified ${this.client.owners[0].username}
+      Want to know more about the error? Join the support server by getting an invite by using the \`${msg.guild.commandPrefix}invite\` command `);
     }
   }
 };

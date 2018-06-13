@@ -1,3 +1,4 @@
+/* eslint-disable max-lines, max-len */
 const BattleTypeChart = {
   Bug: {
     damageTaken: {

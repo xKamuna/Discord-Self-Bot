@@ -330,14 +330,12 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-better-sqlite3@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-4.0.0.tgz#90d077c94c14e3a483f8086c48ce79ea57955417"
+better-sqlite3@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-4.1.4.tgz#9fe1dcf7b699087b98b1997cbb00261e265897e2"
   dependencies:
-    bindings "^1.2.1"
-    integer "^1.0.1"
-    lzz-gyp "^0.3.5"
-    to-descriptor "^1.0.1"
+    bindings "^1.3.0"
+    integer "^1.0.5"
 
 bindings@^1.2.1, bindings@^1.3.0:
   version "1.3.0"
@@ -1025,9 +1023,9 @@ domutils@^1.5.1:
     dom-serializer "0"
     domelementtype "1"
 
-dotenv@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.1.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
+dotenv@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.0.0.tgz#24e37c041741c5f4b25324958ebbc34bca965935"
 
 draftlog@^1.0.12:
   version "1.0.12"
@@ -1712,9 +1710,9 @@ inquirer@^3.0.6:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
-integer@^1.0.1:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/integer/-/integer-1.0.3.tgz#6e6403896de6781c50974c5adf9eea9bb0ce6acb"
+integer@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/integer/-/integer-1.0.5.tgz#cadbf6078290389e8e4e29226e6b0044433deec1"
   dependencies:
     bindings "^1.3.0"
 
@@ -2205,10 +2203,6 @@ lru-cache@^4.0.1:
   dependencies:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
-
-lzz-gyp@^0.3.5:
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/lzz-gyp/-/lzz-gyp-0.3.5.tgz#0ec67d00f4bdaa5bc5c5eecd1eb3beed181032e5"
 
 maljs@^0.3.0:
   version "0.3.0"
@@ -3145,9 +3139,13 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
-snekfetch@3.6.4, snekfetch@^3.6.0, snekfetch@^3.6.4:
+snekfetch@^3.6.0, snekfetch@^3.6.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-3.6.4.tgz#d13e80a616d892f3d38daae4289f4d258a645120"
+
+snekfetch@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-4.0.2.tgz#fa1de5d363c5cd81422c0659a6fdc9793a0df399"
 
 sntp@2.x.x:
   version "2.1.0"
@@ -3456,10 +3454,6 @@ tmp@^0.0.33:
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
   dependencies:
     os-tmpdir "~1.0.2"
-
-to-descriptor@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/to-descriptor/-/to-descriptor-1.0.1.tgz#a0e678c34ebc7d2dae464d8372bc21479d9c2bcd"
 
 to-fast-properties@^2.0.0:
   version "2.0.0"

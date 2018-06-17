@@ -58,8 +58,8 @@ module.exports = class RPReloadCommand extends Command {
     } else {
       this.client.user.setPresence({
         activity: {
-          name: this.client.provider.get('global', 'rptoggle', ''),
-          type: this.client.provider.get('global', 'rptoggle', 'PLAYING')
+          name: this.client.provider.get('global', 'rpname', ''),
+          type: 'PLAYING'
         }
       });
     }

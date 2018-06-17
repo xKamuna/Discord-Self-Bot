@@ -948,8 +948,8 @@ dijkstrajs@^1.0.1:
   resolved "https://registry.yarnpkg.com/dijkstrajs/-/dijkstrajs-1.0.1.tgz#d3cd81221e3ea40742cfcde556d4e99e98ddc71b"
 
 discord.js-commando@favna/commando#selfbot:
-  version "1.1.5-selfbot"
-  resolved "https://codeload.github.com/favna/commando/tar.gz/b0a474f34365816a08fc0f8f6da421c61c16d798"
+  version "1.1.6-selfbot"
+  resolved "https://codeload.github.com/favna/commando/tar.gz/131944f4fb23fae315c46beb8e940ef5ef8fdc1f"
   dependencies:
     common-tags "^1.0.0"
     escape-string-regexp "^1.0.0"

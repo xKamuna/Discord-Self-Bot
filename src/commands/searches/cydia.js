@@ -74,8 +74,8 @@ module.exports = class CydiaCommand extends Command {
             site = await request.get(`${baseURL}package/${result.name}`);
 
           if (site.ok) {
-            const $ = cheerio.load(site.text);
-
+            const $ = cheerio.load(site.body.toString());
+  
             embed
               .addField('Source', $('.source-name').html(), true)
               .addField('Section', $('#section').html(), true)

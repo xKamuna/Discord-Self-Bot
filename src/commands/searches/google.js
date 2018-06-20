@@ -94,10 +94,6 @@ module.exports = class GoogleCommand extends Command {
             .first()
             .attr('href');
 
-        if (!href) {
-          return msg.reply('***nothing found***');
-        }
-
         deleteCommandMessages(msg, this.client);
 
         return msg.say(href.replace('/url?q=', '').split('&')[0]);

@@ -150,6 +150,9 @@ Has a very specific syntax! Be sure to adapt the example!
 <dt><a href="#module_ping">ping</a> ⇒ <code>Message</code></dt>
 <dd><p>Info PingCommand - Checks the bot\&#39;s ping to the Discord server<br><strong>Aliases</strong>: <code>pong</code></p>
 </dd>
+<dt><a href="#module_Reddit">Reddit</a> ⇒ <code>MessageEmbed</code></dt>
+<dd><p>Info RedditCommand - Gets statistics on a Reddit user<br><strong>Aliases</strong>: <code>red</code>, <code>redditor</code></p>
+</dd>
 <dt><a href="#module_server">server</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Info ServerInfoCommand - Gets information about any server you&#39;re in<br><strong>Aliases</strong>: <code>serverinfo</code>, <code>sinfo</code></p>
 </dd>
@@ -752,6 +755,23 @@ Info PingCommand - Checks the bot\'s ping to the Discord server
 
 **Returns**: <code>Message</code> - Ping result  
 **Category**: info  
+<a name="module_Reddit"></a>
+
+## Reddit ⇒ <code>MessageEmbed</code>
+Info RedditCommand - Gets statistics on a Reddit user  
+**Aliases**: `red`, `redditor`
+
+**Returns**: <code>MessageEmbed</code> - Statistics of the reddit user  
+**Category**: info  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| RedditUser | <code>StringResolvable</code> | The Reddit user you want to look up |
+
+**Example**  
+```js
+reddit favna
+```
 <a name="module_server"></a>
 
 ## server ⇒ <code>MessageEmbed</code>

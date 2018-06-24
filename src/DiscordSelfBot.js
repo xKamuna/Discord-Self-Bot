@@ -1,4 +1,6 @@
 const Database = require('better-sqlite3'),
+  decache = require('decache'),
+  fs = require('fs'),
   path = require('path'),
   snek = require('snekfetch'),
   {Client, SyncSQLiteProvider} = require('discord.js-commando'),
@@ -38,6 +40,13 @@ class DiscordSelfBot {
           await snek.get(`https://${process.env.heroku}.herokuapp.com`);
         }, 1500000);
       }
+
+      fs.watch(path.join(__dirname, 'data/dex/formats.json'), (eventType, filename) => {
+        if (filename) {
+          decache(path.join(__dirname, 'data/dex/formats.json'));
+          this.client.registry.resolveCommand('pokemon:dex').reload();
+        }
+      });
     };
   }
 

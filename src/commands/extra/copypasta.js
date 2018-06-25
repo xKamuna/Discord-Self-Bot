@@ -93,7 +93,10 @@ module.exports = class CopyPastaCommand extends Command {
         return msg.reply(`no pastas saved for this server. Start saving your first with \`${msg.guild.commandPrefix}copypastaadd <name> <content>\``);
       }
 
-      return msg.reply('an unknown error occurred there :(');
+      console.error(err);
+      
+      return msg.reply(oneLine`Woops! something went horribly wrong there, the error was logged to the console.
+      Want to know more about the error? Join the support server by getting an invite by using the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}invite\` command `);
     }
   }
 };

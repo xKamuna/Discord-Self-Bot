@@ -14,6 +14,7 @@ const Database = require('better-sqlite3'),
   path = require('path'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
+  {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class CopyPastaAddCommand extends Command {
@@ -87,7 +88,10 @@ module.exports = class CopyPastaAddCommand extends Command {
         return msg.embed(pastaAddEmbed);
       }
 
-      return msg.reply('an unknown error occurred there :(');
+      console.error(err);
+      
+      return msg.reply(oneLine`Woops! something went horribly wrong there, the error was logged to the console.
+      Want to know more about the error? Join the support server by getting an invite by using the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}invite\` command `);
     }
   }
 };

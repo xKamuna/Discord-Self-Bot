@@ -100,7 +100,7 @@ module.exports = class WeatherCommand extends Command {
     } catch (err) {
       deleteCommandMessages(msg, this.client);
 
-      return msg.reply(`i wasn't able to find a location for \`${location}\``);
+      return msg.reply(`I wasn't able to find a location for \`${location}\``);
     }
   }
 };

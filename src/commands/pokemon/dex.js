@@ -241,6 +241,6 @@ module.exports = class DexCommand extends Command {
     }
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply('no Pokémon not found.');
+    return msg.reply(`no Pokémon found for \`${pokemon}\``);
   }
 };

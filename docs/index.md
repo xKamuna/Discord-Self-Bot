@@ -212,7 +212,7 @@ For item names existing of multiple words (for example <code>life orb</code>) yo
 <dd><p>quoting CrossQuoteCommand - Quote someone else&#39;s message into a MessageEmbed<br>This command has support for cross-server quoting!<br><strong>Aliases</strong>: <code>xq</code></p>
 </dd>
 <dt><a href="#module_anime">anime</a> ⇒ <code>MessageEmbed</code></dt>
-<dd><p>Searches AnimeCommand - Gets information about any anime from MyAnimeList<br><strong>Aliases</strong>: <code>ani</code>, <code>mal</code></p>
+<dd><p>Searches AnimeCommand - Gets information about any anime from kitsu.io<br><strong>Aliases</strong>: <code>ani</code>, <code>mal</code>, <code>kitsu</code></p>
 </dd>
 <dt><a href="#module_cydia">cydia</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Searches CydiaCommand - Gets info from a package on Cydia, only supports default repositories<br><strong>Aliases</strong>: <code>cy</code></p>
@@ -239,7 +239,7 @@ For item names existing of multiple words (for example <code>life orb</code>) yo
 <dd><p>Searches LmgtfyCommand - Transform some query into a LMGTFY (Let Me Google That For You) url<br><strong>Aliases</strong>: <code>dumb</code></p>
 </dd>
 <dt><a href="#module_manga">manga</a> ⇒ <code>MessageEmbed</code></dt>
-<dd><p>Searches MangaCommand - Gets information about any manga from MyAnimeList<br><strong>Aliases</strong>: <code>cartoon</code>, <code>man</code></p>
+<dd><p>Searches MangaCommand - Gets information about any manga from kitsu.io<br><strong>Aliases</strong>: <code>cartoon</code>, <code>man</code></p>
 </dd>
 <dt><a href="#module_steam">steam</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Searches SteamCommand - Gets information about a game using Steam<br><strong>Aliases</strong>: <code>valve</code></p>
@@ -1115,8 +1115,8 @@ xquote 246821351585742851 355269305941622786 355275528002994176 Oh so that was t
 <a name="module_anime"></a>
 
 ## anime ⇒ <code>MessageEmbed</code>
-Searches AnimeCommand - Gets information about any anime from MyAnimeList  
-**Aliases**: `ani`, `mal`
+Searches AnimeCommand - Gets information about any anime from kitsu.io  
+**Aliases**: `ani`, `mal`, `kitsu`
 
 **Returns**: <code>MessageEmbed</code> - Information about the requested anime  
 **Category**: searches  
@@ -1269,7 +1269,7 @@ lmgtfy is it legal to kill an ant???
 <a name="module_manga"></a>
 
 ## manga ⇒ <code>MessageEmbed</code>
-Searches MangaCommand - Gets information about any manga from MyAnimeList  
+Searches MangaCommand - Gets information about any manga from kitsu.io  
 **Aliases**: `cartoon`, `man`
 
 **Returns**: <code>MessageEmbed</code> - Information about the requested manga  

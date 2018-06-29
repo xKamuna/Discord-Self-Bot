@@ -13,7 +13,7 @@ const moment = require('moment'),
   request = require('snekfetch'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
-  {oneLine, stripIndents} = require('common-tags'),
+  {oneLine} = require('common-tags'),
   {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class iTunesCommand extends Command {
@@ -66,6 +66,10 @@ module.exports = class iTunesCommand extends Command {
         tunesEmbed = new MessageEmbed(),
         hit = JSON.parse(tunes.body).results[0]; // eslint-disable-line sort-vars
 
+      if (!hit) {
+        throw new Error('no song found');
+      }
+
       tunesEmbed
         .setThumbnail(hit.artworkUrl100)
         .setTitle(hit.trackName)
@@ -84,16 +88,14 @@ module.exports = class iTunesCommand extends Command {
 
       return msg.embed(tunesEmbed);
     } catch (err) {
-      this.client.channels.resolve(process.env.ribbonlogchannel).send(stripIndents`
-    <@${this.client.owners[0].id}> Error occurred in \`chips\` command!
-    **Server:** ${msg.guild.name} (${msg.guild.id})
-    **Author:** ${msg.author.tag} (${msg.author.id})
-    **Time:** ${moment(msg.createdTimestamp).format('MMMM Do YYYY [at] HH:mm:ss [UTC]Z')}
-    **Error Message:** ${err}
-    `);
-
-      return msg.reply(oneLine`An error occurred but I notified ${this.client.owners[0].username}
-    Want to know more about the error? Join the support server by getting an invite by using the \`${msg.guild.commandPrefix}invite\` command `);
+      deleteCommandMessages(msg, this.client);
+      if (/(?:no song found)/i.test(err.toString())) {
+        return msg.reply(`no song found for \`${music.replace(/\+/g, ' ')}\``);
+      }
+      console.error(err);
+      
+      return msg.reply(oneLine`Woops! something went horribly wrong there, the error was logged to the console.
+      Want to know more about the error? Join the support server by getting an invite by using the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}invite\` command `);
     }
   }
 };

@@ -14,7 +14,7 @@ const Fuse = require('fuse.js'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {oneLine, stripIndents} = require('common-tags'),
-  {deleteCommandMessages} = require('../../components/util.js');
+  {deleteCommandMessages} = require('../../util.js');
 
 module.exports = class DocsCommand extends Command {
   constructor (client) {

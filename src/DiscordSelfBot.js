@@ -94,11 +94,20 @@ class DiscordSelfBot {
     };
   }
 
+  onError () {
+    return (e) => {
+      console.error(e);
+    };
+  }
+
   init () {
     this.client
       .on('commandPrefixChange', this.onCommandPrefixChange())
       .on('message', this.onMessage())
-      .on('ready', this.onReady());
+      .on('ready', this.onReady())
+      .on('debug', console.log)
+      .on('error', this.onError())
+      .on('warn', console.warn);
 
     const db = new Database(path.join(__dirname, 'data/databases/settings.sqlite3'));
 

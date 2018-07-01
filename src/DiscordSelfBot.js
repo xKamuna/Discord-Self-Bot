@@ -77,15 +77,16 @@ class DiscordSelfBot {
 
           if (!regexpExclusions.find(rx => rx.test(msg.cleanContent))) {
             mentionEmbed
-              .setAuthor(msg.channel.type === 'text'
-                ? `${msg.member ? msg.member.displayName : 'someone'} dropped your name in #${msg.channel.name} in ${msg.guild.name}`
-                : `${msg.author.username} sent a message with your name`, msg.author.displayAvatarURL())
+              .setTitle(msg.channel.type === 'text'
+                ? `${msg.member ? msg.member.displayName : 'someone'} dropped your name in \`${msg.channel.name}\` in \`${msg.guild.name}\``
+                : `\`${msg.author.tag}\` sent a message with your name`)
               .setFooter('Message date')
               .setTimestamp(msg.createdAt)
               .setColor(msg.member ? msg.member.displayHexColor : '#7CFC00')
               .setThumbnail(msg.author.displayAvatarURL())
-              .addField('Message Content', msg.cleanContent.length > 1024 ? msg.cleanContent.slice(0, 1024) : msg.cleanContent)
-              .addField('Message Attachments', msg.attachments.first() && msg.attachments.first().url ? msg.attachments.map(au => au.url) : 'None');
+              .setDescription(msg.cleanContent);
+
+            msg.attachments.first() && msg.attachments.first().url ? mentionEmbed.addField('Attachment(s)', msg.attachments.map(au => au.url)) : null;
 
             hookClient.send(`Stalkify away <@${process.env.owner}>`, {embeds: [mentionEmbed]}).catch(console.error);
           }

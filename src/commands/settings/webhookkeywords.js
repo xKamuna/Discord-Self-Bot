@@ -5,6 +5,7 @@
  * @category settings
  * @name webhookkeywords
  * @example webhookkeywords favna
+ * @example webhookkeywords word1 word2 word3
  * @param {StringResolvable} Keywords The keyword(s) to include in the WNS
  * @returns {Message} Confirmation the setting was stored
  */
@@ -21,7 +22,7 @@ module.exports = class WebhookKeywordsCommand extends Command {
       group: 'settings',
       aliases: ['whk', 'hookwords', 'hookkeywords'],
       description: 'Configure the keywords to be included in your Webhook Notification System',
-      format: 'user,name,nick,name',
+      format: 'word1 word2 word3',
       examples: ['webhookkeywords Favna'],
       guildOnly: false,
       args: [
@@ -41,7 +42,7 @@ module.exports = class WebhookKeywordsCommand extends Command {
 		
     deleteCommandMessages(msg, this.client);
 
-    return msg.reply(oneLine`Webhook Keywords have been set to \`${keywords.replace(/,/gim, ', ')}\`. 
+    return msg.reply(oneLine`Webhook Keywords have been set to ${keywords.map(word => `\`${word}\``).join(', ')}. 
         Make sure to enable webhooks with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhooktoggle\`
         and optionally set your word exclusions with the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}webhookexclusions\` command`);
   }

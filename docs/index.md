@@ -181,7 +181,7 @@ Has a very specific syntax! Be sure to adapt the example!
 <dd><p>Owner EShopFetchCommand - Fetch the latest data for the eShop command<br><strong>Aliases</strong>: <code>efetch</code></p>
 </dd>
 <dt><a href="#module_dex">dex</a> ⇒ <code>MessageEmbed</code></dt>
-<dd><p>Pokémon DexCommand - Gets information about a Pokémon from Dexter<br>Different forms are supported. Generally you want to write it all as 1 word with the form appended. For example <code>necrozmaduskmane</code> or <code>metagrossmega</code><br>If you want to get the shiny sprite displayed add the <code>--shiny</code> at the end of the search<br><strong>Aliases</strong>: <code>pokedex</code>, <code>dexfind</code>, <code>df</code>, <code>rotom</code></p>
+<dd><p>Pokémon DexCommand - Gets information about a Pokémon from Dexter<br>Different forms are supported. Generally you want to write it all as 1 word with the form appended. For example <code>necrozmaduskmane</code> or <code>metagrossmega</code><br>If you want to get the shiny sprite displayed add the <code>--shiny</code> at the end of the search<br><strong>Aliases</strong>: <code>p</code>, <code>poke</code>, <code>mon</code>, <code>pokemon</code>, <code>pokedex</code>, <code>df</code>, <code>dexfind</code>, <code>dexdata</code>, <code>dexter</code>, <code>rotom</code></p>
 </dd>
 <dt><a href="#module_flavor">flavor</a> ⇒ <code>MessageEmbed</code></dt>
 <dd><p>Pokémon FlavorCommand - Gets flavor text from a Pokémon<br>Different forms are supported. Generally you want to write it all as 1 word with the form appended. For example <code>necrozmaduskmane</code> or <code>metagrossmega</code><br>Due to message limit size it fetches as many entries possible starting with generation 7 going downwards<br>If you want to get the shiny sprite displayed add the <code>--shiny</code> at the end of the search<br><strong>Aliases</strong>: <code>flavors</code>, <code>dexdata</code>, <code>dexentries</code>, <code>dextext</code>, <code>dextex</code>, <code>dexter</code></p>
@@ -917,7 +917,7 @@ Owner EShopFetchCommand - Fetch the latest data for the eShop command
 Pokémon DexCommand - Gets information about a Pokémon from Dexter  
 Different forms are supported. Generally you want to write it all as 1 word with the form appended. For example `necrozmaduskmane` or `metagrossmega`  
 If you want to get the shiny sprite displayed add the `--shiny` at the end of the search  
-**Aliases**: `pokedex`, `dexfind`, `df`, `rotom`
+**Aliases**: `p`, `poke`, `mon`, `pokemon`, `pokedex`, `df`, `dexfind`, `dexdata`, `dexter`, `rotom`
 
 **Returns**: <code>MessageEmbed</code> - Lots of information about the pokemon  
 **Category**: pokemon  
@@ -1704,6 +1704,10 @@ Settings WebhookExclusionsCommand - Configure the keywords to be avoided in your
 ```js
 webhookexclusions Fantasy
 ```
+**Example**  
+```js
+webhookexclusions word1 word2 word3
+```
 <a name="module_webhookkeywords"></a>
 
 ## webhookkeywords ⇒ <code>Message</code>
@@ -1720,6 +1724,10 @@ Settings WebhookKeywordsCommand - Configure the keywords to be included in your 
 **Example**  
 ```js
 webhookkeywords favna
+```
+**Example**  
+```js
+webhookkeywords word1 word2 word3
 ```
 <a name="module_webhooktoggle"></a>
 

@@ -31,7 +31,7 @@ module.exports = class MathCommand extends Command {
           key: 'equation',
           prompt: 'What is the equation to solve?',
           type: 'string',
-          parse: p => p.toLowerCase()
+          parse: p => p.toLowerCase().replace(/x/gim, '*')
         }
       ]
     });

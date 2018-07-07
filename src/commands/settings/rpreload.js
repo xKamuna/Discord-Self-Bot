@@ -33,28 +33,47 @@ module.exports = class RPReloadCommand extends Command {
       if (this.client.provider.get('global', 'rptype', 'PLAYING') === 'STREAMING') {
         msg.reply(oneLine`when using streaming rich presence type be sure to set a Rich Presence URL, otherwise it won\'t work
         Furthermore, it will only show Twitch purple when you use a Twitch URL`);
-        this.client.user.setPresence({activity: {url: this.client.provider.get('global', 'rpurl', '')}});
-      }
-
-      this.client.user.setPresence({
-        activity: {
-          application: this.client.provider.get('global', 'rpappid', ''),
-          name: this.client.provider.get('global', 'rpname', ''),
-          type: this.client.provider.get('global', 'rptype', ''),
-          details: this.client.provider.get('global', 'rpdetails', ''),
-          state: this.client.provider.get('global', 'rpstate', ''),
-          timestamps: this.client.provider.get('global', 'rptimestamptoggle', false) ? {
-            start: Date.now(),
-            end: this.client.provider.get('global', 'rptoggletimeend', true) ? this.addHours(new Date(), this.client.provider.get('global', 'rptimeend', 1)) : ''
-          } : '',
-          assets: {
-            largeImage: this.client.provider.get('global', 'rplargeimage', ''),
-            smallImage: this.client.provider.get('global', 'rpsmallimage', ''),
-            largeText: this.client.provider.get('global', 'rplargetext', ''),
-            smallText: this.client.provider.get('global', 'rpsmalltext', '')
+        this.client.user.setPresence({
+          activity: {
+            application: this.client.provider.get('global', 'rpappid', ''),
+            name: this.client.provider.get('global', 'rpname', ''),
+            type: this.client.provider.get('global', 'rptype', 'STREAMING'),
+            details: this.client.provider.get('global', 'rpdetails', ''),
+            state: this.client.provider.get('global', 'rpstate', ''),
+            timestamps: this.client.provider.get('global', 'rptimestamptoggle', false) ? {
+              start: Date.now(),
+              end: this.client.provider.get('global', 'rptoggletimeend', true) ? this.addHours(new Date(), this.client.provider.get('global', 'rptimeend', 1)) : ''
+            } : '',
+            assets: {
+              largeImage: this.client.provider.get('global', 'rplargeimage', ''),
+              smallImage: this.client.provider.get('global', 'rpsmallimage', ''),
+              largeText: this.client.provider.get('global', 'rplargetext', ''),
+              smallText: this.client.provider.get('global', 'rpsmalltext', '')
+            },
+            url: this.client.provider.get('global', 'rpurl', '')
           }
-        }
-      });
+        });
+      } else {
+        this.client.user.setPresence({
+          activity: {
+            application: this.client.provider.get('global', 'rpappid', ''),
+            name: this.client.provider.get('global', 'rpname', ''),
+            type: this.client.provider.get('global', 'rptype', 'PLAYING'),
+            details: this.client.provider.get('global', 'rpdetails', ''),
+            state: this.client.provider.get('global', 'rpstate', ''),
+            timestamps: this.client.provider.get('global', 'rptimestamptoggle', false) ? {
+              start: Date.now(),
+              end: this.client.provider.get('global', 'rptoggletimeend', true) ? this.addHours(new Date(), this.client.provider.get('global', 'rptimeend', 1)) : ''
+            } : '',
+            assets: {
+              largeImage: this.client.provider.get('global', 'rplargeimage', ''),
+              smallImage: this.client.provider.get('global', 'rpsmallimage', ''),
+              largeText: this.client.provider.get('global', 'rplargetext', ''),
+              smallText: this.client.provider.get('global', 'rpsmalltext', '')
+            }
+          }
+        });
+      }
     } else {
       this.client.user.setPresence({
         activity: {

@@ -20,7 +20,7 @@ const path = require('path'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {BattleLearnsets} = require(path.join(__dirname, '../../data/dex/learnsets')),
-  {oneLine, stripIndents} = require('common-tags'),
+  {stripIndents} = require('common-tags'),
   {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
 
 module.exports = class LearnCommand extends Command {
@@ -133,11 +133,10 @@ module.exports = class LearnCommand extends Command {
 
       return msg.embed(learnEmbed);
     } catch (err) {
-      deleteCommandMessages(msg, this.client);
       console.error(err);
-      
-      return msg.reply(oneLine`Woops! something went horribly wrong there, the error was logged to the console.
-      Want to know more about the error? Join the support server by getting an invite by using the \`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}invite\` command `);
+
+      return msg.reply(stripIndents`no learn match found for \`${pokemon}\` and ${moves.map(val => `\`${val}\``).join(', ')}.
+      An error was logged.`);
     }
   }
 };

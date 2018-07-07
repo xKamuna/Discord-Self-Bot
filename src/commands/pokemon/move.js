@@ -16,7 +16,7 @@ const Fuse = require('fuse.js'),
   {MessageEmbed} = require('discord.js'),
   {BattleMovedex} = require(path.join(__dirname, '../../data/dex/moves')),
   {MoveAliases} = require(path.join(__dirname, '../../data/dex/aliases')),
-  {oneLine} = require('common-tags'),
+  {oneLine, stripIndents} = require('common-tags'),
   {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
 
 module.exports = class MoveCommand extends Command {
@@ -46,33 +46,33 @@ module.exports = class MoveCommand extends Command {
   }
 
   run (msg, {move}) {
-    /* eslint-disable sort-vars */
-    const aliasOptions = {
-        shouldSort: true,
-        threshold: 0.2,
-        location: 0,
-        distance: 100,
-        maxPatternLength: 32,
-        minMatchCharLength: 1,
-        keys: ['alias', 'move']
-      },
-      moveOptions = {
-        shouldSort: true,
-        threshold: 0.2,
-        location: 0,
-        distance: 100,
-        maxPatternLength: 32,
-        minMatchCharLength: 1,
-        keys: ['id', 'name']
-      },
-      aliasFuse = new Fuse(MoveAliases, aliasOptions),
-      moveFuse = new Fuse(BattleMovedex, moveOptions),
-      aliasSearch = aliasFuse.search(move),
-      moveSearch = aliasSearch.length ? moveFuse.search(aliasSearch[0].move) : moveFuse.search(move),
-      moveEmbed = new MessageEmbed();
-    /* eslint-enable sort-vars */
+    try {
+      /* eslint-disable sort-vars */
+      const aliasOptions = {
+          shouldSort: true,
+          threshold: 0.2,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: ['alias', 'move']
+        },
+        moveOptions = {
+          shouldSort: true,
+          threshold: 0.2,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: ['id', 'name']
+        },
+        aliasFuse = new Fuse(MoveAliases, aliasOptions),
+        moveFuse = new Fuse(BattleMovedex, moveOptions),
+        aliasSearch = aliasFuse.search(move),
+        moveSearch = aliasSearch.length ? moveFuse.search(aliasSearch[0].move) : moveFuse.search(move),
+        moveEmbed = new MessageEmbed();
+      /* eslint-enable sort-vars */
 
-    if (moveSearch.length) {
       moveEmbed
         .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
         .setThumbnail('https://favna.xyz/images/ribbonhost/unovadexclosedv2.png')
@@ -81,7 +81,7 @@ module.exports = class MoveCommand extends Command {
         .addField('Base Power', moveSearch[0].basePower, true)
         .addField('PP', moveSearch[0].pp, true)
         .addField('Category', moveSearch[0].category, true)
-        .addField('Accuracy', moveSearch[0].accuracy ? 'Certain Success' : moveSearch[0].accuracy, true)
+        .addField('Accuracy', typeof moveSearch[0].accuracy === 'boolean' ? 'Certain Success' : moveSearch[0].accuracy, true)
         .addField('Priority', moveSearch[0].priority, true)
         .addField('Target', moveSearch[0].target === 'normal' ? 'One Enemy' : capitalizeFirstLetter(moveSearch[0].target.replace(/([A-Z])/g, ' $1')), true)
         .addField('Contest Condition', moveSearch[0].contestType, true)
@@ -94,9 +94,17 @@ module.exports = class MoveCommand extends Command {
       deleteCommandMessages(msg, this.client);
 
       return msg.embed(moveEmbed, `**${capitalizeFirstLetter(moveSearch[0].name)}**`);
-    }
-    deleteCommandMessages(msg, this.client);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
 
-    return msg.reply('no move found. Be sure it is a move that has an effect in battles!');
+      if (/(?:Cannot read property 'desc' of undefined)/i.test(err.toString())) {
+        return msg.reply(stripIndents`no move found for \`${move}\``);
+      }
+
+      console.error(err);
+
+      return msg.reply(stripIndents`no move found for \`${move}\`. Be sure it is a move that has an effect in battles!
+      An error was logged.`);
+    }
   }
 };

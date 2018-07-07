@@ -15,7 +15,7 @@ const Fuse = require('fuse.js'),
   {MessageEmbed} = require('discord.js'),
   {BattleAbilities} = require(path.join(__dirname, '../../data/dex/abilities')),
   {AbilityAliases} = require(path.join(__dirname, '../../data/dex/aliases')),
-  {oneLine} = require('common-tags'),
+  {oneLine, stripIndents} = require('common-tags'),
   {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
 
 module.exports = class AbilityCommand extends Command {
@@ -45,24 +45,24 @@ module.exports = class AbilityCommand extends Command {
   }
 
   run (msg, {ability}) {
-    /* eslint-disable sort-vars */
-    const fsoptions = {
-        shouldSort: true,
-        threshold: 0.6,
-        location: 0,
-        distance: 100,
-        maxPatternLength: 32,
-        minMatchCharLength: 1,
-        keys: ['alias', 'ability', 'id', 'name']
-      },
-      aliasFuse = new Fuse(AbilityAliases, fsoptions),
-      abilityFuse = new Fuse(BattleAbilities, fsoptions),
-      aliasSearch = aliasFuse.search(ability),
-      abilitySearch = aliasSearch.length ? abilityFuse.search(aliasSearch[0].ability) : abilityFuse.search(ability),
-      abilityEmbed = new MessageEmbed();
-    /* eslint-enable sort-vars */
+    try {
+      /* eslint-disable sort-vars */
+      const fsoptions = {
+          shouldSort: true,
+          threshold: 0.6,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: ['alias', 'ability', 'id', 'name']
+        },
+        aliasFuse = new Fuse(AbilityAliases, fsoptions),
+        abilityFuse = new Fuse(BattleAbilities, fsoptions),
+        aliasSearch = aliasFuse.search(ability),
+        abilitySearch = aliasSearch.length ? abilityFuse.search(aliasSearch[0].ability) : abilityFuse.search(ability),
+        abilityEmbed = new MessageEmbed();
+      /* eslint-enable sort-vars */
 
-    if (abilitySearch.length) {
       abilityEmbed
         .setColor(msg.guild ? msg.guild.me.displayHexColor : '#7CFC00')
         .setThumbnail('https://favna.xyz/images/ribbonhost/unovadexclosedv2.png')
@@ -73,11 +73,19 @@ module.exports = class AbilityCommand extends Command {
 			|  [PokémonDB](http://pokemondb.net/ability/${abilitySearch[0].name.toLowerCase().replace(/ /g, '-')})`);
 
       deleteCommandMessages(msg, this.client);
-
+      
       return msg.embed(abilityEmbed, `**${capitalizeFirstLetter(abilitySearch[0].name)}**`);
-    }
-    deleteCommandMessages(msg, this.client);
+    } catch (err) {
+      deleteCommandMessages(msg, this.client);
 
-    return msg.reply('no ability found. Be sure it is an ability that has an effect in battles!');
+      if (/(?:Cannot read property 'desc' of undefined)/i.test(err.toString())) {
+        return msg.reply(stripIndents`no ability found for \`${ability}\``);
+      }
+
+      console.error(err);
+  
+      return msg.reply(stripIndents`no ability found for \`${ability}\`. Be sure it is an ability that has an effect in battles!
+      An error was logged.`);
+    }
   }
 };

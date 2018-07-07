@@ -20,7 +20,7 @@
 const request = require('snekfetch'),
   {Command, ArgumentCollector} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
-  {stripIndents} = require('common-tags');
+  {oneLine, stripIndents} = require('common-tags');
 
 module.exports = class PokemonTCGCommand extends Command {
   constructor (client) {
@@ -41,7 +41,6 @@ module.exports = class PokemonTCGCommand extends Command {
       format: 'Properties',
       examples: ['tcg name types subtype'],
       guildOnly: false,
-      ownerOnly: true,
       throttling: {
         usages: 2,
         duration: 3
@@ -282,14 +281,18 @@ module.exports = class PokemonTCGCommand extends Command {
         } else if (properties.supertype === 'trainer') {
           tcgEmbed.setDescription(cards[selection].text[0]);
         }
-
+       
         return command.embed(tcgEmbed);
       }
-
+      
       return command.reply(stripIndents`no cards were found for that query.
         Be sure to check the command help (\`${msg.guild ? msg.guild.commandPrefix : this.client.commandPrefix}help tcg\`) if you want to know how to use this command `);
     } catch (err) {
-      return msg.reply('an error occurred getting info on that TCG card');
+
+      console.error(err);
+
+      return msg.reply(oneLine`An error occurred and it was logged.
+      Want to know more about the error? Join the support server by getting an invite by using the \`${msg.guild.commandPrefix}invite\` command `);
     }
   }
 };

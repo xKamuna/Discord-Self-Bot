@@ -9,13 +9,12 @@
  * @returns {MessageEmbed} All weaknesses, advantages
  */
 
-const moment = require('moment'),
-  path = require('path'),
+const path = require('path'),
   {Command} = require('discord.js-commando'),
   {MessageEmbed} = require('discord.js'),
   {BattleTypeChart} = require(path.join(__dirname, '../../data/dex/typechart')),
   {oneLine, stripIndents} = require('common-tags'),
-  {capitalizeFirstLetter, deleteCommandMessages, stopTyping, startTyping} = require('../../components/util.js');
+  {capitalizeFirstLetter, deleteCommandMessages} = require('../../util.js');
 
 module.exports = class TypeCommand extends Command {
   constructor (client) {
@@ -53,7 +52,6 @@ module.exports = class TypeCommand extends Command {
   /* eslint-disable max-statements, complexity */
   run (msg, {types}) {
     try {
-      startTyping(msg);
       const atkMulti = {
           Bug: 1,
           Dark: 1,
@@ -257,23 +255,14 @@ module.exports = class TypeCommand extends Command {
       |  [PokémonDB](http://pokemondb.net/type/${types.split(' ')[0]})`);
 
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
       return msg.embed(typeEmbed);
     } catch (err) {
       deleteCommandMessages(msg, this.client);
-      stopTyping(msg);
 
-      this.client.channels.resolve(process.env.ribbonlogchannel).send(stripIndents`
-      <@${this.client.owners[0].id}> Error occurred in \`type\` command!
-      **Server:** ${msg.guild.name} (${msg.guild.id})
-      **Author:** ${msg.author.tag} (${msg.author.id})
-      **Time:** ${moment(msg.createdTimestamp).format('MMMM Do YYYY [at] HH:mm:ss [UTC]Z')}
-      **Input:** ${types}
-      **Error Message:** ${err}
-      `);
+      console.error(err);
 
-      return msg.reply(stripIndents`An error occurred matching those types and I notified ${this.client.owners[0].username} about it.
+      return msg.reply(stripIndents`An error occurred matching those types and I logged it to the console.
     Want to know more about the error? Join the support server by getting an invite by using the \`${msg.guild.commandPrefix}invite\` command`);
     }
   }

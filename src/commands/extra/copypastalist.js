@@ -34,7 +34,6 @@ module.exports = class CopyPastaListCommand extends Command {
     const conn = new Database(path.join(__dirname, '../../data/databases/pastas.sqlite3'));
 
     try {
-      // eslint-disable-next-line newline-per-chained-call
       const list = conn.prepare('SELECT name FROM pastas;').all().map(p => p.name);
 
       if (list && list.length) {

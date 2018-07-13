@@ -76,7 +76,7 @@ module.exports = class CopyPastaAddCommand extends Command {
 
       return msg.embed(pastaAddEmbed);
     } catch (err) {
-      if (/(?:no such table)/i.test(err.toString())) {
+      if ((/(?:no such table)/i).test(err.toString())) {
         conn.prepare('CREATE TABLE IF NOT EXISTS pastas (name TEXT PRIMARY KEY, content TEXT);').run();
 
         conn.prepare('INSERT INTO pastas VALUES ($name, $content);').run({

@@ -89,7 +89,7 @@ module.exports = class CopyPastaCommand extends Command {
         : `You can save it with \`${msg.guild.commandPrefix}copypastaadd <name> <content>\``}`);
     } catch (err) {
       deleteCommandMessages(msg, this.client);
-      if (/(?:no such table)/i.test(err.toString())) {
+      if ((/(?:no such table)/i).test(err.toString())) {
         return msg.reply(`no pastas saved for this server. Start saving your first with \`${msg.guild.commandPrefix}copypastaadd <name> <content>\``);
       }
 

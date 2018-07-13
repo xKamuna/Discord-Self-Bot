@@ -84,7 +84,7 @@ module.exports = class ItemCommand extends Command {
     } catch (err) {
       deleteCommandMessages(msg, this.client);
 
-      if (/(?:Cannot read property 'name' of undefined)/i.test(err.toString())) {
+      if ((/(?:Cannot read property 'name' of undefined)/i).test(err.toString())) {
         return msg.reply(stripIndents`no item found for \`${item}\``);
       }
 

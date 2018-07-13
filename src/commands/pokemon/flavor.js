@@ -80,7 +80,7 @@ module.exports = class FlavorCommand extends Command {
   /* eslint-disable complexity*/
   run (msg, {pokemon, shines}) {
     try {
-      if (/(?:--shiny)/i.test(pokemon)) {
+      if ((/(?:--shiny)/i).test(pokemon)) {
         pokemon = (pokemon.substring(0, pokemon.indexOf('--shiny')) + pokemon.substring(pokemon.indexOf('--shiny') + '--shiny'.length)).replace(/ /g, '');
         shines = true;
       }
@@ -194,7 +194,7 @@ module.exports = class FlavorCommand extends Command {
     } catch (err) {
       deleteCommandMessages(msg, this.client);
 
-      if (/(?:Cannot read property 'forme' of undefined|Cannot read property 'length' of undefined)/i.test(err.toString())) {
+      if ((/(?:Cannot read property 'forme' of undefined|Cannot read property 'length' of undefined)/i).test(err.toString())) {
         return msg.reply(stripIndents`no Pokémon or flavor texts found for \`${pokemon}\``);
       }
 

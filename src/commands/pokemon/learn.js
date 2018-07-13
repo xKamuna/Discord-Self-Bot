@@ -67,7 +67,7 @@ module.exports = class LearnCommand extends Command {
 
   run (msg, {pokemon, moves, gen = 7}) {
     try {
-      if (/(?:--gen)/i.test(moves)) {
+      if ((/(?:--gen)/i).test(moves)) {
         gen = moves.match(/[1-7]/gm) ? moves.match(/[1-7]/gm)[0] : 7;
         moves = moves.substring(0, moves.indexOf('--gen')) + moves.substring(moves.indexOf('--gen') + '--gen'.length + 1);
       }

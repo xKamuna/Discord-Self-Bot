@@ -88,7 +88,7 @@ module.exports = class iTunesCommand extends Command {
       return msg.embed(tunesEmbed);
     } catch (err) {
       deleteCommandMessages(msg, this.client);
-      if (/(?:no song found)/i.test(err.toString())) {
+      if ((/(?:no song found)/i).test(err.toString())) {
         return msg.reply(`no song found for \`${music.replace(/\+/g, ' ')}\``);
       }
       console.error(err);

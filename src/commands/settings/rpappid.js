@@ -31,7 +31,7 @@ module.exports = class RPAppIDCommand extends Command {
           type: 'string',
           label: 'appid',
           validate: (id) => {
-            if (/[0-9]{18}/.test(id)) {
+            if ((/[0-9]{18}/).test(id)) {
               return true;
             }
 

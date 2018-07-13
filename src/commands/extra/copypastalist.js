@@ -67,7 +67,7 @@ module.exports = class CopyPastaListCommand extends Command {
 
     } catch (err) {
       deleteCommandMessages(msg, this.client);
-      if (/(?:no such table)/i.test(err.toString())) {
+      if ((/(?:no such table)/i).test(err.toString())) {
         return msg.reply(`no pastas saved yet. Start saving your first with \`${msg.guild.commandPrefix}copypastaadd <name> <content>\``);
       }
 

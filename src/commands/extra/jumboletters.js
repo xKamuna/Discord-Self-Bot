@@ -64,15 +64,15 @@ module.exports = class JumboLettersCommand extends Command {
     const jumboString = [];
 
     for (const i in text) {
-      if (/[a-zA-Z]/gim.test(text[i])) {
+      if ((/[a-zA-Z]/gim).test(text[i])) {
         jumboString.push(`:regional_indicator_${text[i].toLowerCase()}:`);
-      } else if (/[0-9]/gim.test(text[i])) {
+      } else if ((/[0-9]/gim).test(text[i])) {
         jumboString.push(`:${this.fetchNumberWord(text[i])}:`);
-      } else if (/!/gim.test(text[i])) {
+      } else if ((/!/gim).test(text[i])) {
         jumboString.push(':exclamation:');
-      } else if (/\?/gim.test(text[i])) {
+      } else if ((/\?/gim).test(text[i])) {
         jumboString.push(':question:');
-      } else if (/ /gim.test(text[i])) {
+      } else if ((/ /gim).test(text[i])) {
         jumboString.push('  ');
       } else {
         jumboString.push(text[i]);

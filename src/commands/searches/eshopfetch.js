@@ -29,7 +29,7 @@ module.exports = class EshopFetchCommand extends Command {
 
   async run (msg) {
     msg.edit('\`fetching, please wait...\`');
-    fs.writeFileSync(path.join(__dirname, '../../data/databases/eshopdata.json'), JSON.stringify(await eshop.getGamesAmerica()), 'utf8');
+    fs.writeFileSync(path.join(__dirname, '../../data/databases/eshopdata.json'), JSON.stringify(await eshop.getGamesAmerica({shop: 'all'})), 'utf8');
 
     if (fs.existsSync(path.join(__dirname, '../../data/databases/eshopdata.json'))) {
       deleteCommandMessages(msg, this.client);

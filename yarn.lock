@@ -932,21 +932,21 @@ dijkstrajs@^1.0.1:
   resolved "https://registry.yarnpkg.com/dijkstrajs/-/dijkstrajs-1.0.1.tgz#d3cd81221e3ea40742cfcde556d4e99e98ddc71b"
 
 discord.js-commando@favna/commando#selfbot:
-  version "1.1.7-selfbot"
-  resolved "https://codeload.github.com/favna/commando/tar.gz/0620c3be22249676f7750b934c78632b24bca024"
+  version "1.1.8-selfbot"
+  resolved "https://codeload.github.com/favna/commando/tar.gz/6a9fd0282ca7dd53c7bc775a474434b309ad5c64"
   dependencies:
     common-tags "^1.0.0"
     escape-string-regexp "^1.0.0"
     require-all "^2.0.0"
 
 discord.js@favna/discord.js#main:
-  version "12.0.3-main"
-  resolved "https://codeload.github.com/favna/discord.js/tar.gz/8a7a519e82ee3896c88a0399d872b9d15062fd5b"
+  version "12.0.4-main"
+  resolved "https://codeload.github.com/favna/discord.js/tar.gz/a87dd66a57eb8450fe95e6d61f73b2988bc80902"
   dependencies:
     form-data "^2.3.2"
     node-fetch "^2.1.2"
     pako "^1.0.0"
-    prism-media "^0.3.0"
+    prism-media hydrabolt/prism-media
     tweetnacl "^1.0.0"
     ws "^4.0.0"
 
@@ -2682,9 +2682,9 @@ presage@^0.1.4:
   dependencies:
     babel-runtime "~6.26.0"
 
-prism-media@^0.3.0:
+prism-media@hydrabolt/prism-media:
   version "0.3.1"
-  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-0.3.1.tgz#5331522d1194b544c65db4a66ea3854e6916a258"
+  resolved "https://codeload.github.com/hydrabolt/prism-media/tar.gz/ead016c69b1f341898cb264746c355b982502c62"
 
 process-nextick-args@~2.0.0:
   version "2.0.0"

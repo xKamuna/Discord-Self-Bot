@@ -52,7 +52,8 @@ module.exports = class RPSmallImageCommand extends Command {
             return msg.reply(`No assets found in application with ID \`${appID}\``);
           }
           for (const i in assets) {
-            if (assets[i].type === 'SMALL') {
+            //if (assets[i].type === 'SMALL')
+            {
               array.push({
                 id: assets[i].id,
                 name: assets[i].name
